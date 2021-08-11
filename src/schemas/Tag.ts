@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-type Tag = Document;
+type Tag = Document & {
+  title: string;
+};
 
 const TagSchema = new Schema(
   {
@@ -8,7 +10,6 @@ const TagSchema = new Schema(
       type: String,
       lowercase: true,
       trim: true,
-      unique: true,
       required: true,
     },
   },

@@ -1,6 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-type Contact = Document;
+type Contact = Document & {
+  email: string;
+  tags: string[];
+};
 
 const ContactSchema = new Schema(
   {
@@ -8,7 +11,6 @@ const ContactSchema = new Schema(
       type: String,
       lowercase: true,
       trim: true,
-      unique: true,
       required: true,
     },
     tags: [
