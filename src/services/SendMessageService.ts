@@ -1,27 +1,33 @@
-import nodemailer, { Transporter } from 'nodemailer';
+import MailQueue from '../queues/MailQueue';
+import Contact from '../schemas/Contact';
+import Message, { MessageModel } from '../schemas/Message';
 
 class SendMessageService {
-  private transporter: Transporter;
+  async run(
+    messageData: {
+      subject: string;
+      body: string;
+    },
+    tags: string[]
+  ): Promise<MessageModel> {
+    const message = await Message.create(messageData);
 
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
-      port: 2525,
-      secure: false,
-      auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASSWORD,
+    const recipients = await Contact.find({
+      tags: {
+        $in: tags,
       },
     });
-  }
 
-  async run(): Promise<void> {
-    await this.transporter.sendMail({
-      from: 'sender@example.com',
-      to: 'equipe@gobarber.com.br',
-      subject: 'Message',
-      text: 'I hope this message gets delivered!',
-    });
+    await Promise.all(
+      recipients.map((recipient) => {
+        return MailQueue.add({
+          to: recipient.email,
+          messageData,
+        });
+      })
+    );
+
+    return message;
   }
 }
 
