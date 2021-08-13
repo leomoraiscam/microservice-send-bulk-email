@@ -1,6 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-type Message = Document;
+export type MessageAttributes = {
+  subject: string;
+  body: string;
+  completedAt: Date;
+  tags: string[];
+};
+
+export type MessageModel = Document & MessageAttributes;
 
 const MessageSchema = new Schema(
   {
@@ -28,4 +35,4 @@ const MessageSchema = new Schema(
   }
 );
 
-export default mongoose.model<Message>('Message', MessageSchema);
+export default mongoose.model<MessageModel>('Message', MessageSchema);
