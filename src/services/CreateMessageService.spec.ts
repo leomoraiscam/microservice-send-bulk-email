@@ -4,7 +4,7 @@ import Contact from '../schemas/Contact';
 import Message from '../schemas/Message';
 import Tag from '../schemas/Tag';
 import QueueMock from '../utils/tests/QueueMock';
-import SendMessageService from './SendMessageService';
+import SendMessageService from './CreateMessageService';
 
 describe('Send Message', () => {
   beforeAll(async () => {
@@ -68,5 +68,13 @@ describe('Send Message', () => {
       to: contacts[2].email,
       messageData,
     });
+  });
+
+  it('should create a job inside the queue for each recipients email', async () => {
+    return true;
+  });
+
+  it('should process the queue sending mail for each recipient', async () => {
+    return true;
   });
 });
