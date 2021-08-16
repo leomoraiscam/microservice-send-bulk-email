@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/app.ts",
+    "queue": "ts-node-dev --transpile-only --ignore-watch node_modules src/queue.ts",
     "test": "jest",
     "commit": "cz"
   },
