@@ -14,8 +14,8 @@ services:
     ports:
       - 3333:3333
     environment: 
-      - MONGO_URL=mongo
-      - REDIS_URL=redis
+      - MONGO_URL=umbriel-mongo
+      - REDIS_URL=umbriel-redis
     depends_on: 
       - umbriel-mongo
       - umbriel-redis
@@ -27,9 +27,12 @@ services:
     container_name: umbriel-mongo
     restart: always
     environment: 
-      - ALLOW_EMPTY_PASSWORD=yes
+      - ALLOW_EMPTY_PASSWORD=no
+      - MONGODB_USERNAME=${MONGO_USER}
+      - MONGODB_PASSWORD=${MONGO_PASS}
+      - MONGODB_DATABASE=${MONGO_DB}
     ports:
-      - "27017:27017"
+      - "15017:27017"
     volumes:
       - umbriel-mongo-data:/data/db
     networks:
@@ -42,10 +45,27 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - REDIS_PASSWORD=${REDIS_PASS}
+    ports:
+      - "6379:6379"
     volumes:
       - umbriel-redis-data:/bitnami/redis/data
     networks:
       - umbriel-network
+
+  umbriel-queue:
+    build: .
+    volumes:
+      - .:/home/node/api
+    environment:
+      - MONGO_URL=umbriel-mongo
+      - REDIS_URL=${REDIS_URL}
+    depends_on:
+      - umbriel-mongo
+      - umbriel-redis
+    networks:
+      - umbriel-network
+    container_name: umbriel-queue
+    command: yarn queue
 
 volumes:
   umbriel-redis-data:
