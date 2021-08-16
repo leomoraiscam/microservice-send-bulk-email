@@ -1,15 +1,36 @@
 import { Router } from 'express';
+import fs from 'fs';
+import path from 'path';
 
-import SendMessageService from './services/SendMessageService';
+import CreateMessageService from './services/CreateMessageService';
+import ImportContactsService from './services/ImportContactsService';
 
 const routes = Router();
 
+routes.post('/contacts/import', async (request, response) => {
+  const { tags } = request.body;
+
+  const contactsReadStream = fs.createReadStream(
+    path.resolve(__dirname, '..', 'tmp', 'contacts_mail.csv')
+  );
+
+  const importContacts = new ImportContactsService();
+
+  await importContacts.run(contactsReadStream, tags);
+
+  return response.send();
+});
+
 routes.post('/messages', async (request, response) => {
-  const sendMessage = new SendMessageService();
+  const { subject, body, tags } = request.body;
 
-  await sendMessage.run();
+  const createMessage = new CreateMessageService();
 
-  return response.json({ Ok: true });
+  const messageData = { subject, body };
+
+  const message = await createMessage.run(messageData, tags);
+
+  return response.json(message);
 });
 
 export default routes;
