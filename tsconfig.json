@@ -7,8 +7,7 @@
     "paths": {
       "@modules/*": ["modules/*"],
       "@config/*": ["config/*"],
-      "@shared/*": ["shared/*"],
-      "@errors/*": ["errors/*"]
+      "@shared/*": ["shared/*"]
     }, 
     "allowJs": true,                                
     "esModuleInterop": true,                        
