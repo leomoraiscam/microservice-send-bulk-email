@@ -1,6 +1,6 @@
-import MailQueue from '../queues/MailQueue';
 import Contact from '../schemas/Contact';
 import Message, { MessageModel } from '../schemas/Message';
+import MailQueue from '../shared/infra/queue/MailQueue';
 
 class SendMessageService {
   async run(
