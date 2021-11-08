@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 
-import Contact from '../schemas/Contact';
-import Message from '../schemas/Message';
-import Tag from '../schemas/Tag';
-import QueueMock from '../utils/tests/QueueMock';
+import Contact from '@modules/contacts/infra/mongoose/schemas/Contact';
+import Tag from '@modules/contacts/infra/mongoose/schemas/Tag';
+import QueueMock from '@modules/contacts/utils/tests/QueueMock';
+
+import Message from '../infra/mongoose/schemas/Message';
 import SendMessageService from './CreateMessageService';
 
 describe('Send Message', () => {

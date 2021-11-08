@@ -2,8 +2,8 @@ import { Router } from 'express';
 import fs from 'fs';
 import path from 'path';
 
-import CreateMessageService from './services/CreateMessageService';
-import ImportContactsService from './services/ImportContactsService';
+import ImportContactsService from '@modules/contacts/services/ImportContactsService';
+import CreateMessageService from '@modules/messages/services/CreateMessageService';
 
 const routes = Router();
 

@@ -1,12 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
-import './config/connection';
 
-import routes from './routes';
+import routes from './http/routes/index';
+import '@shared/infra/mongoose/connection';
 
 const app = express();
 
 app.use(express.json());
+
 app.use(routes);
 
 app.listen(3333, () => {

@@ -1,6 +1,7 @@
-import Contact from '../schemas/Contact';
-import Message, { MessageModel } from '../schemas/Message';
-import MailQueue from '../shared/infra/queue/MailQueue';
+import MailQueue from '@config/redis';
+import Contact from '@modules/contacts/infra/mongoose/schemas/Contact';
+
+import Message, { MessageModel } from '../infra/mongoose/schemas/Message';
 
 class SendMessageService {
   async run(

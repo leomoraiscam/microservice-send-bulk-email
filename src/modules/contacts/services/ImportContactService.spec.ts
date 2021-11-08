@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { Readable } from 'stream';
 
-import Contact from '../schemas/Contact';
-import Tag from '../schemas/Tag';
+import Contact from '../infra/mongoose/schemas/Contact';
+import Tag from '../infra/mongoose/schemas/Tag';
 import ImportContactsService from './ImportContactsService';
 
 describe('Import', () => {
