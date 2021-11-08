@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import MailQueue from './queues/MailQueue';
 import SendMessageToRecipientService from './services/SendMessageToRecipientService';
+import MailQueue from './shared/infra/queue/MailQueue';
 
 MailQueue.process(async () => {
   const sendMessageToRecipient = new SendMessageToRecipientService();
