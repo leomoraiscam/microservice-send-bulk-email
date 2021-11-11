@@ -23,7 +23,7 @@ services:
       - umbriel-network
 
   umbriel-mongo:
-    image: mongo:4
+    image: mongo
     container_name: umbriel-mongo
     restart: always
     environment: 
