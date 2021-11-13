@@ -4,7 +4,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import AppError from '@shared/errors/AppError';
 
-import routes from './http/routes/index';
+import routes from './routes';
 import '@shared/infra/mongoose/connection';
 
 const app = express();
@@ -31,6 +31,4 @@ app.use(
   }
 );
 
-app.listen(3333, () => {
-  console.log('🚀 Server is running');
-});
+export default app;
