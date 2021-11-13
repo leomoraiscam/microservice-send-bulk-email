@@ -4,7 +4,7 @@ import Contact from '@modules/contacts/infra/mongoose/schemas/Contact';
 import Message, { MessageModel } from '../infra/mongoose/schemas/Message';
 
 class SendMessageService {
-  async run(
+  async execute(
     messageData: {
       subject: string;
       body: string;

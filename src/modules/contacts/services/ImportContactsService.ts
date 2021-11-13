@@ -5,7 +5,7 @@ import Contact from '../infra/mongoose/schemas/Contact';
 import Tag from '../infra/mongoose/schemas/Tag';
 
 class ImportContactsService {
-  public async run(
+  public async execute(
     contactsFileStream: Readable,
     tags: string[]
   ): Promise<void> {
