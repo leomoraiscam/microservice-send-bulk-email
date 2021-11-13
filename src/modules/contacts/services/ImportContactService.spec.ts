@@ -35,7 +35,7 @@ describe('Import', () => {
 
     const importContacts = new ImportContactsService();
 
-    await importContacts.run(contactsFileStream, ['Students', 'Class A']);
+    await importContacts.execute(contactsFileStream, ['Students', 'Class A']);
 
     const createdTags = await Tag.find({});
 
@@ -79,7 +79,7 @@ describe('Import', () => {
 
     await Tag.create({ title: 'Students' });
 
-    await importContacts.run(contactsFileStream, ['Students', 'Class A']);
+    await importContacts.execute(contactsFileStream, ['Students', 'Class A']);
 
     const createdTags = await Tag.find({}).lean();
 
@@ -103,7 +103,7 @@ describe('Import', () => {
     const tag = await Tag.create({ title: 'Students' });
     await Contact.create({ email: 'email@email.com', tags: [tag._id] });
 
-    await importContacts.run(contactsFileStream, ['Class A']);
+    await importContacts.execute(contactsFileStream, ['Class A']);
 
     const contacts = await Contact.find({ email: 'email@email.com' })
       .populate('tags')
