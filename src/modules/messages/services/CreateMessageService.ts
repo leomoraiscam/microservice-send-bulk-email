@@ -1,5 +1,6 @@
 import MailQueue from '@config/redis';
 import Contact from '@modules/contacts/infra/mongoose/schemas/Contact';
+import AppError from '@shared/errors/AppError';
 
 import Message, { MessageModel } from '../infra/mongoose/schemas/Message';
 
@@ -18,6 +19,10 @@ class SendMessageService {
         $in: tags,
       },
     });
+
+    if (!recipients.length) {
+      throw new AppError('recipients does not exist');
+    }
 
     await Promise.all(
       recipients.map((recipient) => {
