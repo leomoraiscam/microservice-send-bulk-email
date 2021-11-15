@@ -1,9 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-type Contact = Document & {
+export type ContactAttributes = {
   email: string;
   tags: string[];
 };
+
+export type ContactModel = Document & ContactAttributes;
 
 const ContactSchema = new Schema(
   {
@@ -25,4 +27,4 @@ const ContactSchema = new Schema(
   }
 );
 
-export default mongoose.model<Contact>('Contact', ContactSchema);
+export default mongoose.model<ContactModel>('Contact', ContactSchema);
