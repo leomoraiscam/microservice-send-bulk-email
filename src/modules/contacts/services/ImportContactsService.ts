@@ -1,10 +1,19 @@
 import csvParse from 'csv-parse';
 import { Readable } from 'stream';
+import { injectable, inject } from 'tsyringe';
 
-import Contact from '../infra/mongoose/schemas/Contact';
-import Tag from '../infra/mongoose/schemas/Tag';
+import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
+import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 
+@injectable()
 class ImportContactsService {
+  constructor(
+    @inject('TagsRepository')
+    private tagsRepository: ITagsRepository,
+    @inject('ContactsRepository')
+    private contactsRepository: IContactsRepository
+  ) {}
+
   public async execute(
     contactsFileStream: Readable,
     tags: string[]
@@ -15,11 +24,7 @@ class ImportContactsService {
 
     const parseCSV = contactsFileStream.pipe(parsers);
 
-    const existentTags = await Tag.find({
-      title: {
-        $in: tags,
-      },
-    });
+    const existentTags = await this.tagsRepository.find(tags);
 
     const existentTagsTitles = existentTags.map((tag) => tag.title);
 
@@ -27,24 +32,14 @@ class ImportContactsService {
       .filter((tag) => !existentTagsTitles.includes(tag))
       .map((tag) => ({ title: tag }));
 
-    const createdTags = await Tag.create(newTagsData);
+    const createdTags = await this.tagsRepository.create(newTagsData);
 
     const tagsIds = createdTags.map((tag) => tag._id);
 
     parseCSV.on('data', async (line) => {
       const [email] = line;
 
-      await Contact.findOneAndUpdate(
-        { email },
-        {
-          $addToSet: {
-            tags: tagsIds,
-          },
-        },
-        {
-          upsert: true,
-        }
-      );
+      await this.contactsRepository.findOneAndUpdate(email, tagsIds);
     });
 
     await new Promise((resolve) => parseCSV.on('end', resolve));
