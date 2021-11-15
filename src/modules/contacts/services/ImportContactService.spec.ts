@@ -3,27 +3,23 @@ import { Readable } from 'stream';
 
 import Contact from '../infra/mongoose/schemas/Contact';
 import Tag from '../infra/mongoose/schemas/Tag';
+import ContactsRepositoryInMemory from '../repositories/in-memory/ContactsRepositoryInMemory';
+import TagsRepositoryInMemory from '../repositories/in-memory/TagsRepsositoryInMemory';
 import ImportContactsService from './ImportContactsService';
 
+let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let tagsRepositoryInMemory: TagsRepositoryInMemory;
+let importContacts: ImportContactsService;
+
 describe('Import', () => {
-  beforeAll(async () => {
-    if (!process.env.MONGO_URL) {
-      throw new Error('MongoDB server not initialized');
-    }
-
-    await mongoose.connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
   beforeEach(async () => {
-    await Contact.deleteMany({});
+    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
+    tagsRepositoryInMemory = new TagsRepositoryInMemory();
+
+    importContacts = new ImportContactsService(
+      tagsRepositoryInMemory,
+      contactsRepositoryInMemory
+    );
   });
 
   it('should be able to import new contacts', async () => {
@@ -33,11 +29,9 @@ describe('Import', () => {
       'johndoe@email.com.br\n',
     ]);
 
-    const importContacts = new ImportContactsService();
-
     await importContacts.execute(contactsFileStream, ['Students', 'Class A']);
 
-    const createdTags = await Tag.find({});
+    const createdTags = await tagsRepositoryInMemory.findAll();
 
     expect(createdTags).toEqual(
       expect.arrayContaining([
@@ -48,7 +42,7 @@ describe('Import', () => {
 
     const createdTagsId = createdTags.map((tag) => tag._id);
 
-    const createdContacts = await Contact.find({}).lean();
+    const createdContacts = await contactsRepositoryInMemory.findAll();
 
     expect(createdContacts).toEqual(
       expect.arrayContaining([
@@ -75,13 +69,11 @@ describe('Import', () => {
       'johndoe@email.com.br\n',
     ]);
 
-    const importContacts = new ImportContactsService();
-
-    await Tag.create({ title: 'Students' });
+    await tagsRepositoryInMemory.create([{ title: 'Students' }]);
 
     await importContacts.execute(contactsFileStream, ['Students', 'Class A']);
 
-    const createdTags = await Tag.find({}).lean();
+    const createdTags = await tagsRepositoryInMemory.findAll();
 
     expect(createdTags).toEqual(
       expect.arrayContaining([
@@ -91,23 +83,25 @@ describe('Import', () => {
     );
   });
 
-  it('should be able not recreate contacts that already exist', async () => {
+  it.only('should be able not recreate contacts that already exist', async () => {
     const contactsFileStream = Readable.from([
       'email@email.com\n',
       'email@email.com.br\n',
       'johndoe@email.com.br\n',
     ]);
 
-    const importContacts = new ImportContactsService();
+    const [tag] = await tagsRepositoryInMemory.create([{ title: 'Students' }]);
 
-    const tag = await Tag.create({ title: 'Students' });
-    await Contact.create({ email: 'email@email.com', tags: [tag._id] });
+    await contactsRepositoryInMemory.create({
+      email: 'email@email.com',
+      tags: [tag.id],
+    });
 
     await importContacts.execute(contactsFileStream, ['Class A']);
 
-    const contacts = await Contact.find({ email: 'email@email.com' })
-      .populate('tags')
-      .lean();
+    const email = 'email@email.com';
+
+    const contacts = await contactsRepositoryInMemory.findByEmail(email);
 
     expect(contacts.length).toBe(1);
     expect(contacts[0].tags).toEqual([

@@ -8,6 +8,7 @@ interface ITagsRepository {
   create(data: ICreateTagDTO[]): Promise<TagModel[]>;
   find(tags: string[]): Promise<TagModel[]>;
   findAll(): Promise<TagModel[]>;
+  tagsContacts(email: string): Promise<TagModel[]>;
 }
 
 export default ITagsRepository;

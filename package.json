@@ -20,6 +20,7 @@
     "lint-staged": "^10.5.4",
     "mongoose": "^5.13.6",
     "nodemailer": "^6.6.3",
+    "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.6.0",
     "uuid": "^8.3.2"
   },
