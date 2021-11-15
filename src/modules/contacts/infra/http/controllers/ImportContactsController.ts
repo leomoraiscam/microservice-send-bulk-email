@@ -1,6 +1,7 @@
 import { Response, Request } from 'express';
 import fs from 'fs';
 import path from 'path';
+import { container } from 'tsyringe';
 
 import ImportContactsService from '@modules/contacts/services/ImportContactsService';
 
@@ -22,7 +23,7 @@ class ImportContactsController {
       )
     );
 
-    const importContacts = new ImportContactsService();
+    const importContacts = container.resolve(ImportContactsService);
 
     await importContacts.execute(contactsReadStream, tags);
 
