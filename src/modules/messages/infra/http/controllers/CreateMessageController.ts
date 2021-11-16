@@ -1,4 +1,5 @@
 import { Response, Request } from 'express';
+import { container } from 'tsyringe';
 
 import CreateMessageService from '@modules/messages/services/CreateMessageService';
 
@@ -6,7 +7,7 @@ class CreateMessageController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { subject, body, tags } = request.body;
 
-    const createMessage = new CreateMessageService();
+    const createMessage = container.resolve(CreateMessageService);
 
     const messageData = { subject, body };
 

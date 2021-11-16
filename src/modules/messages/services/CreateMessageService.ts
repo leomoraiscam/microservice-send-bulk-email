@@ -1,24 +1,29 @@
+import { inject, injectable } from 'tsyringe';
+
 import MailQueue from '@config/redis';
-import Contact from '@modules/contacts/infra/mongoose/schemas/Contact';
+import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 import AppError from '@shared/errors/AppError';
 
-import Message, { MessageModel } from '../infra/mongoose/schemas/Message';
+import Message from '../infra/typeorm/schemas/Message';
+import IMessageRepository from '../repositories/IMessageRepository';
 
-class SendMessageService {
+@injectable()
+class CreateMessageService {
+  constructor(
+    // @inject('MessagesRepository')
+    // private messagesRepository: IMessageRepository,
+    @inject('ContactsRepository')
+    private contactsRepository: IContactsRepository
+  ) {}
+
   async execute(
     messageData: {
       subject: string;
       body: string;
     },
     tags: string[]
-  ): Promise<MessageModel> {
-    const message = await Message.create(messageData);
-
-    const recipients = await Contact.find({
-      tags: {
-        $in: tags,
-      },
-    });
+  ): Promise<void> {
+    const recipients = await this.contactsRepository.findByTags(tags);
 
     if (!recipients.length) {
       throw new AppError('recipients does not exist');
@@ -32,9 +37,7 @@ class SendMessageService {
         });
       })
     );
-
-    return message;
   }
 }
 
-export default SendMessageService;
+export default CreateMessageService;
