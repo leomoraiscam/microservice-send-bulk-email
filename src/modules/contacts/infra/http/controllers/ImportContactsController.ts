@@ -7,8 +7,6 @@ import ImportContactsService from '@modules/contacts/services/ImportContactsServ
 
 class ImportContactsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { tags } = request.body;
-
     const contactsReadStream = fs.createReadStream(
       path.resolve(
         __dirname,
@@ -25,7 +23,7 @@ class ImportContactsController {
 
     const importContacts = container.resolve(ImportContactsService);
 
-    await importContacts.execute(contactsReadStream, tags);
+    await importContacts.execute(contactsReadStream);
 
     return response.send();
   }

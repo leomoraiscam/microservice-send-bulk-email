@@ -1,14 +1,11 @@
-import { TagModel } from '../infra/mongoose/schemas/Tag';
+import { ICreateTagsDTO } from '@modules/contacts/services/CreateTagsService';
 
-interface ICreateTagDTO {
-  title: string;
-}
+import Tag from '../infra/typeorm/entities/Tag';
 
 interface ITagsRepository {
-  create(data: ICreateTagDTO[]): Promise<TagModel[]>;
-  find(tags: string[]): Promise<TagModel[]>;
-  findAll(): Promise<TagModel[]>;
-  tagsContacts(email: string): Promise<TagModel[]>;
+  create(tags: ICreateTagsDTO[]): Promise<Tag[]>;
+  findByIds(ids: string[]): Promise<Tag[]>;
+  findByTitle(title: string): Promise<Tag>;
 }
 
 export default ITagsRepository;

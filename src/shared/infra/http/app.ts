@@ -6,7 +6,7 @@ import 'express-async-errors';
 import AppError from '@shared/errors/AppError';
 
 import routes from './routes';
-import '@shared/infra/mongoose/connection';
+import '@shared/infra/typeorm';
 
 import '@shared/container';
 
@@ -24,6 +24,8 @@ app.use(
         status: 'Error',
       });
     }
+
+    console.log('Error', error.message);
 
     return response.status(500).json({
       message: 'Internal Server Error',

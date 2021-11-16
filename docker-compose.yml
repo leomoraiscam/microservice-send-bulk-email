@@ -1,32 +1,30 @@
-version: '3'
+version: '3.7'
 
 networks:
-  umbriel-network:
+  bulk-message-network:
     driver: bridge
 
-services: 
-  umbriel-api:
-    build: .
-    container_name: umbriel-api
-    command: yarn dev
-    volumes:
-      - .:/home/node/api
+services:
+  bulk-message-postgres:
+    image: postgres
+    container_name: database_bulk_message_sql
     ports:
-      - 3333:3333
-    environment: 
-      - MONGO_URL=umbriel-mongo
-      - REDIS_URL=umbriel-redis
-    depends_on: 
-      - umbriel-mongo
-      - umbriel-redis
+      - 5454:5454
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=bulk_message
+    volumes:
+      - pgdata:/data/postgres
+    command: -p 5454
     networks:
-      - umbriel-network
+      - bulk-message-network
 
-  umbriel-mongo:
+  bulk-message-mongo:
     image: mongo
-    container_name: umbriel-mongo
+    container_name: bulk-message-mongo
     restart: always
-    environment: 
+    environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MONGODB_USERNAME=${MONGO_USER}
       - MONGODB_PASSWORD=${MONGO_PASS}
@@ -34,13 +32,13 @@ services:
     ports:
       - "15017:27017"
     volumes:
-      - umbriel-mongo-data:/data/db
+      - bulk-message-mongo-data:/data/db
     networks:
-      - umbriel-network
+      - bulk-message-network
 
-  umbriel-redis:
+  bulk-message-redis:
     image: bitnami/redis:latest
-    container_name: umbriel-redis
+    container_name: bulk-message-redis
     restart: always
     environment:
       - ALLOW_EMPTY_PASSWORD=no
@@ -48,25 +46,28 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - umbriel-redis-data:/bitnami/redis/data
+      - bulk-message-redis-data:/bitnami/redis/data
     networks:
-      - umbriel-network
+      - bulk-message-network
 
-  umbriel-queue:
+  bulk-message-queue:
     build: .
     volumes:
       - .:/home/node/api
     environment:
-      - MONGO_URL=umbriel-mongo
+      - MONGO_URL=bulk-message-mongo
       - REDIS_URL=${REDIS_URL}
     depends_on:
-      - umbriel-mongo
-      - umbriel-redis
+      - bulk-message-mongo
+      - bulk-message-redis
+      - bulk-message-postgres
     networks:
-      - umbriel-network
-    container_name: umbriel-queue
+      - bulk-message-network
+    container_name: bulk-message-queue
     command: yarn queue
 
 volumes:
-  umbriel-redis-data:
-  umbriel-mongo-data:
+  bulk-message-redis-data:
+  bulk-message-mongo-data:
+  pgdata:
+    driver: local

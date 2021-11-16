@@ -1,53 +1,60 @@
-import Contact, {
-  ContactModel,
-  ContactAttributes,
-} from '@modules/contacts/infra/mongoose/schemas/Contact';
+import { v4 as uuidv4 } from 'uuid';
+
+import Contact from '@modules/contacts/infra/typeorm/entities/Contact';
 
 import IContactsRepository from '../IContactsRepository';
 
-interface ICreateContactDTO {
-  email: string;
-  tags: string[];
-}
-
 class ContactsRepositoryInMemory implements IContactsRepository {
-  private contacts: ContactAttributes[] = [];
+  private contacts: Contact[] = [];
 
-  async create({ email, tags }: ICreateContactDTO): Promise<void> {
+  async findByEmail(email: string): Promise<Contact> {
+    return this.contacts.find((contact) => contact.email === email);
+  }
+
+  async findById(id: string): Promise<Contact> {
+    return this.contacts.find((contact) => contact.id === id);
+  }
+
+  async findByTags(tags: string[]): Promise<Contact[]> {
+    return [
+      {
+        id: '671341f9-c178-4c04-8ab0-241f35547332',
+        email: 'leozonnn@gmail.com',
+        created_at: new Date(),
+        updated_at: new Date(),
+        tags: [
+          {
+            id: 'c1c331be-816b-45ad-839b-fadbb465fd3e',
+            title: 'AWS',
+            created_at: new Date(),
+            updated_at: new Date(),
+          },
+        ],
+      },
+    ];
+  }
+
+  async create(email: string): Promise<Contact> {
     const contact = new Contact();
 
     Object.assign(contact, {
+      id: uuidv4(),
       email,
-      tags,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     this.contacts.push(contact);
+
+    return contact;
   }
 
-  async findOneAndUpdate(email: string, tagsIds: string[]): Promise<void> {
-    const contactsIndex = this.contacts.findIndex(
-      (contact) => contact.email === email
+  async save(contact: Contact): Promise<void> {
+    const findIndex = this.contacts.findIndex(
+      (findContact) => findContact.id === contact.id
     );
 
-    if (contactsIndex > 0) {
-      this.contacts[contactsIndex].email = email;
-      this.contacts[contactsIndex].tags = tagsIds;
-    } else {
-      this.contacts.push({
-        email,
-        tags: tagsIds,
-      });
-    }
-  }
-
-  async findAll(): Promise<ContactModel[]> {
-    return this.contacts as ContactModel[];
-  }
-
-  async findByEmail(email: string): Promise<ContactModel[]> {
-    return this.contacts.filter(
-      (contact) => contact.email === email
-    ) as ContactModel[];
+    this.contacts[findIndex] = contact;
   }
 }
 
