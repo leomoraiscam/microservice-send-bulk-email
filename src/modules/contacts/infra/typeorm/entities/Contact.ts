@@ -11,11 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Tag from './Tag';
 
-/* export type ContactAttributes = {
-  email: string;
-  tags: string[];
-}; */
-
 @Entity('contacts')
 class Contact {
   @PrimaryColumn('uuid')
