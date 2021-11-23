@@ -56,7 +56,7 @@ services:
       - .:/home/node/api
     environment:
       - MONGO_URL=bulk-message-mongo
-      - REDIS_URL=${REDIS_URL}
+      - REDIS_URL=bulk-message-redis
     depends_on:
       - bulk-message-mongo
       - bulk-message-redis
