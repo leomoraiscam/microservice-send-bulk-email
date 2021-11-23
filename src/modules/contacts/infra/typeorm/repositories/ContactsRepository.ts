@@ -1,4 +1,4 @@
-import { getRepository, Like, Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 
@@ -26,9 +26,11 @@ class ContactsRepository implements IContactsRepository {
   async findByTags(tags: string[]): Promise<Contact[]> {
     const values = await this.repository
       .createQueryBuilder('cont')
-      .leftJoinAndSelect('cont.tags', 'tags')
-      // .where('cont.tags LIKE :tags', { tags }).
-      .execute();
+      .innerJoin('cont.tags', 'contacts_tags')
+      .where('contacts_tags.id IN (:...tags)', {
+        tags,
+      })
+      .getMany();
 
     return values;
   }
