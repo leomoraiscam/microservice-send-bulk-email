@@ -61,7 +61,8 @@
     "import/no-extraneous-dependencies": [
       "error",
       { "devDependencies": ["**/*.spec.js"] }
-    ]
+    ],
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"]
   },
   "settings": {
     "import/resolver": {
@@ -69,4 +70,3 @@
     }
   }
 }
-  
