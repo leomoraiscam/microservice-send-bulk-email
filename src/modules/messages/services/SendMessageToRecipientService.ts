@@ -15,7 +15,7 @@ class SendMessageToRecipientService {
     });
   }
 
-  async run(): Promise<void> {
+  async execute(): Promise<void> {
     await this.transporter.sendMail({
       from: 'sender@example.com',
       to: 'equipe@gobarber.com.br',
