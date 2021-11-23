@@ -16,22 +16,19 @@ class ContactsRepositoryInMemory implements IContactsRepository {
   }
 
   async findByTags(tags: string[]): Promise<Contact[]> {
-    return [
-      {
-        id: '671341f9-c178-4c04-8ab0-241f35547332',
-        email: 'leozonnn@gmail.com',
-        created_at: new Date(),
-        updated_at: new Date(),
-        tags: [
-          {
-            id: 'c1c331be-816b-45ad-839b-fadbb465fd3e',
-            title: 'AWS',
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-        ],
-      },
-    ];
+    let isTagIncludeInContact = false;
+
+    const contacts = this.contacts.filter((contact) => {
+      const tagsContacts = contact.tags.map((tag) => tag.id);
+
+      for (const tagId of tagsContacts) {
+        isTagIncludeInContact = tags.includes(tagId);
+      }
+
+      return isTagIncludeInContact;
+    });
+
+    return contacts;
   }
 
   async create(email: string): Promise<Contact> {
