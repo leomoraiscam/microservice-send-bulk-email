@@ -9,9 +9,9 @@ class TagsRepositoryInMemory implements ITagsRepository {
   private tags: Tag[] = [];
 
   async findByIds(ids: string[]): Promise<Tag[]> {
-    const allSpecifications = this.tags.filter((tag) => ids.includes(tag.id));
+    const allTags = this.tags.filter((tag) => ids.includes(tag.id));
 
-    return allSpecifications;
+    return allTags;
   }
 
   async findByTitle(title: string): Promise<Tag> {
@@ -19,22 +19,22 @@ class TagsRepositoryInMemory implements ITagsRepository {
   }
 
   async create(tags: ICreateTagsDTO[]): Promise<Tag[]> {
-    const tgs = tags.map((tag) => {
-      const t = new Tag();
+    const tagsCreated = tags.map((tagData) => {
+      const tag = new Tag();
 
-      Object.assign(t, {
+      Object.assign(tag, {
         id: uuidv4(),
-        title: tag.title,
+        title: tagData.title,
         created_at: new Date(),
         updated_at: new Date(),
       });
 
-      return t;
+      return tag;
     });
 
-    this.tags = this.tags.concat(tgs);
+    this.tags = this.tags.concat(tagsCreated);
 
-    return tgs;
+    return tagsCreated;
   }
 }
 
