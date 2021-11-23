@@ -5,5 +5,5 @@ import SendMessageToRecipientService from '@modules/messages/services/SendMessag
 MailQueue.process(async () => {
   const sendMessageToRecipient = new SendMessageToRecipientService();
 
-  await sendMessageToRecipient.run();
+  await sendMessageToRecipient.execute();
 });
