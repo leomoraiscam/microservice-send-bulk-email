@@ -10,8 +10,8 @@ import IMessageRepository from '../repositories/IMessageRepository';
 @injectable()
 class CreateMessageService {
   constructor(
-    // @inject('MessagesRepository')
-    // private messagesRepository: IMessageRepository,
+    @inject('MessagesRepository')
+    private messagesRepository: IMessageRepository,
     @inject('ContactsRepository')
     private contactsRepository: IContactsRepository
   ) {}
@@ -22,7 +22,9 @@ class CreateMessageService {
       body: string;
     },
     tags: string[]
-  ): Promise<void> {
+  ): Promise<Message> {
+    const message = await this.messagesRepository.create(messageData);
+
     const recipients = await this.contactsRepository.findByTags(tags);
 
     if (!recipients.length) {
@@ -37,6 +39,8 @@ class CreateMessageService {
         });
       })
     );
+
+    return message;
   }
 }
 
