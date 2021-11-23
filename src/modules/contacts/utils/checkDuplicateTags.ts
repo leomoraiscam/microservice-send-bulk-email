@@ -1,4 +1,4 @@
-import { ICreateTagsDTO } from '../services/CreateTagsService';
+import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
 
 function checkDuplicateTags(tags: ICreateTagsDTO[]) {
   return tags.some((tag, _, self) => {

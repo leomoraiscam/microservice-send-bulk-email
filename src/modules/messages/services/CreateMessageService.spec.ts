@@ -59,7 +59,7 @@ describe('Send Message', () => {
 
     const tagsSearch = [id1, id2];
 
-    await sendMessageService.execute(messageData, tagsSearch);
+    await sendMessageService.execute({ messageData, tags: tagsSearch });
 
     expect(QueueMock.add).toHaveBeenCalledWith({
       to: contacts[0].email,
@@ -102,7 +102,7 @@ describe('Send Message', () => {
       body: '<p>just testing the email</p>',
     };
 
-    await sendMessageService.execute(messageData, tagsIds);
+    await sendMessageService.execute({ messageData, tags: tagsIds });
 
     expect(QueueMock.add).toHaveBeenCalledWith({
       to: contacts[0].email,
