@@ -2,13 +2,10 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
+import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
 import Tag from '../infra/typeorm/entities/Tag';
 import ITagsRepository from '../repositories/ITagsRepository';
 import checkDuplicateTags from '../utils/checkDuplicateTags';
-
-export interface ICreateTagsDTO {
-  title: string;
-}
 
 @injectable()
 class CreateTagsService {

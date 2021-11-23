@@ -7,12 +7,12 @@ import IContactsRepository from '../IContactsRepository';
 class ContactsRepositoryInMemory implements IContactsRepository {
   private contacts: Contact[] = [];
 
-  async findByEmail(email: string): Promise<Contact> {
-    return this.contacts.find((contact) => contact.email === email);
-  }
-
   async findById(id: string): Promise<Contact> {
     return this.contacts.find((contact) => contact.id === id);
+  }
+
+  async findByEmail(email: string): Promise<Contact> {
+    return this.contacts.find((contact) => contact.email === email);
   }
 
   async findByTags(tags: string[]): Promise<Contact[]> {

@@ -5,10 +5,7 @@ import IContactsRepository from '@modules/contacts/repositories/IContactsReposit
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 import AppError from '@shared/errors/AppError';
 
-interface IRequest {
-  contact_id: string;
-  tags_ids: string[];
-}
+import ICreateTagsContactDTO from '../dtos/ICreateTagsContactDTO';
 
 @injectable()
 class CreateTagContactService {
@@ -19,7 +16,10 @@ class CreateTagContactService {
     private tagsRepository: ITagsRepository
   ) {}
 
-  async execute({ contact_id, tags_ids }: IRequest): Promise<Contact> {
+  async execute({
+    contact_id,
+    tags_ids,
+  }: ICreateTagsContactDTO): Promise<Contact> {
     const contactExists = await this.contactsRepository.findById(contact_id);
 
     if (!contactExists) {

@@ -4,8 +4,6 @@ import { injectable, inject } from 'tsyringe';
 
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 
-import Contact from '../infra/typeorm/entities/Contact';
-
 @injectable()
 class ImportContactsService {
   constructor(

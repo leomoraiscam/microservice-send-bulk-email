@@ -1,11 +1,10 @@
-import { ICreateTagsDTO } from '@modules/contacts/services/CreateTagsService';
-
+import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
 import Tag from '../infra/typeorm/entities/Tag';
 
 interface ITagsRepository {
-  create(tags: ICreateTagsDTO[]): Promise<Tag[]>;
   findByIds(ids: string[]): Promise<Tag[]>;
   findByTitle(title: string): Promise<Tag>;
+  create(tags: ICreateTagsDTO[]): Promise<Tag[]>;
 }
 
 export default ITagsRepository;

@@ -7,6 +7,14 @@ import AppError from '@shared/errors/AppError';
 import Message from '../infra/typeorm/schemas/Message';
 import IMessageRepository from '../repositories/IMessageRepository';
 
+interface IRequest {
+  messageData: {
+    subject: string;
+    body: string;
+  };
+  tags: string[];
+}
+
 @injectable()
 class CreateMessageService {
   constructor(
@@ -16,13 +24,7 @@ class CreateMessageService {
     private contactsRepository: IContactsRepository
   ) {}
 
-  async execute(
-    messageData: {
-      subject: string;
-      body: string;
-    },
-    tags: string[]
-  ): Promise<Message> {
+  async execute({ messageData, tags }: IRequest): Promise<Message> {
     const message = await this.messagesRepository.create(messageData);
 
     const recipients = await this.contactsRepository.findByTags(tags);

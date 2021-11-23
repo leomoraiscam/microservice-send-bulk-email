@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Tag from '@modules/contacts/infra/typeorm/entities/Tag';
-import { ICreateTagsDTO } from '@modules/contacts/services/CreateTagsService';
 
+import ICreateTagsDTO from '../../dtos/ICreateTagsDTO';
 import ITagsRepository from '../ITagsRepository';
 
 class TagsRepositoryInMemory implements ITagsRepository {
