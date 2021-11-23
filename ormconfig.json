@@ -2,7 +2,7 @@
   {
     "type": "postgres",
     "host": "localhost",
-    "port": "5454",
+    "port": 5454,
     "username": "docker",
     "password": "docker",
     "database": "bulk_message",
@@ -16,7 +16,7 @@
     "name": "mongo",
     "type": "mongodb",
     "host": "localhost",
-    "port": "15017",
+    "port": 27017,
     "database": "umbriel",
     "useUnifiedTopology": true,
     "entities": [
