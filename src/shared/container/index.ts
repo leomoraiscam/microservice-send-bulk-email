@@ -1,4 +1,5 @@
 import { container } from 'tsyringe';
+import './providers';
 
 import ContactsRepository from '@modules/contacts/infra/typeorm/repositories/ContactsRepository';
 import TagsRepository from '@modules/contacts/infra/typeorm/repositories/TagsRepository';
