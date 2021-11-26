@@ -1,34 +1,49 @@
 import csvParse from 'csv-parse';
-import { Readable } from 'stream';
+import fs from 'fs';
 import { injectable, inject } from 'tsyringe';
 
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 
 @injectable()
 class ImportContactsService {
   constructor(
     @inject('ContactsRepository')
-    private contactsRepository: IContactsRepository
+    private contactsRepository: IContactsRepository,
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider
   ) {}
 
-  public async execute(contactsFileStream: Readable): Promise<void> {
+  public async execute(file: string): Promise<void> {
+    const contactsReadStream = fs.createReadStream(file);
+
     const parsers = csvParse({
       delimiter: ';',
     });
 
-    const parseCSV = contactsFileStream.pipe(parsers);
+    const parseCSV = contactsReadStream.pipe(parsers);
 
-    parseCSV.on('data', async (line) => {
-      const [email] = line;
+    await this.storageProvider.save(file);
 
-      const existContact = await this.contactsRepository.findByEmail(email);
+    return new Promise((resolve, reject) => {
+      parseCSV
+        .on('data', async (line) => {
+          const [email] = line;
 
-      if (!existContact) {
-        await this.contactsRepository.create(email);
-      }
+          const existContact = await this.contactsRepository.findByEmail(email);
+
+          if (!existContact) {
+            await this.contactsRepository.create(email);
+          }
+        })
+        .on('end', () => {
+          fs.promises.unlink(file);
+          resolve();
+        })
+        .on('error', (error) => {
+          reject(error);
+        });
     });
-
-    await new Promise((resolve) => parseCSV.on('end', resolve));
   }
 }
 
