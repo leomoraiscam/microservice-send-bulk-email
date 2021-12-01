@@ -1,5 +1,7 @@
 FROM node:14.16.0-alpine3.13
 
+RUN apk update && apk add bash
+
 RUN mkdir -p /home/node/api/node_modules && chown -R node:node /home/node/api
 
 WORKDIR /home/node/api
