@@ -50,21 +50,6 @@ services:
     networks:
       - bulk-message-network
 
-  bulk-message-queue:
-    build: .
-    volumes:
-      - .:/home/node/api
-    environment:
-      - MONGO_URL=bulk-message-mongo
-      - REDIS_URL=bulk-message-redis
-    depends_on:
-      - bulk-message-mongo
-      - bulk-message-redis
-      - bulk-message-postgres
-    networks:
-      - bulk-message-network
-    container_name: bulk-message-queue
-    command: yarn queue
 
 volumes:
   bulk-message-redis-data:
