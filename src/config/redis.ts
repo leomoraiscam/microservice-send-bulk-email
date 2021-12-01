@@ -1,11 +1,9 @@
-import Queue from 'bull';
+import { RedisOptions } from 'ioredis';
 
-const MailQueue = new Queue('mail', {
-  redis: {
-    host: process.env.REDIS_URL,
-    port: Number(process.env.REDIS_PORT) || 6379,
-    password: process.env.REDIS_PASS,
-  },
-});
+type RedisConfig = RedisOptions;
 
-export default MailQueue;
+export default {
+  host: process.env.REDIS_URL,
+  port: Number(process.env.REDIS_PORT) || 6379,
+  password: process.env.REDIS_PASS,
+} as RedisConfig;
