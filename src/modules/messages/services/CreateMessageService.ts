@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import MailQueue from '@config/redis';
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
+import IQueueProvider from '@shared/container/providers/QueueProvider/models/IQueueProvider';
 import AppError from '@shared/errors/AppError';
 
 import Message from '../infra/typeorm/schemas/Message';
@@ -21,7 +22,9 @@ class CreateMessageService {
     @inject('MessagesRepository')
     private messagesRepository: IMessageRepository,
     @inject('ContactsRepository')
-    private contactsRepository: IContactsRepository
+    private contactsRepository: IContactsRepository,
+    @inject('QueueProvider')
+    private queueProvider: IQueueProvider
   ) {}
 
   async execute({ messageData, tags }: IRequest): Promise<Message> {
@@ -35,7 +38,7 @@ class CreateMessageService {
 
     await Promise.all(
       recipients.map((recipient) => {
-        return MailQueue.add({
+        return this.queueProvider.add({
           to: recipient.email,
           messageData,
         });
