@@ -9,15 +9,21 @@ let contactsRepositoryInMemory: ContactsRepositoryInMemory;
 let tagsRepositoryInMemory: TagsRepositoryInMemory;
 let messagesRepositoryInMemory: MessagesRepositoryInMemory;
 let sendMessageService: SendMessageService;
+let mockQueue;
 
 describe('Send Message', () => {
   beforeEach(async () => {
+    mockQueue = {
+      add: jest.fn(),
+    };
+
     contactsRepositoryInMemory = new ContactsRepositoryInMemory();
     tagsRepositoryInMemory = new TagsRepositoryInMemory();
     messagesRepositoryInMemory = new MessagesRepositoryInMemory();
     sendMessageService = new SendMessageService(
       messagesRepositoryInMemory,
-      contactsRepositoryInMemory
+      contactsRepositoryInMemory,
+      mockQueue
     );
   });
 
@@ -61,12 +67,12 @@ describe('Send Message', () => {
 
     await sendMessageService.execute({ messageData, tags: tagsSearch });
 
-    expect(QueueMock.add).toHaveBeenCalledWith({
+    expect(mockQueue.add).toHaveBeenCalledWith({
       to: contacts[0].email,
       messageData,
     });
 
-    expect(QueueMock.add).toHaveBeenCalledWith({
+    expect(mockQueue.add).toHaveBeenCalledWith({
       to: contacts[1].email,
       messageData,
     });
@@ -104,17 +110,17 @@ describe('Send Message', () => {
 
     await sendMessageService.execute({ messageData, tags: tagsIds });
 
-    expect(QueueMock.add).toHaveBeenCalledWith({
+    expect(mockQueue.add).toHaveBeenCalledWith({
       to: contacts[0].email,
       messageData,
     });
 
-    expect(QueueMock.add).toHaveBeenCalledWith({
+    expect(mockQueue.add).toHaveBeenCalledWith({
       to: contacts[1].email,
       messageData,
     });
 
-    expect(QueueMock.add).toHaveBeenCalledWith({
+    expect(mockQueue.add).toHaveBeenCalledWith({
       to: contacts[2].email,
       messageData,
     });
