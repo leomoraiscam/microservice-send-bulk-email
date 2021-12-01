@@ -1,9 +1,14 @@
+import 'reflect-metadata';
 import 'dotenv/config';
-import MailQueue from '@config/redis';
-import SendMessageToRecipientService from '@modules/messages/services/SendMessageToRecipientService';
+import { container } from 'tsyringe';
 
-MailQueue.process(async () => {
-  const sendMessageToRecipient = new SendMessageToRecipientService();
+import '@shared/infra/typeorm';
+import '@shared/container';
 
-  await sendMessageToRecipient.execute();
-});
+import ProcessQueueService from '@modules/messages/services/ProcessQueueService';
+
+const processQueue = container.resolve(ProcessQueueService);
+
+processQueue.execute();
+
+console.log('⚗‎‎  Processing mail sending queue!');
