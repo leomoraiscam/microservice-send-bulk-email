@@ -1,6 +1,5 @@
 import { inject, injectable } from 'tsyringe';
 
-import MailQueue from '@config/redis';
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 import IQueueProvider from '@shared/container/providers/QueueProvider/models/IQueueProvider';
 import AppError from '@shared/errors/AppError';

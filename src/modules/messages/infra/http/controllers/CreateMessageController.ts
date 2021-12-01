@@ -11,7 +11,7 @@ class CreateMessageController {
 
     const messageData = { subject, body };
 
-    const message = await createMessage.execute(messageData, tags);
+    const message = await createMessage.execute({ messageData, tags });
 
     return response.status(201).json(message);
   }
