@@ -37,6 +37,7 @@
     ],
     "class-methods-use-this": "off",
     "import/prefer-default-export": "warn",
+    "@typescript-eslint/ban-types": "warn",
     "no-shadow": "off",
     "no-console": "error",
     "no-useless-constructor": "off",
