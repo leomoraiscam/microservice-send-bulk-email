@@ -12,6 +12,10 @@ class MessageRepository implements IMessageRepository {
     this.repository = getMongoRepository(Message, 'mongo');
   }
 
+  async findById(id: string): Promise<Message> {
+    return this.repository.findOne(id);
+  }
+
   async create({ body, subject }: ICreateMessagesDTO): Promise<Message> {
     const contact = this.repository.create({
       body,
