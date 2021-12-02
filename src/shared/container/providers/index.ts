@@ -1,5 +1,7 @@
-import { container } from 'tsyringe';
+import { container, delay } from 'tsyringe';
 
+import WinstonProvider from './LoggerProvider/implementations/WinstonProvider';
+import ILoggerProvider from './LoggerProvider/models/ILoggerProvider';
 import BullProvider from './QueueProvider/implementations/BullProvider';
 import IQueueProvider from './QueueProvider/models/IQueueProvider';
 import DiskStorageProvider from './StorageProvider/implementations/DiskStorageProvider';
@@ -11,3 +13,5 @@ container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   DiskStorageProvider
 );
+
+container.registerSingleton<ILoggerProvider>('LoggerProvider', WinstonProvider);
