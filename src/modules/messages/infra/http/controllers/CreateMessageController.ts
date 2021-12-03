@@ -5,13 +5,13 @@ import CreateMessageService from '@modules/messages/services/CreateMessageServic
 
 class CreateMessageController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { subject, body, tags } = request.body;
+    const { subject, body } = request.body;
 
     const createMessage = container.resolve(CreateMessageService);
 
     const messageData = { subject, body };
 
-    const message = await createMessage.execute({ messageData, tags });
+    const message = await createMessage.execute({ messageData });
 
     return response.status(201).json(message);
   }
