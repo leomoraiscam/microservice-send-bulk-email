@@ -1,35 +1,36 @@
-import nodemailer, { Transporter } from 'nodemailer';
 import { inject, injectable } from 'tsyringe';
 
+import IMessageJob from '@modules/messages/dtos/IMessageJobDTO';
+import ILoggerProvider from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IQueueProvider from '@shared/container/providers/QueueProvider/models/IQueueProvider';
 
 @injectable()
 class ProcessQueueService {
-  private transporter: Transporter;
-
   constructor(
     @inject('QueueProvider')
-    private queueProvider: IQueueProvider
-  ) {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
-      port: 2525,
-      secure: false,
-      auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASSWORD,
-      },
-    });
-  }
+    private queueProvider: IQueueProvider,
+    @inject('LoggerProvider')
+    private loggerProvider: ILoggerProvider,
+    @inject('MailProvider')
+    private mailProvider: IMailProvider
+  ) {}
 
   async execute(): Promise<void> {
     this.queueProvider.process(async (job) => {
-      await this.transporter.sendMail({
+      const { contact, message } = job.data as IMessageJob;
+
+      await this.mailProvider.sendMail({
         from: 'sender@example.com',
-        to: 'equipe@gobarber.com.br',
-        subject: 'Message',
-        text: 'I hope this message gets delivered!',
+        to: contact.email,
+        subject: message.subject,
+        text: message.body,
       });
+
+      this.loggerProvider.log(
+        'info',
+        `[${message.subject}] Sent message to ${contact.email}`
+      );
     });
   }
 }
