@@ -1,4 +1,4 @@
-import { ObjectID } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 import ICreateMessagesDTO from '../../dtos/ICreateMessagesDTO';
 import Message from '../../infra/typeorm/schemas/Message';
@@ -8,13 +8,7 @@ class MessagesRepositoryInMemory implements IMessageRepository {
   private messages: Message[] = [];
 
   async findById(id: string): Promise<Message> {
-    return {
-      subject: 'Umbriel - Email de confirmação',
-      body: 'Esqueceu a sua senha?',
-      created_at: new Date(),
-      updated_at: new Date(),
-      id: new ObjectID(),
-    };
+    return this.messages.find((message) => message.id === id);
   }
 
   async create({ subject, body }: ICreateMessagesDTO): Promise<Message> {
@@ -23,6 +17,9 @@ class MessagesRepositoryInMemory implements IMessageRepository {
     Object.assign(message, {
       subject,
       body,
+      id: uuidv4(),
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     this.messages.push(message);
