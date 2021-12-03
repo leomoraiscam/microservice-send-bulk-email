@@ -99,4 +99,20 @@ describe('Send Message', () => {
       })
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('should not be able send message when a non-exist recipients to this tags', async () => {
+    const tags = ['1234', '5678'];
+
+    const message = await messageRepositoryInMemory.create({
+      subject: 'Hello Word',
+      body: '<p>just testing the email</p>',
+    });
+
+    await expect(
+      sendMessageService.execute({
+        id: message.id,
+        tags,
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
 });
