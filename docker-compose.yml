@@ -37,7 +37,7 @@ services:
       - bulk-message-network
 
   bulk-message-redis:
-    image: bitnami/redis:latest
+    image: redis
     container_name: bulk-message-redis
     restart: always
     environment:
