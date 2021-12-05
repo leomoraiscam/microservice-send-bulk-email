@@ -3,14 +3,17 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  PrimaryColumn,
+  ObjectIdColumn,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity('messages')
 class Message {
-  @PrimaryColumn('uuid')
-  id: string;
+  @ObjectIdColumn()
+  id!: string;
+
+  @ObjectIdColumn({ name: 'id' })
+  _id!: string;
 
   @Column()
   subject: string;
