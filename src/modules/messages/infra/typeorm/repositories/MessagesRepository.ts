@@ -17,14 +17,14 @@ class MessageRepository implements IMessageRepository {
   }
 
   async create({ body, subject }: ICreateMessagesDTO): Promise<Message> {
-    const contact = this.repository.create({
+    const message = this.repository.create({
       body,
       subject,
     });
 
-    await this.repository.save(contact);
+    await this.repository.save(message);
 
-    return contact;
+    return message;
   }
 }
 
