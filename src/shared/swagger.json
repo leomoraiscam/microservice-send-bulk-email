@@ -1,0 +1,377 @@
+{
+  "openapi":"3.0.0",
+  "info": {
+    "title": "Documentation bulk message microservice",
+    "description": "This is microservice",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/contacts/import": {
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Upload a new contacts from csv",
+        "description": "Upload a new contacts",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/tags/:id": {
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Create a tags to specific contact",
+        "description":"Create a tags to specific contact",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "properties": {
+                    "tags_id": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "tags_ids":  [
+                    "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b",
+                    "36684f21-55f8-44d9-bbd1-2bab8bcc4dc1"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email":  {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "id" : {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "post": {
+        "tags": ["Tags"],
+        "summary": "Create a tags",
+        "description": "Create a new tags",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/Tags",
+                "example": {
+                  "tags": [
+                    {
+                      "name": "Typescript"
+                    },
+                    {
+                      "name": "Javascript"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string"
+                      },
+                      "updated_at": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "tag already exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                },
+                "example": {
+                  "message": "tag already exist",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages": {
+      "post": {
+        "tags": ["Messages"],
+        "summary": "Create a message",
+        "description":"Create a new message",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subject": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Messages"
+                },
+                "example": {
+                  "subject": "[Subject] - confirmation e-mail",
+                  "body": "welcome"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/:id/send": {
+      "post": {
+        "tags": ["Messages"],
+        "summary": "Send a specific message to contacts with specific tags",
+        "description":"send message",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subject": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "tags": [
+                    "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Tags": {
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Messages": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
