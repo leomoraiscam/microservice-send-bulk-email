@@ -2,14 +2,16 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import Queue from 'bull';
 import express, { Request, Response, NextFunction } from 'express';
+import swaggerUi from 'swagger-ui-express';
 
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import 'express-async-errors';
 import AppError from '@shared/errors/AppError';
-import '@shared/infra/typeorm';
 
+import '@shared/infra/typeorm';
+import swaggerFile from '../../swagger.json';
 import routes from './routes';
 
 import '@shared/container';
@@ -29,6 +31,7 @@ serverAdapter.setBasePath('/admin/queues');
 app.use('/admin/queues', serverAdapter.getRouter());
 
 app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(routes);
 
