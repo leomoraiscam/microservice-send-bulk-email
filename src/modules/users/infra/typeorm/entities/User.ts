@@ -5,7 +5,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+
+import Permission from '@modules/roles/infra/typeorm/entities/Permission';
+import Role from '@modules/roles/infra/typeorm/entities/Role';
 
 @Entity('users')
 class User {
@@ -21,6 +26,22 @@ class User {
   @Column()
   @Exclude()
   public password: string;
+
+  @ManyToMany(() => Role)
+  @JoinTable({
+    name: 'users_roles',
+    joinColumns: [{ name: 'user_id' }],
+    inverseJoinColumns: [{ name: 'role_id' }],
+  })
+  roles: Role[];
+
+  @ManyToMany(() => Permission)
+  @JoinTable({
+    name: 'users_permissions',
+    joinColumns: [{ name: 'user_id' }],
+    inverseJoinColumns: [{ name: 'permission_id' }],
+  })
+  permissions: Permission[];
 
   @CreateDateColumn()
   public created_at: Date;
