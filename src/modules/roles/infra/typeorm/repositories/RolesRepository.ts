@@ -11,6 +11,12 @@ class RolesRepository implements IRolesRepository {
     this.repository = getRepository(Role);
   }
 
+  findByIds(ids: string[]): Promise<Role[]> {
+    const roles = this.repository.findByIds(ids);
+
+    return roles;
+  }
+
   findByName(name: string): Promise<Role | undefined> {
     return this.repository.findOne({
       where: {
