@@ -25,9 +25,9 @@ class Role {
   @JoinTable({
     name: 'permissions_roles',
     joinColumns: [{ name: 'role_id' }],
-    inverseJoinColumns: [{ name: 'permissions_id' }],
+    inverseJoinColumns: [{ name: 'permission_id' }],
   })
-  permission: Permission[];
+  permissions: Permission[];
 
   @CreateDateColumn()
   created_at: Date;

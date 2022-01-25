@@ -11,6 +11,12 @@ class RolesRepository implements IRolesRepository {
     this.repository = getRepository(Role);
   }
 
+  findById(id: string): Promise<Role> {
+    const roles = this.repository.findOne(id);
+
+    return roles;
+  }
+
   findByIds(ids: string[]): Promise<Role[]> {
     const roles = this.repository.findByIds(ids);
 
@@ -34,6 +40,10 @@ class RolesRepository implements IRolesRepository {
     await this.repository.save(role);
 
     return role;
+  }
+
+  async save(role: Role): Promise<Role> {
+    return this.repository.save(role);
   }
 }
 
