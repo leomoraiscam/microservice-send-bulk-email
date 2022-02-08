@@ -1,12 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
+import IOptions from '../dtos/IOptionsDTO';
 import Tag from '../infra/typeorm/entities/Tag';
 import ITagsRepository from '../repositories/ITagsRepository';
-
-interface IOptions {
-  take: number;
-  skip: number;
-}
 
 @injectable()
 class ListContactsService {
@@ -15,10 +11,11 @@ class ListContactsService {
     private tagsRepository: ITagsRepository
   ) {}
 
-  async execute({ take, skip }: IOptions): Promise<Tag[]> {
+  async execute({ take, skip, page }: IOptions): Promise<Tag[]> {
     return this.tagsRepository.list({
       take,
       skip,
+      page,
     });
   }
 }

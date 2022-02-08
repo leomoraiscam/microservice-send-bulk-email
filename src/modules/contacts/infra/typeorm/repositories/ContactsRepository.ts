@@ -2,16 +2,12 @@ import { getRepository, Repository } from 'typeorm';
 
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 
+import IOptions from '../../../dtos/IOptionsDTO';
 import Contact from '../entities/Contact';
 
 interface ICrateContacts {
   email: string;
   subscribed: boolean;
-}
-
-interface IOptions {
-  take?: number;
-  skip?: number;
 }
 
 class ContactsRepository implements IContactsRepository {
@@ -46,10 +42,10 @@ class ContactsRepository implements IContactsRepository {
     return values;
   }
 
-  async list({ take, skip }: IOptions): Promise<Contact[]> {
+  async list({ take, page }: IOptions): Promise<Contact[]> {
     const contacts = await this.repository.find({
       take,
-      skip: take * (1 - 1),
+      skip: take * (page - 1),
     });
 
     return contacts;

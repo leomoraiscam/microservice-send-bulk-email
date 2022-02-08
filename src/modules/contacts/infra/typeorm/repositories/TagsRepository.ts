@@ -3,12 +3,8 @@ import { getRepository, Repository } from 'typeorm';
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 import { ICreateTagsDTO } from '@modules/contacts/services/CreateTagsService';
 
+import IOptions from '../../../dtos/IOptionsDTO';
 import Tag from '../entities/Tag';
-
-interface IOptions {
-  take?: number;
-  skip?: number;
-}
 
 class TagsRepository implements ITagsRepository {
   private repository: Repository<Tag>;
@@ -29,13 +25,13 @@ class TagsRepository implements ITagsRepository {
     });
   }
 
-  async list({ take, skip }: IOptions): Promise<Tag[]> {
-    const tags = await this.repository.find({
+  async list({ take, page }: IOptions): Promise<Contact[]> {
+    const contacts = await this.repository.find({
       take,
-      skip: take * (1 - 1),
+      skip: take * (page - 1),
     });
 
-    return tags;
+    return contacts;
   }
 
   async create(tags: ICreateTagsDTO[]): Promise<Tag[]> {
