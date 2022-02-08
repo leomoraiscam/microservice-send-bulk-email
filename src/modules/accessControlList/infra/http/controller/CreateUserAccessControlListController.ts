@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
 
-import createUserAccessControlListService from '@modules/accessControlList/services/CreateUserAccessControlListService';
+import createUserAccessControlListService from '@modules/accessControlList/services/CreateAccessControlListToUserService';
 
 class CreateUserAccessControlListController {
   async handle(request: Request, response: Response): Promise<Response> {
