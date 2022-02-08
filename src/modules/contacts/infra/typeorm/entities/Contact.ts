@@ -27,6 +27,9 @@ class Contact {
   })
   tags: Tag[];
 
+  @Column()
+  subscribed: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

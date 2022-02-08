@@ -5,6 +5,11 @@ import { ICreateTagsDTO } from '@modules/contacts/services/CreateTagsService';
 
 import Tag from '../entities/Tag';
 
+interface IOptions {
+  take?: number;
+  skip?: number;
+}
+
 class TagsRepository implements ITagsRepository {
   private repository: Repository<Tag>;
 
@@ -22,6 +27,15 @@ class TagsRepository implements ITagsRepository {
         title,
       },
     });
+  }
+
+  async list({ take, skip }: IOptions): Promise<Tag[]> {
+    const tags = await this.repository.find({
+      take,
+      skip: take * (1 - 1),
+    });
+
+    return tags;
   }
 
   async create(tags: ICreateTagsDTO[]): Promise<Tag[]> {
