@@ -1,13 +1,9 @@
+import IOptions from '../dtos/IOptionsDTO';
 import Contact from '../infra/typeorm/entities/Contact';
 
 interface ICrateContacts {
   email: string;
   subscribed: boolean;
-}
-
-interface IOptions {
-  take?: number;
-  skip?: number;
 }
 
 interface IContactsRepository {

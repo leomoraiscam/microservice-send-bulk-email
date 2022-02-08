@@ -3,13 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import Tag from '@modules/contacts/infra/typeorm/entities/Tag';
 
 import ICreateTagsDTO from '../../dtos/ICreateTagsDTO';
+import IOptions from '../../dtos/IOptionsDTO';
 import paginateArray from '../../utils/paginateArrayInMemory';
 import ITagsRepository from '../ITagsRepository';
-
-interface IOptions {
-  take?: number;
-  skip?: number;
-}
 
 class TagsRepositoryInMemory implements ITagsRepository {
   private tags: Tag[] = [];

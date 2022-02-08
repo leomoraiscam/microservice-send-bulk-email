@@ -1,10 +1,6 @@
 import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
+import IOptions from '../dtos/IOptionsDTO';
 import Tag from '../infra/typeorm/entities/Tag';
-
-interface IOptions {
-  take?: number;
-  skip?: number;
-}
 
 interface ITagsRepository {
   findByIds(ids: string[]): Promise<Tag[]>;

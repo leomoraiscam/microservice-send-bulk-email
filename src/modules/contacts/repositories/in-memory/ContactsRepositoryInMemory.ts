@@ -2,17 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Contact from '@modules/contacts/infra/typeorm/entities/Contact';
 
+import IOptions from '../../dtos/IOptionsDTO';
 import paginateArray from '../../utils/paginateArrayInMemory';
 import IContactsRepository from '../IContactsRepository';
 
 interface ICrateContacts {
   email: string;
   subscribed: boolean;
-}
-
-interface IOptions {
-  take?: number;
-  skip?: number;
 }
 
 class ContactsRepositoryInMemory implements IContactsRepository {
