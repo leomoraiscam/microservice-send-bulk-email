@@ -3,7 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import Tag from '@modules/contacts/infra/typeorm/entities/Tag';
 
 import ICreateTagsDTO from '../../dtos/ICreateTagsDTO';
+import paginateArray from '../../utils/paginateArrayInMemory';
 import ITagsRepository from '../ITagsRepository';
+
+interface IOptions {
+  take?: number;
+  skip?: number;
+}
 
 class TagsRepositoryInMemory implements ITagsRepository {
   private tags: Tag[] = [];
@@ -16,6 +22,15 @@ class TagsRepositoryInMemory implements ITagsRepository {
 
   async findByTitle(title: string): Promise<Tag> {
     return this.tags.find((tag) => tag.title === title);
+  }
+
+  async list({ skip, take }: IOptions): Promise<Tag[]> {
+    const takeValue = take || 1;
+    const skipValue = skip || 10;
+
+    const paginateContacts = paginateArray(this.tags, skipValue, takeValue);
+
+    return paginateContacts;
   }
 
   async create(tags: ICreateTagsDTO[]): Promise<Tag[]> {
