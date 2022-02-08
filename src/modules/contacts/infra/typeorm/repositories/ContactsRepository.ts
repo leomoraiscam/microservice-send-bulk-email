@@ -4,6 +4,16 @@ import IContactsRepository from '@modules/contacts/repositories/IContactsReposit
 
 import Contact from '../entities/Contact';
 
+interface ICrateContacts {
+  email: string;
+  subscribed: boolean;
+}
+
+interface IOptions {
+  take?: number;
+  skip?: number;
+}
+
 class ContactsRepository implements IContactsRepository {
   private repository: Repository<Contact>;
 
@@ -30,13 +40,24 @@ class ContactsRepository implements IContactsRepository {
       .where('contacts_tags.id IN (:...tags)', {
         tags,
       })
+      // .andWhere('cont.subscribed = :subscribed', { subscribed: true })
       .getMany();
 
     return values;
   }
 
-  async create(email: string): Promise<Contact> {
+  async list({ take, skip }: IOptions): Promise<Contact[]> {
+    const contacts = await this.repository.find({
+      take,
+      skip: take * (1 - 1),
+    });
+
+    return contacts;
+  }
+
+  async create({ subscribed, email }: ICrateContacts): Promise<Contact> {
     const contact = this.repository.create({
+      subscribed,
       email,
     });
 
