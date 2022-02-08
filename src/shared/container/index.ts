@@ -1,6 +1,10 @@
 import { container } from 'tsyringe';
 import './providers';
 
+import PermissionsRepository from '@modules/accessControlList/infra/typeorm/repositories/PermissionsRepository';
+import RolesRepository from '@modules/accessControlList/infra/typeorm/repositories/RolesRepository';
+import IPermissionRepository from '@modules/accessControlList/repositories/IPermissionRepository';
+import IRolesRepository from '@modules/accessControlList/repositories/IRolesRepository';
 import ContactsRepository from '@modules/contacts/infra/typeorm/repositories/ContactsRepository';
 import TagsRepository from '@modules/contacts/infra/typeorm/repositories/TagsRepository';
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
@@ -25,4 +29,14 @@ container.registerSingleton<IMessageRepository>(
 container.registerSingleton<IUsersRepository>(
   'UserRepository',
   UsersRepository
+);
+
+container.registerSingleton<IRolesRepository>(
+  'RolesRepository',
+  RolesRepository
+);
+
+container.registerSingleton<IPermissionRepository>(
+  'PermissionsRepository',
+  PermissionsRepository
 );

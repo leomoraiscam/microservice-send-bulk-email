@@ -1,5 +1,8 @@
 import { Router } from 'express';
 
+import accessControl from '@modules/accessControlList/infra/http/routes/accessControl';
+import permissionsRoutes from '@modules/accessControlList/infra/http/routes/permissions';
+import rolesRoutes from '@modules/accessControlList/infra/http/routes/roles';
 import contactRoutes from '@modules/contacts/infra/http/routes/contact';
 import tagsRoutes from '@modules/contacts/infra/http/routes/tags';
 import messageRoutes from '@modules/messages/infra/http/routes/message';
@@ -13,5 +16,8 @@ routes.use('/tags', tagsRoutes);
 routes.use('/messages', messageRoutes);
 routes.use('/users', userRoutes);
 routes.use('/sessions', sessionRoutes);
+routes.use('/roles', rolesRoutes);
+routes.use('/permissions', permissionsRoutes);
+routes.use('/', accessControl);
 
 export default routes;
