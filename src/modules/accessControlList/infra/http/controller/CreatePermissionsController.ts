@@ -1,15 +1,15 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
 
-import CreateRoleService from '@modules/roles/services/CreateRoleService';
+import CreatePermissionsService from '@modules/accessControlList/services/CreatePermissionsService';
 
-class CreateRolesController {
+class CreatePermissionsController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
 
-    const createRoles = container.resolve(CreateRoleService);
+    const createPermissions = container.resolve(CreatePermissionsService);
 
-    await createRoles.execute({
+    await createPermissions.execute({
       name,
       description,
     });
@@ -18,4 +18,4 @@ class CreateRolesController {
   }
 }
 
-export default CreateRolesController;
+export default CreatePermissionsController;

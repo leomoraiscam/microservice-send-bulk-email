@@ -14,7 +14,7 @@ interface IUserACLRequest {
 }
 
 @injectable()
-class CreateUserAccessControlListService {
+class CreateAccessControlListToUserService {
   constructor(
     @inject('UserRepository')
     private usersRepository: IUserRepository,
@@ -51,4 +51,4 @@ class CreateUserAccessControlListService {
   }
 }
 
-export default CreateUserAccessControlListService;
+export default CreateAccessControlListToUserService;

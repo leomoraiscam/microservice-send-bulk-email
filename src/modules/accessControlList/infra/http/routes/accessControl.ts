@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import CreateRolePermissionController from '@modules/roles/infra/http/controller/CreateRolePermissionController';
-import CreateUserAccessControlListController from '@modules/roles/infra/http/controller/CreateUserAccessControlListController';
+import CreateRolePermissionController from '@modules/accessControlList/infra/http/controller/CreateRolePermissionController';
+import CreateUserAccessControlListController from '@modules/accessControlList/infra/http/controller/CreateUserAccessControlListController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 
 const createUserAccessControlListController =

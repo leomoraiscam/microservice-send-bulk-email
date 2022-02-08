@@ -9,8 +9,8 @@ import {
   JoinTable,
 } from 'typeorm';
 
-import Permission from '@modules/roles/infra/typeorm/entities/Permission';
-import Role from '@modules/roles/infra/typeorm/entities/Role';
+import Permission from '@modules/accessControlList/infra/typeorm/entities/Permission';
+import Role from '@modules/accessControlList/infra/typeorm/entities/Role';
 
 @Entity('users')
 class User {

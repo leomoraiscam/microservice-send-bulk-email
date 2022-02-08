@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import RolesController from '@modules/roles/infra/http/controller/RolesController';
+import RolesController from '@modules/accessControlList/infra/http/controller/RolesController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import { is } from '@shared/infra/http/middlewares/ensurePermission';
 

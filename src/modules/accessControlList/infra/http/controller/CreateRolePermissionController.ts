@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
 
-import createRolePermissionService from '@modules/roles/services/CreateRolePermissionService.';
+import createRolePermissionService from '@modules/accessControlList/services/CreateRolePermissionService.';
 
 class CreateRolePermissionController {
   async handle(request: Request, response: Response): Promise<Response> {
