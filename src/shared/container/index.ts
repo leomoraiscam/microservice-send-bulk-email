@@ -10,7 +10,9 @@ import TagsRepository from '@modules/contacts/infra/typeorm/repositories/TagsRep
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 import MessagesRepository from '@modules/messages/infra/typeorm/repositories/MessagesRepository';
+import TemplatesRepository from '@modules/messages/infra/typeorm/repositories/TemplatesRepository';
 import IMessageRepository from '@modules/messages/repositories/IMessageRepository';
+import ITemplateRepository from '@modules/messages/repositories/ITemplateRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
@@ -39,4 +41,9 @@ container.registerSingleton<IRolesRepository>(
 container.registerSingleton<IPermissionRepository>(
   'PermissionsRepository',
   PermissionsRepository
+);
+
+container.registerSingleton<ITemplateRepository>(
+  'TemplatesRepository',
+  TemplatesRepository
 );
