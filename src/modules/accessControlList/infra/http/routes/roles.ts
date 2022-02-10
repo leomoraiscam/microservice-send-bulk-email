@@ -13,7 +13,7 @@ rolesRoutes.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().required(),
+      name: Joi.string().valid('ADMIN', 'USER').required(),
       description: Joi.string().required(),
     },
   }),
