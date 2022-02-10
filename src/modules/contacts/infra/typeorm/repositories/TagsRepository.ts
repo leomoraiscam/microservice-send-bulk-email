@@ -1,7 +1,7 @@
 import { getRepository, Repository } from 'typeorm';
 
+import ICreateTagsDTO from '@modules/contacts/dtos/ICreateTagsDTO';
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
-import { ICreateTagsDTO } from '@modules/contacts/services/CreateTagsService';
 
 import IOptions from '../../../dtos/IOptionsDTO';
 import Tag from '../entities/Tag';
@@ -25,7 +25,7 @@ class TagsRepository implements ITagsRepository {
     });
   }
 
-  async list({ take, page }: IOptions): Promise<Contact[]> {
+  async list({ take, page }: IOptions): Promise<Tag[]> {
     const contacts = await this.repository.find({
       take,
       skip: take * (page - 1),
@@ -34,8 +34,13 @@ class TagsRepository implements ITagsRepository {
     return contacts;
   }
 
-  async create(tags: ICreateTagsDTO[]): Promise<Tag[]> {
-    const tgs = tags.map((tag) => this.repository.create(tag));
+  async create({ tags, user_id }: ICreateTagsDTO): Promise<Tag[]> {
+    const tgs = tags.map((tag) =>
+      this.repository.create({
+        title: tag.title,
+        user_id,
+      })
+    );
 
     await this.repository.save(tgs);
 

@@ -18,6 +18,9 @@ class Tag {
   @CreateDateColumn()
   created_at: Date;
 
+  @Column()
+  user_id: string;
+
   @UpdateDateColumn()
   updated_at: Date;
 

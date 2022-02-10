@@ -1,5 +1,10 @@
-interface ICreateTagsDTO {
+interface ICreateTags {
   title: string;
 }
 
-export default ICreateTagsDTO;
+interface ICreateTagDTO {
+  tags: ICreateTags[];
+  user_id: string;
+}
+
+export default ICreateTagDTO;

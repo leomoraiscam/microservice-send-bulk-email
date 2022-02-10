@@ -14,7 +14,7 @@ class CreateTagsService {
     private tagsRepository: ITagsRepository
   ) {}
 
-  async execute(tags: ICreateTagsDTO[]): Promise<Tag[]> {
+  async execute({ user_id, tags }: ICreateTagsDTO): Promise<Tag[]> {
     const hasTagsWithSameTitle = checkDuplicateTags(tags);
 
     if (hasTagsWithSameTitle) {
@@ -31,7 +31,10 @@ class CreateTagsService {
 
     await Promise.all(hasTagsWithSameTitleRequest);
 
-    const createdTags = await this.tagsRepository.create(tags);
+    const createdTags = await this.tagsRepository.create({
+      tags,
+      user_id,
+    });
 
     return createdTags;
   }
