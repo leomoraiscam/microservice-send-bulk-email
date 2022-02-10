@@ -1,3 +1,4 @@
+import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
@@ -23,9 +24,28 @@ contactsRoutes.post(
   uploadContacts.single('file'),
   importContactsController.handle
 );
-contactsRoutes.post('/tags/:id', createTagContactServiceController.handle);
+contactsRoutes.post(
+  '/tags/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      tags_ids: Joi.array().items(Joi.string()),
+    },
+  }),
+  createTagContactServiceController.handle
+);
 contactsRoutes.patch(
   '/:contact_id/subscription',
+  celebrate({
+    [Segments.PARAMS]: {
+      contact_id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      subscribed: Joi.bool(),
+    },
+  }),
   changeContactSubscriptionStatusController.handle
 );
 

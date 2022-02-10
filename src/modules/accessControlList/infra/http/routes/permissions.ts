@@ -1,3 +1,4 @@
+import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
 import CreatePermissionsController from '@modules/accessControlList/infra/http/controller/CreatePermissionsController';
@@ -9,6 +10,12 @@ const permissionsRoutes = Router();
 
 permissionsRoutes.post(
   '/',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      description: Joi.string().required(),
+    },
+  }),
   ensureAuthenticated,
   createPermissionsController.handle
 );

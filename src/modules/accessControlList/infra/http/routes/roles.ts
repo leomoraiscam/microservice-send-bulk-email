@@ -1,3 +1,4 @@
+import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
 import RolesController from '@modules/accessControlList/infra/http/controller/RolesController';
@@ -10,6 +11,12 @@ const rolesRoutes = Router();
 
 rolesRoutes.post(
   '/',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      description: Joi.string().required(),
+    },
+  }),
   ensureAuthenticated,
   is(['admin']),
   rolesController.handle
