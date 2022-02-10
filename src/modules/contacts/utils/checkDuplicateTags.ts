@@ -1,6 +1,8 @@
-import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
+interface ICreateTags {
+  title: string;
+}
 
-function checkDuplicateTags(tags: ICreateTagsDTO[]) {
+function checkDuplicateTags(tags: ICreateTags[]) {
   return tags.some((tag, _, self) => {
     const filterList = self.filter((t) => t.title === tag.title);
 
