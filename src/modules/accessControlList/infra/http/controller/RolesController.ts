@@ -1,3 +1,4 @@
+import { classToClass } from 'class-transformer';
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
 
@@ -9,12 +10,12 @@ class CreateRolesController {
 
     const createRoles = container.resolve(CreateRoleService);
 
-    await createRoles.execute({
+    const role = await createRoles.execute({
       name,
       description,
     });
 
-    return response.status(201).send();
+    return response.status(201).json(classToClass(role));
   }
 }
 
