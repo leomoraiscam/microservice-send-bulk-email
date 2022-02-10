@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
+import { RoleEnum } from '@config/roles';
 import AppError from '@shared/errors/AppError';
 
 import Role from '../infra/typeorm/entities/Role';
@@ -24,8 +25,10 @@ class CreateRoleService {
       throw new AppError('Role already exist', 409);
     }
 
+    const serializeRole = RoleEnum[name];
+
     const role = await this.rolesRepository.create({
-      name,
+      name: serializeRole,
       description,
     });
 
