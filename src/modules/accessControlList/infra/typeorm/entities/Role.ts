@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { RoleEnum } from '../../../../../config/roles';
 import Permission from './Permission';
 
 @Entity('roles')
@@ -15,8 +17,14 @@ class Role {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Exclude()
   @Column()
   name: string;
+
+  @Expose({ name: 'name' })
+  getAccessType() {
+    return RoleEnum[this.name];
+  }
 
   @Column()
   description: string;
