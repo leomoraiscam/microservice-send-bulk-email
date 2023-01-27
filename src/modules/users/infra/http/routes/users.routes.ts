@@ -1,14 +1,12 @@
 import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
-import ListUsersController from '@modules/users/infra/http/controllers/ListUsersController';
-import UsersController from '@modules/users/infra/http/controllers/UsersController';
+import CreateUserController from '@modules/users/infra/http/controllers/CreateUserController';
 
-const listUsersController = new ListUsersController();
+const createUserController = new CreateUserController();
 
 const usersRouter = Router();
 
-usersRouter.get('/', listUsersController.handle);
 usersRouter.post(
   '/',
   celebrate({
@@ -18,7 +16,7 @@ usersRouter.post(
       password: Joi.string().required(),
     },
   }),
-  UsersController.create
+  createUserController.handle
 );
 
 export default usersRouter;
