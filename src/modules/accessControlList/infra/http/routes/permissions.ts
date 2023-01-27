@@ -1,10 +1,10 @@
 import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
-import CreatePermissionsController from '@modules/accessControlList/infra/http/controller/CreatePermissionsController';
+import CreatePermissionController from '@modules/accessControlList/infra/http/controller/CreatePermissionController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 
-const createPermissionsController = new CreatePermissionsController();
+const createPermissionController = new CreatePermissionController();
 
 const permissionsRoutes = Router();
 
@@ -17,7 +17,7 @@ permissionsRoutes.post(
     },
   }),
   ensureAuthenticated,
-  createPermissionsController.handle
+  createPermissionController.handle
 );
 
 export default permissionsRoutes;

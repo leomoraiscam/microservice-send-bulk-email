@@ -1,20 +1,20 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
 
-import CreatePermissionsService from '@modules/accessControlList/services/CreatePermissionsService';
+import CreatePermissionService from '@modules/accessControlList/services/CreatePermissionService';
 
 class CreatePermissionsController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
 
-    const createPermissions = container.resolve(CreatePermissionsService);
+    const createPermission = container.resolve(CreatePermissionService);
 
-    await createPermissions.execute({
+    const permission = await createPermission.execute({
       name,
       description,
     });
 
-    return response.status(201).send();
+    return response.status(201).json(permission);
   }
 }
 

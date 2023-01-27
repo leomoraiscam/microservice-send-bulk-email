@@ -41,9 +41,10 @@ class CreateAccessControlListToUserService {
 
     const rolesExists = await this.rolesRepository.findByIds(roles);
 
-    user.permissions = permissionsExists;
-
-    user.roles = rolesExists;
+    Object.assign(user, {
+      roles: rolesExists,
+      permissions: permissionsExists,
+    });
 
     await this.usersRepository.save(user);
 

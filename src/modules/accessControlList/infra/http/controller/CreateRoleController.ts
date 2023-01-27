@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 
 import CreateRoleService from '@modules/accessControlList/services/CreateRoleService';
 
-class CreateRolesController {
+class CreateRoleController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
 
@@ -19,4 +19,4 @@ class CreateRolesController {
   }
 }
 
-export default CreateRolesController;
+export default CreateRoleController;

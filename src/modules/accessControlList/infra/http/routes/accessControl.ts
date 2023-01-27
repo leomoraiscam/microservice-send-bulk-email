@@ -1,18 +1,18 @@
 import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
-import CreateRolePermissionController from '@modules/accessControlList/infra/http/controller/CreateRolePermissionController';
+import CreatePermissionsRoleController from '@modules/accessControlList/infra/http/controller/CreatePermissionsRoleController';
 import CreateUserAccessControlListController from '@modules/accessControlList/infra/http/controller/CreateUserAccessControlListController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 
 const createUserAccessControlListController =
   new CreateUserAccessControlListController();
-const createRolePermissionController = new CreateRolePermissionController();
+const createPermissionsRoleController = new CreatePermissionsRoleController();
 
 const userAclRoutes = Router();
 
 userAclRoutes.post(
-  '/users/acl',
+  '/users/:user_id/acl',
   celebrate({
     [Segments.BODY]: {
       permissions: Joi.array().items(Joi.string().uuid()),
@@ -33,6 +33,6 @@ userAclRoutes.post(
       permissions: Joi.array().items(Joi.string().uuid()),
     },
   }),
-  createRolePermissionController.handle
+  createPermissionsRoleController.handle
 );
 export default userAclRoutes;
