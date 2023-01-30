@@ -1,9 +1,7 @@
-interface ICreateTags {
-  title: string;
-}
-
 interface ICreateTagDTO {
-  tags: ICreateTags[];
+  tags: Array<{
+    title: string;
+  }>;
   user_id: string;
 }
 

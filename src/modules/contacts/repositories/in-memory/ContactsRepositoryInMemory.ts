@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Contact from '@modules/contacts/infra/typeorm/entities/Contact';
+import IOptionsDTO from '@shared/dtos/IOptionsDTO';
 
-import IOptions from '../../dtos/IOptionsDTO';
 import paginateArray from '../../utils/paginateArrayInMemory';
 import IContactsRepository from '../IContactsRepository';
 
@@ -40,11 +40,11 @@ class ContactsRepositoryInMemory implements IContactsRepository {
     return contacts;
   }
 
-  async list({ skip, take }: IOptions): Promise<Contact[]> {
-    const takeValue = take || 1;
-    const skipValue = skip || 10;
+  async list({ page, perPage }: IOptionsDTO): Promise<Contact[]> {
+    page = page || 1;
+    perPage = perPage || 10;
 
-    const paginateContacts = paginateArray(this.contacts, skipValue, takeValue);
+    const paginateContacts = paginateArray(this.contacts, page, perPage);
 
     return paginateContacts;
   }

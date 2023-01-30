@@ -1,4 +1,5 @@
-import IOptions from '../dtos/IOptionsDTO';
+import IOptionsDTO from '@shared/dtos/IOptionsDTO';
+
 import Contact from '../infra/typeorm/entities/Contact';
 
 interface ICrateContacts {
@@ -10,7 +11,7 @@ interface IContactsRepository {
   findById(id: string): Promise<Contact>;
   findByEmail(email: string): Promise<Contact>;
   findByTags(tags: string[]): Promise<Contact[]>;
-  list({ skip, take }: IOptions): Promise<Contact[]>;
+  list(options?: IOptionsDTO): Promise<Contact[]>;
   create(data: ICrateContacts): Promise<Contact>;
   save(contact: Contact): Promise<void>;
 }

@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Tag from '@modules/contacts/infra/typeorm/entities/Tag';
+import IOptionsDTO from '@shared/dtos/IOptionsDTO';
 
 import ICreateTagsDTO from '../../dtos/ICreateTagsDTO';
-import IOptions from '../../dtos/IOptionsDTO';
 import paginateArray from '../../utils/paginateArrayInMemory';
 import ITagsRepository from '../ITagsRepository';
 
@@ -20,16 +20,16 @@ class TagsRepositoryInMemory implements ITagsRepository {
     return this.tags.find((tag) => tag.title === title);
   }
 
-  async list({ skip, take }: IOptions): Promise<Tag[]> {
-    const takeValue = take || 1;
-    const skipValue = skip || 10;
+  async list({ page, perPage }: IOptionsDTO): Promise<Tag[]> {
+    page = page || 1;
+    perPage = perPage || 10;
 
-    const paginateContacts = paginateArray(this.tags, skipValue, takeValue);
+    const paginateContacts = paginateArray(this.tags, page, perPage);
 
     return paginateContacts;
   }
 
-  async create(tags: ICreateTagsDTO[]): Promise<Tag[]> {
+  async create({ tags }: ICreateTagsDTO): Promise<Tag[]> {
     const tagsCreated = tags.map((tagData) => {
       const tag = new Tag();
 
