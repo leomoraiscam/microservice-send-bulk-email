@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import ICreateTagDTO from '../dtos/ICreateTagDTO';
+import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
 import Tag from '../infra/typeorm/entities/Tag';
 import ITagsRepository from '../repositories/ITagsRepository';
 import checkDuplicateTags from '../utils/checkDuplicateTags';
@@ -14,7 +14,7 @@ class CreateTagsService {
     private tagsRepository: ITagsRepository
   ) {}
 
-  async execute({ contact_id, tags }: ICreateTagDTO): Promise<Tag[]> {
+  async execute({ contact_id, tags }: ICreateTagsDTO): Promise<Tag[]> {
     const hasTagsWithSameTitle = checkDuplicateTags(tags);
 
     if (hasTagsWithSameTitle) {

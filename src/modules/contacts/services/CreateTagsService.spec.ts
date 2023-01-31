@@ -25,7 +25,7 @@ describe('Create Tag', () => {
 
     const createdTags = await createTags.execute({
       tags,
-      user_id: null,
+      contact_id: null,
     });
 
     expect(createdTags[0]).toHaveProperty('id');
@@ -44,7 +44,7 @@ describe('Create Tag', () => {
     await expect(
       createTags.execute({
         tags,
-        user_id: null,
+        contact_id: null,
       })
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -61,7 +61,7 @@ describe('Create Tag', () => {
 
     await inMemoryTagsRepository.create({
       tags,
-      user_id: null,
+      contact_id: null,
     });
 
     await expect(
@@ -71,7 +71,7 @@ describe('Create Tag', () => {
             title: 'Javascript',
           },
         ],
-        user_id: null,
+        contact_id: null,
       })
     ).rejects.toBeInstanceOf(AppError);
   });

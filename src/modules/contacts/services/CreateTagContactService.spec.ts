@@ -36,15 +36,15 @@ describe('Create Tag Contacts', () => {
 
     const [tag] = await inMemoryTagsRepository.create({
       tags,
-      user_id: null,
+      contact_id: null,
     });
 
     const contact_id = contact.id;
-    const tags_ids = [tag.id];
+    const tag_ids = [tag.id];
 
     const tagsContacts = await createTagContactService.execute({
       contact_id,
-      tags_ids,
+      tag_ids,
     });
 
     expect(tagsContacts).toHaveProperty('tags');

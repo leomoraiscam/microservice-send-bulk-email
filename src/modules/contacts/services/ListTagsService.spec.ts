@@ -41,17 +41,17 @@ describe('List Contacts From tags', () => {
 
     await inMemoryTagsRepository.create({
       tags: tagsTools,
-      user_id: null,
+      contact_id: null,
     });
 
     await inMemoryTagsRepository.create({
       tags: tagsInfra,
-      user_id: null,
+      contact_id: null,
     });
 
     await inMemoryTagsRepository.create({
       tags: tagsFram,
-      user_id: null,
+      contact_id: null,
     });
 
     const tags = await listTagsService.execute({
