@@ -5,7 +5,7 @@ import IContactsRepository from '@modules/contacts/repositories/IContactsReposit
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 import AppError from '@shared/errors/AppError';
 
-import ICreateTagsContactDTO from '../dtos/ICreateTagsContactDTO';
+import ICreateTagsToContactDTO from '../dtos/ICreateTagsToContactDTO';
 
 @injectable()
 class CreateTagContactService {
@@ -18,15 +18,15 @@ class CreateTagContactService {
 
   async execute({
     contact_id,
-    tags_ids,
-  }: ICreateTagsContactDTO): Promise<Contact> {
+    tag_ids,
+  }: ICreateTagsToContactDTO): Promise<Contact> {
     const contactExists = await this.contactsRepository.findById(contact_id);
 
     if (!contactExists) {
       throw new AppError("Contact doesn't exist", 404);
     }
 
-    const tags = await this.tagsRepository.findByIds(tags_ids);
+    const tags = await this.tagsRepository.findByIds(tag_ids);
 
     contactExists.tags = tags;
 
