@@ -2,13 +2,9 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
+import IChangeStatusDTO from '../dtos/IChangeContactStatusDTO';
 import Contact from '../infra/typeorm/entities/Contact';
 import IContactsRepository from '../repositories/IContactsRepository';
-
-interface IChangeStatus {
-  contact_id: string;
-  subscribed: boolean;
-}
 
 @injectable()
 class ChangeContactSubscriptionStatusService {
@@ -17,7 +13,10 @@ class ChangeContactSubscriptionStatusService {
     private contactsRepository: IContactsRepository
   ) {}
 
-  async execute({ contact_id, subscribed }: IChangeStatus): Promise<Contact> {
+  async execute({
+    contact_id,
+    subscribed,
+  }: IChangeStatusDTO): Promise<Contact> {
     const contact = await this.contactsRepository.findById(contact_id);
 
     if (!contact) {
