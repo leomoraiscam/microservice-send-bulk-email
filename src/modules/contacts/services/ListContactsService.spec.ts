@@ -1,37 +1,37 @@
-import ContactsRepositoryInMemory from '@modules/contacts/repositories/in-memory/ContactsRepositoryInMemory';
+import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory/InMemoryContactsRepository';
 
 import ListContactsService from './ListContactsService';
 
 let listContactsService: ListContactsService;
-let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let inMemoryContactsRepository: InMemoryContactsRepository;
 
 describe('List Contacts From tags', () => {
   beforeEach(() => {
-    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
-    listContactsService = new ListContactsService(contactsRepositoryInMemory);
+    inMemoryContactsRepository = new InMemoryContactsRepository();
+    listContactsService = new ListContactsService(inMemoryContactsRepository);
   });
 
   it('should be able to list contacts', async () => {
     const email = 'lmorais@gmail.com';
 
-    await contactsRepositoryInMemory.create({
+    await inMemoryContactsRepository.create({
       email,
       subscribed: true,
     });
 
-    await contactsRepositoryInMemory.create({
+    await inMemoryContactsRepository.create({
       email: 'l@gmail.com',
       subscribed: true,
     });
 
-    await contactsRepositoryInMemory.create({
+    await inMemoryContactsRepository.create({
       email: 'lm@gmail.com',
       subscribed: true,
     });
 
     const contacts = await listContactsService.execute({
-      take: 1,
-      skip: 2,
+      perPage: 1,
+      page: 2,
     });
 
     expect(contacts.length).toBe(2);

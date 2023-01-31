@@ -1,16 +1,16 @@
 import AppError from '@shared/errors/AppError';
 
-import TagsRepositoryInMemory from '../repositories/in-memory/TagsRepositoryInMemory';
+import InMemoryTagsRepository from '../repositories/in-memory/InMemoryTagsRepository';
 import CreateTagsService from './CreateTagsService';
 
-let tagsRepositoryInMemory: TagsRepositoryInMemory;
+let inMemoryTagsRepository: InMemoryTagsRepository;
 let createTags: CreateTagsService;
 
 describe('Create Tag', () => {
   beforeEach(async () => {
-    tagsRepositoryInMemory = new TagsRepositoryInMemory();
+    inMemoryTagsRepository = new InMemoryTagsRepository();
 
-    createTags = new CreateTagsService(tagsRepositoryInMemory);
+    createTags = new CreateTagsService(inMemoryTagsRepository);
   });
 
   it('should be able to create new tags', async () => {
@@ -23,7 +23,10 @@ describe('Create Tag', () => {
       },
     ];
 
-    const createdTags = await createTags.execute(tags);
+    const createdTags = await createTags.execute({
+      tags,
+      user_id: null,
+    });
 
     expect(createdTags[0]).toHaveProperty('id');
   });
@@ -38,7 +41,12 @@ describe('Create Tag', () => {
       },
     ];
 
-    await expect(createTags.execute(tags)).rejects.toBeInstanceOf(AppError);
+    await expect(
+      createTags.execute({
+        tags,
+        user_id: null,
+      })
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to create new tags if already exist', async () => {
@@ -51,14 +59,20 @@ describe('Create Tag', () => {
       },
     ];
 
-    await tagsRepositoryInMemory.create(tags);
+    await inMemoryTagsRepository.create({
+      tags,
+      user_id: null,
+    });
 
     await expect(
-      createTags.execute([
-        {
-          title: 'Javascript',
-        },
-      ])
+      createTags.execute({
+        tags: [
+          {
+            title: 'Javascript',
+          },
+        ],
+        user_id: null,
+      })
     ).rejects.toBeInstanceOf(AppError);
   });
 });

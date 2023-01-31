@@ -1,22 +1,22 @@
-import ContactsRepositoryInMemory from '@modules/contacts/repositories/in-memory/ContactsRepositoryInMemory';
+import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory/InMemoryContactsRepository';
 import AppError from '@shared/errors/AppError';
 
 import ChangeContactSubscriptionStatusService from './ChangeContactSubscriptionStatusService';
 
 let changeContactSubscriptionStatusService: ChangeContactSubscriptionStatusService;
-let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let inMemoryContactsRepository: InMemoryContactsRepository;
 
 describe('Create Tag Contacts', () => {
   beforeEach(() => {
-    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
+    inMemoryContactsRepository = new InMemoryContactsRepository();
     changeContactSubscriptionStatusService =
-      new ChangeContactSubscriptionStatusService(contactsRepositoryInMemory);
+      new ChangeContactSubscriptionStatusService(inMemoryContactsRepository);
   });
 
   it('should be able to change status of contacts', async () => {
     const email = 'lmorais@gmail.com';
 
-    const contact = await contactsRepositoryInMemory.create({
+    const contact = await inMemoryContactsRepository.create({
       email,
       subscribed: true,
     });

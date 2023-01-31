@@ -1,13 +1,13 @@
-import ContactsRepositoryInMemory from '@modules/contacts/repositories/in-memory/ContactsRepositoryInMemory';
-import TagsRepositoryInMemory from '@modules/contacts/repositories/in-memory/TagsRepositoryInMemory';
+import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory/InMemoryContactsRepository';
+import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
 import MessageRepositoryInMemory from '@modules/messages/repositories/in-memory/MessagesRepositoryInMemory';
 import MailProviderInMemory from '@shared/container/providers/MailProvider/in-memory/MailProviderInMemory';
 import QueueProviderInMemory from '@shared/container/providers/QueueProvider/in-memory/QueueProviderInMemory';
 
 import ProcessQueueService from './ProcessQueueService';
 
-let tagsRepositoryInMemory: TagsRepositoryInMemory;
-let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let inMemoryTagsRepository: InMemoryTagsRepository;
+let inMemoryContactsRepository: InMemoryContactsRepository;
 let messageRepositoryInMemory: MessageRepositoryInMemory;
 let mailProviderInMemory: MailProviderInMemory;
 let queueProviderInMemory: QueueProviderInMemory;
@@ -21,9 +21,9 @@ describe('Process Queue', () => {
       log: jest.fn(),
     };
 
-    tagsRepositoryInMemory = new TagsRepositoryInMemory();
+    inMemoryTagsRepository = new InMemoryTagsRepository();
     messageRepositoryInMemory = new MessageRepositoryInMemory();
-    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
+    inMemoryContactsRepository = new InMemoryContactsRepository();
     mailProviderInMemory = new MailProviderInMemory();
     queueProviderInMemory = new QueueProviderInMemory();
 
@@ -37,15 +37,17 @@ describe('Process Queue', () => {
   it('should send message to all recipients when processing the queue', async () => {
     const sendMail = jest.spyOn(mailProviderInMemory, 'sendMail');
 
-    const tags = await tagsRepositoryInMemory.create([
-      { title: 'Students' },
-      { title: 'Class A' },
-      { title: 'Class B' },
-    ]);
+    const tags = await inMemoryTagsRepository.create({
+      tags: [{ title: 'Students' }, { title: 'Class A' }, { title: 'Class B' }],
+      user_id: null,
+    });
 
     const contacts = [{ email: 'email@email.com' }];
 
-    const contact = await contactsRepositoryInMemory.create(contacts[0].email);
+    const contact = await inMemoryContactsRepository.create({
+      email: contacts[0].email,
+      subscribed: true,
+    });
 
     contact.tags = tags;
 

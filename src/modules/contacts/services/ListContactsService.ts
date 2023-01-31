@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import IOptions from '../dtos/IOptionsDTO';
+import IOptions from '@shared/dtos/IOptionsDTO';
+
 import Contact from '../infra/typeorm/entities/Contact';
 import IContactsRepository from '../repositories/IContactsRepository';
 
@@ -11,11 +12,10 @@ class ListContactsService {
     private contactsRepository: IContactsRepository
   ) {}
 
-  async execute({ take, skip, page }: IOptions): Promise<Contact[]> {
+  async execute({ perPage, page }: IOptions): Promise<Contact[]> {
     return this.contactsRepository.list({
-      take,
-      skip,
       page,
+      perPage,
     });
   }
 }

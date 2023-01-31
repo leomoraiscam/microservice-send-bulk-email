@@ -1,14 +1,14 @@
-import TagsRepositoryInMemory from '@modules/contacts/repositories/in-memory/TagsRepositoryInMemory';
+import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
 
 import ListTagsService from './ListTagsService';
 
 let listTagsService: ListTagsService;
-let tagsRepositoryInMemory: TagsRepositoryInMemory;
+let inMemoryTagsRepository: InMemoryTagsRepository;
 
 describe('List Contacts From tags', () => {
   beforeEach(() => {
-    tagsRepositoryInMemory = new TagsRepositoryInMemory();
-    listTagsService = new ListTagsService(tagsRepositoryInMemory);
+    inMemoryTagsRepository = new InMemoryTagsRepository();
+    listTagsService = new ListTagsService(inMemoryTagsRepository);
   });
 
   it('should be able to list tags', async () => {
@@ -39,15 +39,24 @@ describe('List Contacts From tags', () => {
       },
     ];
 
-    await tagsRepositoryInMemory.create(tagsTools);
+    await inMemoryTagsRepository.create({
+      tags: tagsTools,
+      user_id: null,
+    });
 
-    await tagsRepositoryInMemory.create(tagsInfra);
+    await inMemoryTagsRepository.create({
+      tags: tagsInfra,
+      user_id: null,
+    });
 
-    await tagsRepositoryInMemory.create(tagsFram);
+    await inMemoryTagsRepository.create({
+      tags: tagsFram,
+      user_id: null,
+    });
 
     const tags = await listTagsService.execute({
-      take: 1,
-      skip: 2,
+      perPage: 10,
+      page: 1,
     });
 
     expect(tags.length).toBe(2);

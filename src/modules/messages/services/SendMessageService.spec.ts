@@ -1,13 +1,13 @@
-import ContactsRepositoryInMemory from '@modules/contacts/repositories/in-memory/ContactsRepositoryInMemory';
-import TagsRepositoryInMemory from '@modules/contacts/repositories/in-memory/TagsRepositoryInMemory';
+import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory/InMemoryContactsRepository';
+import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
 import MessageRepositoryInMemory from '@modules/messages/repositories/in-memory/MessagesRepositoryInMemory';
 import AppError from '@shared/errors/AppError';
 
 import SendMessageService from './SendMessageService';
 
-let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let inMemoryContactsRepository: InMemoryContactsRepository;
 let messageRepositoryInMemory: MessageRepositoryInMemory;
-let tagsRepositoryInMemory: TagsRepositoryInMemory;
+let inMemoryTagsRepository: InMemoryTagsRepository;
 let sendMessageService: SendMessageService;
 let mockQueue;
 let mockLogger;
@@ -22,23 +22,22 @@ describe('Send Message', () => {
       log: jest.fn(),
     };
 
-    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
+    inMemoryContactsRepository = new InMemoryContactsRepository();
     messageRepositoryInMemory = new MessageRepositoryInMemory();
-    tagsRepositoryInMemory = new TagsRepositoryInMemory();
+    inMemoryTagsRepository = new InMemoryTagsRepository();
     sendMessageService = new SendMessageService(
       messageRepositoryInMemory,
-      contactsRepositoryInMemory,
+      inMemoryContactsRepository,
       mockQueue,
       mockLogger
     );
   });
 
   it('should be able to send message to users with existent tags', async () => {
-    const tags = await tagsRepositoryInMemory.create([
-      { title: 'Students' },
-      { title: 'Class A' },
-      { title: 'Class B' },
-    ]);
+    const tags = await inMemoryTagsRepository.create({
+      tags: [{ title: 'Students' }, { title: 'Class A' }, { title: 'Class B' }],
+      user_id: null,
+    });
 
     const [t1, t2, t3] = tags;
 
@@ -53,9 +52,18 @@ describe('Send Message', () => {
     ];
 
     const [firstContact, secondContact, tertiaryContact] = await Promise.all([
-      await contactsRepositoryInMemory.create(contacts[0].email),
-      await contactsRepositoryInMemory.create(contacts[1].email),
-      await contactsRepositoryInMemory.create(contacts[2].email),
+      await inMemoryContactsRepository.create({
+        email: contacts[0].email,
+        subscribed: true,
+      }),
+      await inMemoryContactsRepository.create({
+        email: contacts[1].email,
+        subscribed: true,
+      }),
+      await inMemoryContactsRepository.create({
+        email: contacts[2].email,
+        subscribed: true,
+      }),
     ]);
 
     const arrayConcat = [t1].concat([t2]);

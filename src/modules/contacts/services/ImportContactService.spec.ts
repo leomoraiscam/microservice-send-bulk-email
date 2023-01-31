@@ -1,19 +1,19 @@
 import StorageProviderInMemory from '@shared/container/providers/StorageProvider/in-memory/StorageProviderInMemory';
 
-import ContactsRepositoryInMemory from '../repositories/in-memory/ContactsRepositoryInMemory';
+import InMemoryContactsRepository from '../repositories/in-memory/InMemoryContactsRepository';
 import ImportContactsService from './ImportContactsService';
 
-let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let inMemoryContactsRepository: InMemoryContactsRepository;
 let storageProviderInMemory: StorageProviderInMemory;
 let importContacts: ImportContactsService;
 
 describe('Import Contacts', () => {
   beforeEach(async () => {
-    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
+    inMemoryContactsRepository = new InMemoryContactsRepository();
     storageProviderInMemory = new StorageProviderInMemory();
 
     importContacts = new ImportContactsService(
-      contactsRepositoryInMemory,
+      inMemoryContactsRepository,
       storageProviderInMemory
     );
   });

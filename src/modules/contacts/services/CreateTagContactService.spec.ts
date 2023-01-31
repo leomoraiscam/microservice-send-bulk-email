@@ -1,20 +1,20 @@
-import ContactsRepositoryInMemory from '@modules/contacts/repositories/in-memory/ContactsRepositoryInMemory';
-import TagsRepositoryInMemory from '@modules/contacts/repositories/in-memory/TagsRepositoryInMemory';
+import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory/InMemoryContactsRepository';
+import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
 import AppError from '@shared/errors/AppError';
 
 import CreateTagContactService from './CreateTagContactService';
 
 let createTagContactService: CreateTagContactService;
-let tagsRepositoryInMemory: TagsRepositoryInMemory;
-let contactsRepositoryInMemory: ContactsRepositoryInMemory;
+let inMemoryTagsRepository: InMemoryTagsRepository;
+let inMemoryContactsRepository: InMemoryContactsRepository;
 
 describe('Create Tag Contacts', () => {
   beforeEach(() => {
-    contactsRepositoryInMemory = new ContactsRepositoryInMemory();
-    tagsRepositoryInMemory = new TagsRepositoryInMemory();
+    inMemoryContactsRepository = new InMemoryContactsRepository();
+    inMemoryTagsRepository = new InMemoryTagsRepository();
     createTagContactService = new CreateTagContactService(
-      contactsRepositoryInMemory,
-      tagsRepositoryInMemory
+      inMemoryContactsRepository,
+      inMemoryTagsRepository
     );
   });
 
@@ -29,9 +29,15 @@ describe('Create Tag Contacts', () => {
       },
     ];
 
-    const contact = await contactsRepositoryInMemory.create(email);
+    const contact = await inMemoryContactsRepository.create({
+      email,
+      subscribed: true,
+    });
 
-    const [tag] = await tagsRepositoryInMemory.create(tags);
+    const [tag] = await inMemoryTagsRepository.create({
+      tags,
+      user_id: null,
+    });
 
     const contact_id = contact.id;
     const tags_ids = [tag.id];
