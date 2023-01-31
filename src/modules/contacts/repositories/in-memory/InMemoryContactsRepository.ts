@@ -11,7 +11,7 @@ interface ICrateContacts {
   subscribed: boolean;
 }
 
-class ContactsRepositoryInMemory implements IContactsRepository {
+class InMemoryContactsRepository implements IContactsRepository {
   private contacts: Contact[] = [];
 
   async findById(id: string): Promise<Contact> {
@@ -74,4 +74,4 @@ class ContactsRepositoryInMemory implements IContactsRepository {
   }
 }
 
-export default ContactsRepositoryInMemory;
+export default InMemoryContactsRepository;

@@ -7,7 +7,7 @@ import ICreateTagsDTO from '../../dtos/ICreateTagsDTO';
 import paginateArray from '../../utils/paginateArrayInMemory';
 import ITagsRepository from '../ITagsRepository';
 
-class TagsRepositoryInMemory implements ITagsRepository {
+class InMemoryTagsRepository implements ITagsRepository {
   private tags: Tag[] = [];
 
   async findByIds(ids: string[]): Promise<Tag[]> {
@@ -49,4 +49,4 @@ class TagsRepositoryInMemory implements ITagsRepository {
   }
 }
 
-export default TagsRepositoryInMemory;
+export default InMemoryTagsRepository;
