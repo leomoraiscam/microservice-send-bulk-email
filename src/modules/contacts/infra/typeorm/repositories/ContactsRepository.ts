@@ -1,14 +1,10 @@
 import { getRepository, Repository } from 'typeorm';
 
+import ICreateContactsDTO from '@modules/contacts/dtos/ICreateContactsDTO';
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 import IOptionsDTO from '@shared/dtos/IOptionsDTO';
 
 import Contact from '../entities/Contact';
-
-interface ICrateContacts {
-  email: string;
-  subscribed: boolean;
-}
 
 class ContactsRepository implements IContactsRepository {
   private repository: Repository<Contact>;
@@ -30,28 +26,24 @@ class ContactsRepository implements IContactsRepository {
   }
 
   async findByTags(tags: string[]): Promise<Contact[]> {
-    const values = await this.repository
-      .createQueryBuilder('cont')
-      .innerJoin('cont.tags', 'contacts_tags')
+    return this.repository
+      .createQueryBuilder('contact')
+      .innerJoin('contact.tags', 'contacts_tags')
       .where('contacts_tags.id IN (:...tags)', {
         tags,
       })
-      .andWhere('cont.subscribed = :subscribed', { subscribed: true })
+      .andWhere('contact.subscribed = :subscribed', { subscribed: true })
       .getMany();
-
-    return values;
   }
 
   async list({ page, perPage }: IOptionsDTO): Promise<Contact[]> {
-    const contacts = await this.repository.find({
+    return this.repository.find({
       take: perPage,
       skip: perPage * (page - 1),
     });
-
-    return contacts;
   }
 
-  async create({ subscribed, email }: ICrateContacts): Promise<Contact> {
+  async create({ subscribed, email }: ICreateContactsDTO): Promise<Contact> {
     const contact = this.repository.create({
       subscribed,
       email,

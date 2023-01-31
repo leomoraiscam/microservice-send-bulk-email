@@ -21,7 +21,7 @@ class InMemoryContactsRepository implements IContactsRepository {
   async findByTags(tags: string[]): Promise<Contact[]> {
     let isTagIncludeInContact = false;
 
-    const contacts = this.contacts
+    return this.contacts
       .filter((contact) => {
         const tagsContacts = contact.tags.map((tag) => tag.id);
 
@@ -32,8 +32,6 @@ class InMemoryContactsRepository implements IContactsRepository {
         return isTagIncludeInContact;
       })
       .filter((contact) => contact.subscribed === true);
-
-    return contacts;
   }
 
   async list({ page, perPage }: IOptionsDTO): Promise<Contact[]> {

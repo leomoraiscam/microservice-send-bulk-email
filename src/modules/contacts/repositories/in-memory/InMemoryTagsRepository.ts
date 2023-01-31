@@ -11,9 +11,7 @@ class InMemoryTagsRepository implements ITagsRepository {
   private tags: Tag[] = [];
 
   async findByIds(ids: string[]): Promise<Tag[]> {
-    const allTags = this.tags.filter((tag) => ids.includes(tag.id));
-
-    return allTags;
+    return this.tags.filter((tag) => ids.includes(tag.id));
   }
 
   async findByTitle(title: string): Promise<Tag> {

@@ -26,25 +26,23 @@ class TagsRepository implements ITagsRepository {
   }
 
   async list({ page, perPage }: IOptionsDTO): Promise<Tag[]> {
-    const contacts = await this.repository.find({
+    return this.repository.find({
       take: perPage,
       skip: perPage * (page - 1),
     });
-
-    return contacts;
   }
 
   async create({ tags, contact_id }: ICreateTagsDTO): Promise<Tag[]> {
-    const tgs = tags.map((tag) =>
+    const createdTags = tags.map((tag) =>
       this.repository.create({
         title: tag.title,
         user_id: contact_id,
       })
     );
 
-    await this.repository.save(tgs);
+    await this.repository.save(createdTags);
 
-    return tgs;
+    return createdTags;
   }
 }
 
