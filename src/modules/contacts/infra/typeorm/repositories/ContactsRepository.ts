@@ -1,8 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
 
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
+import IOptionsDTO from '@shared/dtos/IOptionsDTO';
 
-import IOptions from '../../../dtos/IOptionsDTO';
 import Contact from '../entities/Contact';
 
 interface ICrateContacts {
@@ -36,16 +36,16 @@ class ContactsRepository implements IContactsRepository {
       .where('contacts_tags.id IN (:...tags)', {
         tags,
       })
-      // .andWhere('cont.subscribed = :subscribed', { subscribed: true })
+      .andWhere('cont.subscribed = :subscribed', { subscribed: true })
       .getMany();
 
     return values;
   }
 
-  async list({ take, page }: IOptions): Promise<Contact[]> {
+  async list({ page, perPage }: IOptionsDTO): Promise<Contact[]> {
     const contacts = await this.repository.find({
-      take,
-      skip: take * (page - 1),
+      take: perPage,
+      skip: perPage * (page - 1),
     });
 
     return contacts;

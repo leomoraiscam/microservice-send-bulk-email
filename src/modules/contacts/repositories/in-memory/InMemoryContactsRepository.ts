@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Contact from '@modules/contacts/infra/typeorm/entities/Contact';
 import IOptionsDTO from '@shared/dtos/IOptionsDTO';
 
-import ICreateContact from '../../dtos/ICrateContactDTO';
+import ICreateContactsDTO from '../../dtos/ICreateContactsDTO';
 import paginateArray from '../../utils/paginateArrayInMemory';
 import IContactsRepository from '../IContactsRepository';
 
@@ -45,7 +45,7 @@ class InMemoryContactsRepository implements IContactsRepository {
     return paginateContacts;
   }
 
-  async create({ email, subscribed }: ICreateContact): Promise<Contact> {
+  async create({ email, subscribed }: ICreateContactsDTO): Promise<Contact> {
     const contact = new Contact();
 
     Object.assign(contact, {
