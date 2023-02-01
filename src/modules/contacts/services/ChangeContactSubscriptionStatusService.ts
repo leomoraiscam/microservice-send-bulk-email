@@ -20,10 +20,12 @@ class ChangeContactSubscriptionStatusService {
     const contact = await this.contactsRepository.findById(contact_id);
 
     if (!contact) {
-      throw new AppError('Contact not exists');
+      throw new AppError("Contact doesn't exist", 404);
     }
 
-    contact.subscribed = subscribed;
+    Object.assign(contact, {
+      subscribed,
+    });
 
     await this.contactsRepository.save(contact);
 

@@ -22,7 +22,7 @@ class InMemoryTagsRepository implements ITagsRepository {
     page = page || 1;
     perPage = perPage || 10;
 
-    const paginateContacts = paginateArray(this.tags, page, perPage);
+    const paginateContacts = paginateArray(this.tags, perPage, page);
 
     return paginateContacts;
   }

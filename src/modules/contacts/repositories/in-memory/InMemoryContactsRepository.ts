@@ -38,7 +38,7 @@ class InMemoryContactsRepository implements IContactsRepository {
     page = page || 1;
     perPage = perPage || 10;
 
-    const paginateContacts = paginateArray(this.contacts, page, perPage);
+    const paginateContacts = paginateArray(this.contacts, perPage, page);
 
     return paginateContacts;
   }

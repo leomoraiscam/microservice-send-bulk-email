@@ -20,19 +20,21 @@ class CreateTagContactService {
     contact_id,
     tag_ids,
   }: ICreateTagsToContactDTO): Promise<Contact> {
-    const contactExists = await this.contactsRepository.findById(contact_id);
+    const contact = await this.contactsRepository.findById(contact_id);
 
-    if (!contactExists) {
+    if (!contact) {
       throw new AppError("Contact doesn't exist", 404);
     }
 
     const tags = await this.tagsRepository.findByIds(tag_ids);
 
-    contactExists.tags = tags;
+    Object.assign(contact, {
+      tags,
+    });
 
-    await this.contactsRepository.save(contactExists);
+    await this.contactsRepository.save(contact);
 
-    return contactExists;
+    return contact;
   }
 }
 

@@ -6,7 +6,7 @@ import Tag from '../infra/typeorm/entities/Tag';
 import ITagsRepository from '../repositories/ITagsRepository';
 
 @injectable()
-class ListContactsService {
+class ListTagsService {
   constructor(
     @inject('TagsRepository')
     private tagsRepository: ITagsRepository
@@ -20,4 +20,4 @@ class ListContactsService {
   }
 }
 
-export default ListContactsService;
+export default ListTagsService;

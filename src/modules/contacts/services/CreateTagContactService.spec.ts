@@ -4,11 +4,11 @@ import AppError from '@shared/errors/AppError';
 
 import CreateTagContactService from './CreateTagContactService';
 
-let createTagContactService: CreateTagContactService;
-let inMemoryTagsRepository: InMemoryTagsRepository;
-let inMemoryContactsRepository: InMemoryContactsRepository;
+describe('CreateTagContactService', () => {
+  let createTagContactService: CreateTagContactService;
+  let inMemoryTagsRepository: InMemoryTagsRepository;
+  let inMemoryContactsRepository: InMemoryContactsRepository;
 
-describe('Create Tag Contacts', () => {
   beforeEach(() => {
     inMemoryContactsRepository = new InMemoryContactsRepository();
     inMemoryTagsRepository = new InMemoryTagsRepository();
@@ -18,45 +18,44 @@ describe('Create Tag Contacts', () => {
     );
   });
 
-  it('should be able to add a new tags to the contacts', async () => {
-    const email = 'lmorais@gmail.com';
+  it('should be able to add multiples tags to specific contacts', async () => {
+    const email = 'zir@iti.hk';
+
     const tags = [
       {
-        title: 'Node.js',
+        title: 'NodeJs',
       },
       {
-        title: 'Nest.js',
+        title: 'ExpressJs',
       },
     ];
 
-    const contact = await inMemoryContactsRepository.create({
+    const { id } = await inMemoryContactsRepository.create({
       email,
       subscribed: true,
     });
 
-    const [tag] = await inMemoryTagsRepository.create({
+    const [firstTag, secondTag] = await inMemoryTagsRepository.create({
       tags,
-      contact_id: null,
+      contact_id: id,
     });
 
-    const contact_id = contact.id;
-    const tag_ids = [tag.id];
+    const tag_ids = [firstTag.id, secondTag.id];
 
-    const tagsContacts = await createTagContactService.execute({
-      contact_id,
+    const tagsOfContact = await createTagContactService.execute({
+      contact_id: id,
       tag_ids,
     });
 
-    expect(tagsContacts).toHaveProperty('tags');
-    expect(tagsContacts.tags.length).toBe(1);
+    expect(tagsOfContact.tags.length).toBe(2);
   });
 
-  it('should not be able to add a new specifications to the car non-exist', async () => {
-    const contact_id = '123';
-    const tags_ids = ['12345', '54321'];
-
+  it('should not be able to add tags to a non-exist', async () => {
     await expect(
-      createTagContactService.execute({ contact_id, tags_ids })
+      createTagContactService.execute({
+        contact_id: 'id-non-exist',
+        tag_ids: [],
+      })
     ).rejects.toBeInstanceOf(AppError);
   });
 });

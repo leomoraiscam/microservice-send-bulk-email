@@ -1,36 +1,32 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
 
+import Contact from '../infra/typeorm/entities/Contact';
 import ListTagsService from './ListTagsService';
 
-let listTagsService: ListTagsService;
-let inMemoryTagsRepository: InMemoryTagsRepository;
+describe('ListTagsService', () => {
+  let listTagsService: ListTagsService;
+  let inMemoryTagsRepository: InMemoryTagsRepository;
+  let contact_id;
 
-describe('List Contacts From tags', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     inMemoryTagsRepository = new InMemoryTagsRepository();
     listTagsService = new ListTagsService(inMemoryTagsRepository);
-  });
 
-  it('should be able to list tags', async () => {
-    const tagsTools = [
+    const tags = [
       {
         title: 'Javascript',
       },
       {
         title: 'Typescript',
       },
-    ];
-
-    const tagsInfra = [
       {
         title: 'AWS',
       },
       {
         title: 'GCP',
       },
-    ];
-
-    const tagsFram = [
       {
         title: 'Nest.js',
       },
@@ -39,26 +35,62 @@ describe('List Contacts From tags', () => {
       },
     ];
 
-    await inMemoryTagsRepository.create({
-      tags: tagsTools,
-      contact_id: null,
-    });
+    const { id }: Contact = {
+      id: uuidv4(),
+      email: 'lu@ace.sm',
+      subscribed: true,
+      created_at: new Date(),
+      updated_at: new Date(),
+      tags: [],
+    };
+
+    contact_id = id;
 
     await inMemoryTagsRepository.create({
-      tags: tagsInfra,
-      contact_id: null,
+      tags,
+      contact_id,
+    });
+  });
+
+  it('should be able list all tags with default pagination values', async () => {
+    const contacts = await listTagsService.execute({});
+
+    expect(contacts.length).toBe(6);
+  });
+
+  it('should be able list tags with custom pagination values', async () => {
+    const page = 1;
+    const perPage = 2;
+
+    const movies = await listTagsService.execute({
+      perPage,
+      page,
     });
 
-    await inMemoryTagsRepository.create({
-      tags: tagsFram,
-      contact_id: null,
+    expect(movies.length).toBe(2);
+  });
+
+  it('should be able list tags in second page with two objects', async () => {
+    const page = 2;
+    const perPage = 1;
+
+    const movies = await listTagsService.execute({
+      perPage,
+      page,
     });
 
-    const tags = await listTagsService.execute({
-      perPage: 10,
-      page: 1,
+    expect(movies.length).toBe(1);
+  });
+
+  it('should be able list tags in second page with insufficient objects', async () => {
+    const page = 2;
+    const perPage = 10;
+
+    const movies = await listTagsService.execute({
+      perPage,
+      page,
     });
 
-    expect(tags.length).toBe(2);
+    expect(movies.length).toBe(0);
   });
 });

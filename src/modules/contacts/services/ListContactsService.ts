@@ -12,7 +12,7 @@ class ListContactsService {
     private contactsRepository: IContactsRepository
   ) {}
 
-  async execute({ perPage, page }: IOptions): Promise<Contact[]> {
+  async execute({ perPage = 15, page = 1 }: IOptions): Promise<Contact[]> {
     return this.contactsRepository.list({
       page,
       perPage,

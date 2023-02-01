@@ -3,40 +3,38 @@ import AppError from '@shared/errors/AppError';
 
 import ChangeContactSubscriptionStatusService from './ChangeContactSubscriptionStatusService';
 
-let changeContactSubscriptionStatusService: ChangeContactSubscriptionStatusService;
-let inMemoryContactsRepository: InMemoryContactsRepository;
+describe('ChangeContactSubscriptionStatusService', () => {
+  let changeContactSubscriptionStatusService: ChangeContactSubscriptionStatusService;
+  let inMemoryContactsRepository: InMemoryContactsRepository;
 
-describe('Create Tag Contacts', () => {
   beforeEach(() => {
     inMemoryContactsRepository = new InMemoryContactsRepository();
     changeContactSubscriptionStatusService =
       new ChangeContactSubscriptionStatusService(inMemoryContactsRepository);
   });
 
-  it('should be able to change status of contacts', async () => {
-    const email = 'lmorais@gmail.com';
+  it('should be able to change status of specific contact', async () => {
+    const email = 'ugivapzo@uvo.so';
 
-    const contact = await inMemoryContactsRepository.create({
+    const { id } = await inMemoryContactsRepository.create({
       email,
       subscribed: true,
     });
 
-    const contactChanged = await changeContactSubscriptionStatusService.execute(
+    const { subscribed } = await changeContactSubscriptionStatusService.execute(
       {
-        contact_id: contact.id,
+        contact_id: id,
         subscribed: false,
       }
     );
 
-    expect(contactChanged.subscribed).toBeFalsy();
+    expect(subscribed).toBeFalsy();
   });
 
-  it('should not be able to change the status when the contact non-exist', async () => {
-    const contact_id = '123';
-
+  it('should not be able to change the status when the receive contact non-exist', async () => {
     await expect(
       changeContactSubscriptionStatusService.execute({
-        contact_id,
+        contact_id: 'id-non-exist',
         subscribed: true,
       })
     ).rejects.toBeInstanceOf(AppError);

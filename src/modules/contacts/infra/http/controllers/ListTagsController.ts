@@ -5,13 +5,13 @@ import ListTagsService from '../../../services/ListTagsService';
 
 class ListTagsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { take, skip } = request.query;
+    const { page, perPage } = request.query;
 
     const listTags = container.resolve(ListTagsService);
 
     const tags = await listTags.execute({
-      skip: Number(skip),
-      take: Number(take),
+      page: Number(page),
+      perPage: Number(perPage),
     });
 
     return response.status(200).json(tags);

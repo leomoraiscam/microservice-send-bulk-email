@@ -5,19 +5,19 @@ import ChangeContactSubscriptionStatusService from '../../../services/ChangeCont
 
 class ChangeContactSubscriptionStatusController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
+    const { id: contact_id } = request.params;
     const { subscribed } = request.body;
 
     const changeContactSubscriptionStatus = container.resolve(
       ChangeContactSubscriptionStatusService
     );
 
-    const contact = await changeContactSubscriptionStatus.execute({
-      contact_id: id,
+    const updatedContact = await changeContactSubscriptionStatus.execute({
+      contact_id,
       subscribed,
     });
 
-    return response.status(201).json(contact);
+    return response.status(201).json(updatedContact);
   }
 }
 

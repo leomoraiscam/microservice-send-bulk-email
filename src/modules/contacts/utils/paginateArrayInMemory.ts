@@ -1,5 +1,5 @@
-function paginateInMemory(array, perPage, pageNumber) {
-  return array.slice((pageNumber - 1) * perPage, pageNumber * perPage);
+function paginateInMemory(array, perPage, page) {
+  return array.slice((page - 1) * perPage, page * perPage);
 }
 
 export default paginateInMemory;

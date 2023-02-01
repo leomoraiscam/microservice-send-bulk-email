@@ -2,38 +2,69 @@ import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory
 
 import ListContactsService from './ListContactsService';
 
-let listContactsService: ListContactsService;
-let inMemoryContactsRepository: InMemoryContactsRepository;
+describe('ListContactsService', () => {
+  let listContactsService: ListContactsService;
+  let inMemoryContactsRepository: InMemoryContactsRepository;
 
-describe('List Contacts From tags', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     inMemoryContactsRepository = new InMemoryContactsRepository();
     listContactsService = new ListContactsService(inMemoryContactsRepository);
+
+    await Promise.all([
+      inMemoryContactsRepository.create({
+        email: 'jiciptoh@redketa.ug',
+        subscribed: true,
+      }),
+      inMemoryContactsRepository.create({
+        email: 'eji@gumdudeku.ao',
+        subscribed: true,
+      }),
+      inMemoryContactsRepository.create({
+        email: 'ronjo@dac.na',
+        subscribed: true,
+      }),
+    ]);
   });
 
-  it('should be able to list contacts', async () => {
-    const email = 'lmorais@gmail.com';
+  it('should be able list all contacts with default pagination values', async () => {
+    const contacts = await listContactsService.execute({});
 
-    await inMemoryContactsRepository.create({
-      email,
-      subscribed: true,
+    expect(contacts.length).toBe(3);
+  });
+
+  it('should be able list contacts with custom pagination values', async () => {
+    const page = 1;
+    const perPage = 2;
+
+    const movies = await listContactsService.execute({
+      perPage,
+      page,
     });
 
-    await inMemoryContactsRepository.create({
-      email: 'l@gmail.com',
-      subscribed: true,
+    expect(movies.length).toBe(2);
+  });
+
+  it('should be able list contacts in second page with two objects', async () => {
+    const page = 2;
+    const perPage = 1;
+
+    const movies = await listContactsService.execute({
+      perPage,
+      page,
     });
 
-    await inMemoryContactsRepository.create({
-      email: 'lm@gmail.com',
-      subscribed: true,
+    expect(movies.length).toBe(1);
+  });
+
+  it('should be able list contacts in second page with insufficient objects', async () => {
+    const page = 2;
+    const perPage = 10;
+
+    const movies = await listContactsService.execute({
+      perPage,
+      page,
     });
 
-    const contacts = await listContactsService.execute({
-      perPage: 1,
-      page: 2,
-    });
-
-    expect(contacts.length).toBe(2);
+    expect(movies.length).toBe(0);
   });
 });
