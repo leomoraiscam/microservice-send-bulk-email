@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import ICreateUserDTO from '../dtos/ICreateUserDTO';
+import ICreateUsersDTO from '../dtos/ICreateUsersDTO';
 import User from '../infra/typeorm/entities/User';
 import IUserRepository from '../repositories/IUsersRepository';
 
@@ -14,7 +14,7 @@ class CreateUserUseCase {
     private usersRepository: IUserRepository
   ) {}
 
-  async execute({ name, email, password }: ICreateUserDTO): Promise<User> {
+  async execute({ name, email, password }: ICreateUsersDTO): Promise<User> {
     const userExist = await this.usersRepository.findByEmail(email);
 
     if (userExist) {

@@ -1,9 +1,7 @@
-class ICreateUserDTO {
+class ICreateUsersDTO {
   name: string;
-
   email: string;
-
   password: string;
 }
 
-export default ICreateUserDTO;
+export default ICreateUsersDTO;

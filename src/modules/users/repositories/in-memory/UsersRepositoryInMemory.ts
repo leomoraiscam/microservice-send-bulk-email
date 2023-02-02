@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import ICreateUserDTO from '../../dtos/ICreateUserDTO';
+import ICreateUsersDTO from '../../dtos/ICreateUsersDTO';
 import User from '../../infra/typeorm/entities/User';
 import IUsersRepository from '../IUsersRepository';
 
@@ -19,7 +19,7 @@ class UsersRepositoryInMemory implements IUsersRepository {
     return user;
   }
 
-  async create({ name, email, password }: ICreateUserDTO): Promise<User> {
+  async create({ name, email, password }: ICreateUsersDTO): Promise<User> {
     const user = new User();
 
     Object.assign(user, {
