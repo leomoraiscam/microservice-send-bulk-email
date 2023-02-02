@@ -9,9 +9,7 @@ class CreateMessageController {
 
     const createMessage = container.resolve(CreateMessageService);
 
-    const messageData = { subject, body };
-
-    const message = await createMessage.execute({ messageData });
+    const message = await createMessage.execute({ body, subject });
 
     return response.status(201).json(message);
   }
