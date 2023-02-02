@@ -5,7 +5,7 @@ import ILoggerProvider from '@shared/container/providers/LoggerProvider/models/I
 import IQueueProvider from '@shared/container/providers/QueueProvider/models/IQueueProvider';
 import AppError from '@shared/errors/AppError';
 
-import IMessageRepository from '../repositories/IMessageRepository';
+import IMessagesRepository from '../repositories/IMessagesRepository';
 
 interface IRequest {
   id: string;
@@ -16,7 +16,7 @@ interface IRequest {
 class SendMessageService {
   constructor(
     @inject('MessagesRepository')
-    private messageRepository: IMessageRepository,
+    private messageRepository: IMessagesRepository,
     @inject('ContactsRepository')
     private contactsRepository: IContactsRepository,
     @inject('QueueProvider')

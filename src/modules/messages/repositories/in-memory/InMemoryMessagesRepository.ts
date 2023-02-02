@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import ICreateMessagesDTO from '../../dtos/ICreateMessagesDTO';
 import Message from '../../infra/typeorm/schemas/Message';
-import IMessageRepository from '../IMessageRepository';
+import IMessagesRepository from '../IMessagesRepository';
 
-class MessagesRepositoryInMemory implements IMessageRepository {
+class InMemoryMessagesRepository implements IMessagesRepository {
   private messages: Message[] = [];
 
   async findById(id: string): Promise<Message> {
@@ -28,4 +28,4 @@ class MessagesRepositoryInMemory implements IMessageRepository {
   }
 }
 
-export default MessagesRepositoryInMemory;
+export default InMemoryMessagesRepository;

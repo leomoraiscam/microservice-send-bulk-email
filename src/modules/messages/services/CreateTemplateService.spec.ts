@@ -1,22 +1,23 @@
-import TemplatesRepositoryInMemory from '@modules/messages/repositories/in-memory/TemplatesRepositoryInMemory';
+import InMemoryTemplatesRepository from '@modules/messages/repositories/in-memory/InMemoryTemplatesRepository';
 
 import CreateTemplateService from './CreateTemplateService';
 
-let templatesRepositoryInMemory: TemplatesRepositoryInMemory;
-let createTemplateService: CreateTemplateService;
+describe('CreateTemplateService', () => {
+  let inMemoryTemplatesRepository: InMemoryTemplatesRepository;
+  let createTemplateService: CreateTemplateService;
 
-describe('Create Template', () => {
   beforeEach(async () => {
-    templatesRepositoryInMemory = new TemplatesRepositoryInMemory();
+    inMemoryTemplatesRepository = new InMemoryTemplatesRepository();
     createTemplateService = new CreateTemplateService(
-      templatesRepositoryInMemory
+      inMemoryTemplatesRepository
     );
   });
 
-  it('should be able to create new template', async () => {
+  it('should be able to create new template when receive correct data', async () => {
     const template = await createTemplateService.execute({
-      title: 'Hello Word',
-      content: '<p>just testing the email</p>',
+      title: 'Hello Word to welcome',
+      content: '<p>just testing the template email</p>',
+      default: true,
     });
 
     expect(template).toHaveProperty('id');

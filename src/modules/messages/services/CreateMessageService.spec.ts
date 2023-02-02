@@ -1,23 +1,21 @@
-import MessagesRepositoryInMemory from '@modules/messages/repositories/in-memory/MessagesRepositoryInMemory';
+import InMemoryMessagesRepository from '@modules/messages/repositories/in-memory/InMemoryMessagesRepository';
 
-import SendMessageService from './CreateMessageService';
+import CreateMessageService from './CreateMessageService';
 
-let messagesRepositoryInMemory: MessagesRepositoryInMemory;
-let sendMessageService: SendMessageService;
+describe('CreateMessageService', () => {
+  let inMemoryMessagesRepository: InMemoryMessagesRepository;
+  let createMessageService: CreateMessageService;
 
-describe('Send Message', () => {
   beforeEach(async () => {
-    messagesRepositoryInMemory = new MessagesRepositoryInMemory();
-    sendMessageService = new SendMessageService(messagesRepositoryInMemory);
+    inMemoryMessagesRepository = new InMemoryMessagesRepository();
+    createMessageService = new CreateMessageService(inMemoryMessagesRepository);
   });
 
-  it('should not be able to create new message', async () => {
-    const messageData = {
+  it('should be able to create new message when receive correct data', async () => {
+    const message = await createMessageService.execute({
       subject: 'Hello Word',
       body: '<p>just testing the email</p>',
-    };
-
-    const message = await sendMessageService.execute({ messageData });
+    });
 
     expect(message).toHaveProperty('id');
   });

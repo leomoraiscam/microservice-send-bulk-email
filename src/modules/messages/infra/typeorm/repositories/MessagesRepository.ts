@@ -1,11 +1,11 @@
 import { getMongoRepository, MongoRepository } from 'typeorm';
 
 import ICreateMessagesDTO from '@modules/messages/dtos/ICreateMessagesDTO';
-import IMessageRepository from '@modules/messages/repositories/IMessageRepository';
+import IMessagesRepository from '@modules/messages/repositories/IMessagesRepository';
 
 import Message from '../schemas/Message';
 
-class MessageRepository implements IMessageRepository {
+class MessagesRepository implements IMessagesRepository {
   private repository: MongoRepository<Message>;
 
   constructor() {
@@ -28,4 +28,4 @@ class MessageRepository implements IMessageRepository {
   }
 }
 
-export default MessageRepository;
+export default MessagesRepository;

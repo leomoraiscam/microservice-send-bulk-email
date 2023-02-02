@@ -1,22 +1,17 @@
 import { inject, injectable } from 'tsyringe';
 
+import ICreateTemplatesDTO from '../dtos/ICreateTemplatesDTO';
 import Template from '../infra/typeorm/schemas/Template';
-import ITemplateRepository from '../repositories/ITemplateRepository';
-
-interface ICreateTemplateDTO {
-  title: string;
-  content: string;
-  default?: boolean;
-}
+import ITemplatesRepository from '../repositories/ITemplatesRepository';
 
 @injectable()
 class CreateTemplateService {
   constructor(
     @inject('TemplatesRepository')
-    private templatesRepository: ITemplateRepository
+    private templatesRepository: ITemplatesRepository
   ) {}
 
-  async execute({ title, content }: ICreateTemplateDTO): Promise<Template> {
+  async execute({ title, content }: ICreateTemplatesDTO): Promise<Template> {
     const template = await this.templatesRepository.create({
       title,
       content,

@@ -1,18 +1,21 @@
+import { v4 as uuidv4 } from 'uuid';
+
+import Tag from '@modules/contacts/infra/typeorm/entities/Tag';
 import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory/InMemoryContactsRepository';
-import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
-import MessageRepositoryInMemory from '@modules/messages/repositories/in-memory/MessagesRepositoryInMemory';
+import InMemoryMessagesRepository from '@modules/messages/repositories/in-memory/InMemoryMessagesRepository';
 import AppError from '@shared/errors/AppError';
 
 import SendMessageService from './SendMessageService';
 
-let inMemoryContactsRepository: InMemoryContactsRepository;
-let messageRepositoryInMemory: MessageRepositoryInMemory;
-let inMemoryTagsRepository: InMemoryTagsRepository;
-let sendMessageService: SendMessageService;
-let mockQueue;
-let mockLogger;
+describe('SendMessageService', () => {
+  let inMemoryContactsRepository: InMemoryContactsRepository;
+  let inMemoryMessagesRepository: InMemoryMessagesRepository;
+  let sendMessageService: SendMessageService;
+  let defaultTags: Tag[];
+  let tertiaryTags: Tag[];
+  let mockQueue;
+  let mockLogger;
 
-describe('Send Message', () => {
   beforeEach(() => {
     mockQueue = {
       add: jest.fn(),
@@ -23,65 +26,72 @@ describe('Send Message', () => {
     };
 
     inMemoryContactsRepository = new InMemoryContactsRepository();
-    messageRepositoryInMemory = new MessageRepositoryInMemory();
-    inMemoryTagsRepository = new InMemoryTagsRepository();
+    inMemoryMessagesRepository = new InMemoryMessagesRepository();
     sendMessageService = new SendMessageService(
-      messageRepositoryInMemory,
+      inMemoryMessagesRepository,
       inMemoryContactsRepository,
       mockQueue,
       mockLogger
     );
+
+    defaultTags = [
+      {
+        id: uuidv4(),
+        title: 'Students',
+        created_at: new Date(),
+        updated_at: new Date(),
+        user_id: uuidv4(),
+      },
+      {
+        id: uuidv4(),
+        title: 'Class A',
+        created_at: new Date(),
+        updated_at: new Date(),
+        user_id: uuidv4(),
+      },
+    ];
+
+    tertiaryTags = [
+      {
+        title: 'Class B',
+        id: uuidv4(),
+        created_at: new Date(),
+        updated_at: new Date(),
+        user_id: uuidv4(),
+      },
+    ];
   });
 
   it('should be able to send message to users with existent tags', async () => {
-    const tags = await inMemoryTagsRepository.create({
-      tags: [{ title: 'Students' }, { title: 'Class A' }, { title: 'Class B' }],
-      user_id: null,
-    });
-
-    const [t1, t2, t3] = tags;
-
-    const tagsIds = tags.map((tag) => tag.id);
-
-    const [id1, id2] = tagsIds;
-
-    const contacts = [
-      { email: 'email@email.com' },
-      { email: 'email@email.com.br' },
-      { email: 'johndoe@email.com.br' },
-    ];
-
     const [firstContact, secondContact, tertiaryContact] = await Promise.all([
       await inMemoryContactsRepository.create({
-        email: contacts[0].email,
+        email: 'raok@vicur.gov',
         subscribed: true,
       }),
       await inMemoryContactsRepository.create({
-        email: contacts[1].email,
+        email: 'ijcahe@ciku.md',
         subscribed: true,
       }),
       await inMemoryContactsRepository.create({
-        email: contacts[2].email,
+        email: 'je@lij.kw',
         subscribed: true,
       }),
     ]);
 
-    const arrayConcat = [t1].concat([t2]);
+    firstContact.tags = defaultTags;
+    secondContact.tags = defaultTags;
+    tertiaryContact.tags = tertiaryTags;
 
-    firstContact.tags = arrayConcat;
-    secondContact.tags = arrayConcat;
-    tertiaryContact.tags = [t3];
+    const [{ id: firstTagId }, { id: secondTagId }] = defaultTags;
 
-    const tagsSearch = [id1, id2];
+    const tag_ids = [firstTagId, secondTagId];
 
-    const message = await messageRepositoryInMemory.create({
+    const message = await inMemoryMessagesRepository.create({
       subject: 'Hello Word',
       body: '<p>just testing the email</p>',
     });
 
-    const { id } = message;
-
-    await sendMessageService.execute({ id, tags: tagsSearch });
+    await sendMessageService.execute({ id: message.id, tags: tag_ids });
 
     const dataJob = [
       {
@@ -98,7 +108,7 @@ describe('Send Message', () => {
   });
 
   it('should not be able send message when a the same a non-exist', async () => {
-    const messageId = '1234';
+    const messageId = 'message-non-exist';
 
     await expect(
       sendMessageService.execute({
@@ -109,9 +119,9 @@ describe('Send Message', () => {
   });
 
   it('should not be able send message when a non-exist recipients to this tags', async () => {
-    const tags = ['1234', '5678'];
+    const tags = ['first-tag-non-exist', 'second-tag-non-exist'];
 
-    const message = await messageRepositoryInMemory.create({
+    const message = await inMemoryMessagesRepository.create({
       subject: 'Hello Word',
       body: '<p>just testing the email</p>',
     });

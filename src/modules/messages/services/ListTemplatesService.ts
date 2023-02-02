@@ -1,23 +1,23 @@
 import { inject, injectable } from 'tsyringe';
 
-import IOptions from '../dtos/IOptionsDTO';
+import IOptionsDTO from '@shared/dtos/IOptionsDTO';
+
 import Template from '../infra/typeorm/schemas/Template';
-import ITemplateRepository from '../repositories/ITemplateRepository';
+import ITemplatesRepository from '../repositories/ITemplatesRepository';
 
 @injectable()
-class ListContactsService {
+class ListTemplatesService {
   constructor(
     @inject('TemplatesRepository')
-    private templatesRepository: ITemplateRepository
+    private templatesRepository: ITemplatesRepository
   ) {}
 
-  async execute({ take, skip, page }: IOptions): Promise<Template[]> {
+  async execute({ page, perPage }: IOptionsDTO): Promise<Template[]> {
     return this.templatesRepository.list({
-      take,
-      skip,
       page,
+      perPage,
     });
   }
 }
 
-export default ListContactsService;
+export default ListTemplatesService;

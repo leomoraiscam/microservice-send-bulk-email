@@ -1,27 +1,22 @@
 import { getMongoRepository, MongoRepository } from 'typeorm';
 
-import IOptions from '@modules/contacts/dtos/IOptionsDTO';
-import ITemplateRepository from '@modules/messages/repositories/ITemplateRepository';
+import ITemplatesRepository from '@modules/messages/repositories/ITemplatesRepository';
+import IOptions from '@shared/dtos/IOptionsDTO';
 
+import ICreateTemplateDTO from '../../../dtos/ICreateTemplatesDTO';
 import Template from '../schemas/Template';
 
-interface ICreateTemplateDTO {
-  title: string;
-  content: string;
-  default?: boolean;
-}
-
-class TemplateRepository implements ITemplateRepository {
+class TemplatesRepository implements ITemplatesRepository {
   private repository: MongoRepository<Template>;
 
   constructor() {
     this.repository = getMongoRepository(Template, 'mongo');
   }
 
-  async list({ take, page }: IOptions): Promise<Template[]> {
+  async list({ page, perPage }: IOptions): Promise<Template[]> {
     const templates = await this.repository.find({
-      take,
-      skip: take * (page - 1),
+      take: perPage,
+      skip: perPage * (page - 1),
     });
 
     return templates;
@@ -39,4 +34,4 @@ class TemplateRepository implements ITemplateRepository {
   }
 }
 
-export default TemplateRepository;
+export default TemplatesRepository;
