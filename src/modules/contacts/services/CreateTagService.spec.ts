@@ -4,7 +4,7 @@ import AppError from '@shared/errors/AppError';
 import InMemoryTagsRepository from '../repositories/in-memory/InMemoryTagsRepository';
 import CreateTagService from './CreateTagService';
 
-describe('CreateTagsService', () => {
+describe('CreateTagService', () => {
   let inMemoryTagsRepository: InMemoryTagsRepository;
   let inMemoryContactsRepository: InMemoryContactsRepository;
   let createTagService: CreateTagService;

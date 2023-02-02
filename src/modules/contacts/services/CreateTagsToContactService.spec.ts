@@ -2,9 +2,9 @@ import InMemoryContactsRepository from '@modules/contacts/repositories/in-memory
 import InMemoryTagsRepository from '@modules/contacts/repositories/in-memory/InMemoryTagsRepository';
 import AppError from '@shared/errors/AppError';
 
-import CreateTagContactService from './CreateTagContactService';
+import CreateTagContactService from './CreateTagsToContactService';
 
-describe('CreateTagContactService', () => {
+describe('CreateTagsToContactService', () => {
   let createTagContactService: CreateTagContactService;
   let inMemoryTagsRepository: InMemoryTagsRepository;
   let inMemoryContactsRepository: InMemoryContactsRepository;

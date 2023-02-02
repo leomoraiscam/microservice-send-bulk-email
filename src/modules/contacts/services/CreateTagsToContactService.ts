@@ -8,7 +8,7 @@ import AppError from '@shared/errors/AppError';
 import ICreateTagsToContactDTO from '../dtos/ICreateTagsToContactDTO';
 
 @injectable()
-class CreateTagContactService {
+class CreateTagsToContactService {
   constructor(
     @inject('ContactsRepository')
     private contactsRepository: IContactsRepository,
@@ -38,4 +38,4 @@ class CreateTagContactService {
   }
 }
 
-export default CreateTagContactService;
+export default CreateTagsToContactService;
