@@ -1,6 +1,6 @@
-interface ICreateRoleDTO {
+interface ICreateRolesDTO {
   name: string;
   description: string;
 }
 
-export default ICreateRoleDTO;
+export default ICreateRolesDTO;
