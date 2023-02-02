@@ -3,13 +3,9 @@ import { inject, injectable } from 'tsyringe';
 import { RoleEnum } from '@config/roles';
 import AppError from '@shared/errors/AppError';
 
+import ICreateRolesDTO from '../dtos/ICreateRolesDTO';
 import Role from '../infra/typeorm/entities/Role';
 import IRoleRepository from '../repositories/IRolesRepository';
-
-interface IRoleRequest {
-  name: string;
-  description: string;
-}
 
 @injectable()
 class CreateRoleService {
@@ -18,7 +14,7 @@ class CreateRoleService {
     private rolesRepository: IRoleRepository
   ) {}
 
-  async execute({ name, description }: IRoleRequest): Promise<Role> {
+  async execute({ name, description }: ICreateRolesDTO): Promise<Role> {
     const roleExists = await this.rolesRepository.findByName(name);
 
     if (roleExists) {

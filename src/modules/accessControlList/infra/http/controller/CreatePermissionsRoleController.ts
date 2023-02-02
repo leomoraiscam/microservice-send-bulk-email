@@ -12,12 +12,12 @@ class CreatePermissionsRoleController {
       createPermissionsRoleService
     );
 
-    const createdPermissionRole = await createPermissionsRole.execute({
+    const permissionsRole = await createPermissionsRole.execute({
       permissions,
       role_id,
     });
 
-    return response.status(201).json(createdPermissionRole);
+    return response.status(201).json(permissionsRole);
   }
 }
 

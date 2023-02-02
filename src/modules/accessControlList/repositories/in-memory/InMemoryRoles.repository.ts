@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Role from '@modules/accessControlList/infra/typeorm/entities/Role';
 
-import ICreateRoleDTO from '../../dtos/ICreateRoleDTO';
+import ICreateRolesDTO from '../../dtos/ICreateRolesDTO';
 import IRolesRepository from '../IRolesRepository';
 
 class InMemoryRolesRepository implements IRolesRepository {
@@ -22,7 +22,7 @@ class InMemoryRolesRepository implements IRolesRepository {
     return this.roles.find((role) => role.name === name);
   }
 
-  async create({ description, name }: ICreateRoleDTO): Promise<Role> {
+  async create({ description, name }: ICreateRolesDTO): Promise<Role> {
     const role = new Role();
 
     Object.assign(role, {

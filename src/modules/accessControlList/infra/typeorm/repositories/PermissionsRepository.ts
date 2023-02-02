@@ -1,7 +1,7 @@
 import { getRepository, Repository } from 'typeorm';
 
 import ICreatePermissionsDTO from '../../../dtos/ICreatePermissionsDTO';
-import IPermissionsRepository from '../../../repositories/IPermissionRepository';
+import IPermissionsRepository from '../../../repositories/IPermissionsRepository';
 import Permission from '../entities/Permission';
 
 class PermissionsRepository implements IPermissionsRepository {

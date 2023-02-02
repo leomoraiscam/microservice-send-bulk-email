@@ -4,7 +4,7 @@ import UsersRepositoryInMemory from '@modules/users/repositories/in-memory/Users
 
 import CreateAccessControlListToUserService from './CreateAccessControlListToUserService';
 
-describe('CreateAccessControlListService', () => {
+describe('CreateAccessControlListToUserService', () => {
   let createAccessControlListToUserService: CreateAccessControlListToUserService;
   let usersRepositoryInMemory: UsersRepositoryInMemory;
   let permissionsRepositoryInMemory: PermissionsRepositoryInMemory;

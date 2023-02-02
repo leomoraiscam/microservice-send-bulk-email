@@ -1,10 +1,9 @@
-import PermissionsRepositoryInMemory from '@modules/accessControlList/repositories/in-memory/InMemoryPermissions.repository';
 import RolesRepositoryInMemory from '@modules/accessControlList/repositories/in-memory/InMemoryRoles.repository';
 import AppError from '@shared/errors/AppError';
 
 import CreateRoleService from './CreateRoleService';
 
-describe('CreateRolesService', () => {
+describe('CreateRoleService', () => {
   let createRoleService: CreateRoleService;
   let inMemoryRolesRepository: RolesRepositoryInMemory;
 

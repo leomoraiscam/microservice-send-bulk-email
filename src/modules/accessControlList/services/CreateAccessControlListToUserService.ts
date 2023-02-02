@@ -4,14 +4,9 @@ import User from '@modules/users/infra/typeorm/entities/User';
 import IUserRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 
-import IPermissionsRepository from '../repositories/IPermissionRepository';
+import ICreateACLsToUserDTO from '../dtos/ICreateAccessControlListToUserDTO';
+import IPermissionsRepository from '../repositories/IPermissionsRepository';
 import IRoleRepository from '../repositories/IRolesRepository';
-
-interface IUserACLRequest {
-  user_id: string;
-  roles: string[];
-  permissions: string[];
-}
 
 @injectable()
 class CreateAccessControlListToUserService {
@@ -28,7 +23,7 @@ class CreateAccessControlListToUserService {
     user_id,
     roles,
     permissions,
-  }: IUserACLRequest): Promise<User> {
+  }: ICreateACLsToUserDTO): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {

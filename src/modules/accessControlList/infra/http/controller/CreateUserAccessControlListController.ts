@@ -10,13 +10,13 @@ class CreateUserAccessControlListController {
 
     const createUserACL = container.resolve(createUserAccessControlListService);
 
-    const createdACL = await createUserACL.execute({
+    const accessControlListToUser = await createUserACL.execute({
       user_id: id,
       permissions,
       roles,
     });
 
-    return response.status(201).json(createdACL);
+    return response.status(201).json(accessControlListToUser);
   }
 }
 

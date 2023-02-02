@@ -2,13 +2,9 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
+import ICreatePermissionsDTO from '../dtos/ICreatePermissionsDTO';
 import Permission from '../infra/typeorm/entities/Permission';
-import IPermissionsRepository from '../repositories/IPermissionRepository';
-
-interface IPermissionsRequest {
-  name: string;
-  description: string;
-}
+import IPermissionsRepository from '../repositories/IPermissionsRepository';
 
 @injectable()
 class CreatePermissionService {
@@ -20,7 +16,7 @@ class CreatePermissionService {
   async execute({
     name,
     description,
-  }: IPermissionsRequest): Promise<Permission> {
+  }: ICreatePermissionsDTO): Promise<Permission> {
     const permissionExists = await this.permissionsRepository.findByName(name);
 
     if (permissionExists) {

@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import CreatePermissionService from '@modules/accessControlList/services/CreatePermissionService';
 
-class CreatePermissionsController {
+class CreatePermissionController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
 
@@ -18,4 +18,4 @@ class CreatePermissionsController {
   }
 }
 
-export default CreatePermissionsController;
+export default CreatePermissionController;

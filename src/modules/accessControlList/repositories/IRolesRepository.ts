@@ -1,11 +1,11 @@
-import ICreateRoleDTO from '../dtos/ICreateRoleDTO';
+import ICreateRolesDTO from '../dtos/ICreateRolesDTO';
 import Role from '../infra/typeorm/entities/Role';
 
 interface IRolesRepository {
   findById(ids: string): Promise<Role>;
   findByIds(ids: string[]): Promise<Role[]>;
   findByName(name: string): Promise<Role | undefined>;
-  create(data: ICreateRoleDTO): Promise<Role>;
+  create(data: ICreateRolesDTO): Promise<Role>;
   save(role: Role): Promise<Role>;
 }
 

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Permission from '@modules/accessControlList/infra/typeorm/entities/Permission';
 
 import ICreatePermissionsDTO from '../../dtos/ICreatePermissionsDTO';
-import IPermissionsRepository from '../IPermissionRepository';
+import IPermissionsRepository from '../IPermissionsRepository';
 
 class InMemoryPermissionsRepository implements IPermissionsRepository {
   private permissions: Permission[] = [];
