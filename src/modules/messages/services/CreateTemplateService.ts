@@ -12,12 +12,10 @@ class CreateTemplateService {
   ) {}
 
   async execute({ title, content }: ICreateTemplatesDTO): Promise<Template> {
-    const template = await this.templatesRepository.create({
+    return this.templatesRepository.create({
       title,
       content,
     });
-
-    return template;
   }
 }
 

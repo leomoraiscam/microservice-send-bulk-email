@@ -14,12 +14,10 @@ class TemplatesRepository implements ITemplatesRepository {
   }
 
   async list({ page, perPage }: IOptions): Promise<Template[]> {
-    const templates = await this.repository.find({
+    return this.repository.find({
       take: perPage,
       skip: perPage * (page - 1),
     });
-
-    return templates;
   }
 
   async create({ content, title }: ICreateTemplateDTO): Promise<Template> {

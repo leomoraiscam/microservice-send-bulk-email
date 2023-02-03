@@ -14,9 +14,7 @@ class InMemoryTemplatesRepository implements ITemplatesRepository {
     page = perPage || 1;
     perPage = perPage || 10;
 
-    const paginateTemplates = paginateArray(this.templates, perPage, page);
-
-    return paginateTemplates;
+    return paginateArray(this.templates, perPage, page);
   }
 
   async create({ title, content }: ICreateTemplatesDTO): Promise<Template> {

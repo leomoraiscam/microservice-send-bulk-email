@@ -6,12 +6,12 @@ import SendMessageController from '@modules/messages/infra/http/controllers/Send
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import can from '@shared/infra/http/middlewares/ensurePermission';
 
-const messagesRoutes = Router();
+const messageRouter = Router();
 
 const createMessageController = new CreateMessageController();
 const sendMessageController = new SendMessageController();
 
-messagesRoutes.post(
+messageRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -23,7 +23,7 @@ messagesRoutes.post(
   can(['send_mail']),
   createMessageController.handle
 );
-messagesRoutes.post(
+messageRouter.post(
   '/:id/send',
   celebrate({
     [Segments.BODY]: {
@@ -33,4 +33,4 @@ messagesRoutes.post(
   sendMessageController.handle
 );
 
-export default messagesRoutes;
+export default messageRouter;

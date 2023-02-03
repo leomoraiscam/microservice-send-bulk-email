@@ -5,8 +5,8 @@ import permissionsRoutes from '@modules/accessControlList/infra/http/routes/perm
 import rolesRoutes from '@modules/accessControlList/infra/http/routes/roles';
 import contactRoutes from '@modules/contacts/infra/http/routes/contacts';
 import tagsRoutes from '@modules/contacts/infra/http/routes/tags';
-import messageRoutes from '@modules/messages/infra/http/routes/message';
-import templateRoutes from '@modules/messages/infra/http/routes/template';
+import messageRoutes from '@modules/messages/infra/http/routes/messages';
+import templateRoutes from '@modules/messages/infra/http/routes/templates';
 import sessionRoutes from '@modules/users/infra/http/routes/sessions.routes';
 import userRoutes from '@modules/users/infra/http/routes/users.routes';
 

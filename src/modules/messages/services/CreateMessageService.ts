@@ -12,12 +12,10 @@ class CreateMessageService {
   ) {}
 
   async execute({ body, subject }: ICreateMessagesDTO): Promise<Message> {
-    const message = await this.messagesRepository.create({
+    return this.messagesRepository.create({
       body,
       subject,
     });
-
-    return message;
   }
 }
 
