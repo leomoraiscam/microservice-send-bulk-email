@@ -8,9 +8,9 @@ class CreateTagController {
     const { id: contact_id } = request.user;
     const { tags } = request.body;
 
-    const CreateTags = container.resolve(CreateTagsService);
+    const createTags = container.resolve(CreateTagsService);
 
-    const createdTags = await CreateTags.execute({
+    const createdTags = await createTags.execute({
       tags,
       contact_id,
     });

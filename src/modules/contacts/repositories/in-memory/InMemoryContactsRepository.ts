@@ -38,9 +38,7 @@ class InMemoryContactsRepository implements IContactsRepository {
     page = page || 1;
     perPage = perPage || 10;
 
-    const paginateContacts = paginateArray(this.contacts, perPage, page);
-
-    return paginateContacts;
+    return paginateArray(this.contacts, perPage, page);
   }
 
   async create({ email, subscribed }: ICreateContactsDTO): Promise<Contact> {

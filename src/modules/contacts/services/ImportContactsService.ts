@@ -17,11 +17,11 @@ class ImportContactsService {
   public async execute(file: string): Promise<void> {
     const contactsReadStream = fs.createReadStream(file);
 
-    const parsers = csvParse({
+    const parse = csvParse({
       delimiter: ';',
     });
 
-    const parseCSV = contactsReadStream.pipe(parsers);
+    const parseCSV = contactsReadStream.pipe(parse);
 
     await this.storageProvider.save(file);
 

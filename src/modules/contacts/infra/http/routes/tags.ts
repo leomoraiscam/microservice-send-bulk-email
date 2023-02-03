@@ -1,17 +1,17 @@
 import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
-import CreateTagsController from '@modules/contacts/infra/http/controllers/CreateTagsController';
+import CreateTagController from '@modules/contacts/infra/http/controllers/CreateTagController';
 import ListTagsController from '@modules/contacts/infra/http/controllers/ListTagsController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 
-const createTagsController = new CreateTagsController();
+const createTagController = new CreateTagController();
 const listTagsController = new ListTagsController();
 
-const contactsRoutes = Router();
+const tagRouter = Router();
 
-contactsRoutes.get('/', listTagsController.handle);
-contactsRoutes.post(
+tagRouter.get('/', listTagsController.handle);
+tagRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -21,7 +21,7 @@ contactsRoutes.post(
     },
   }),
   ensureAuthenticated,
-  createTagsController.handle
+  createTagController.handle
 );
 
-export default contactsRoutes;
+export default tagRouter;

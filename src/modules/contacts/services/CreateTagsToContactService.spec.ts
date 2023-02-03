@@ -19,8 +19,6 @@ describe('CreateTagsToContactService', () => {
   });
 
   it('should be able to add multiples tags to specific contacts', async () => {
-    const email = 'zir@iti.hk';
-
     const tags = [
       {
         title: 'NodeJs',
@@ -31,7 +29,7 @@ describe('CreateTagsToContactService', () => {
     ];
 
     const { id } = await inMemoryContactsRepository.create({
-      email,
+      email: 'zir@iti.hk',
       subscribed: true,
     });
 

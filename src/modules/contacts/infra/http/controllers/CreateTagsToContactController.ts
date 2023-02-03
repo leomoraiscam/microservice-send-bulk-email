@@ -10,12 +10,12 @@ class CreateTagsToContactController {
 
     const createTagContact = container.resolve(CreateTagsToContactService);
 
-    const contactTags = await createTagContact.execute({
+    const tagsContact = await createTagContact.execute({
       contact_id,
       tag_ids,
     });
 
-    return response.status(201).json(contactTags);
+    return response.status(201).json(tagsContact);
   }
 }
 

@@ -4,39 +4,38 @@ import multer from 'multer';
 
 import upload from '@config/upload';
 import ChangeContactSubscriptionStatusController from '@modules/contacts/infra/http/controllers/ChangeContactSubscriptionStatusController';
-import CreateTagContactServiceController from '@modules/contacts/infra/http/controllers/CreateTagContactServiceController';
+import CreateTagsToContactController from '@modules/contacts/infra/http/controllers/CreateTagsToContactController';
 import ImportContactsController from '@modules/contacts/infra/http/controllers/ImportContactsController';
 import ListContactsController from '@modules/contacts/infra/http/controllers/ListContactsController';
 
 const importContactsController = new ImportContactsController();
-const createTagContactServiceController =
-  new CreateTagContactServiceController();
+const createTagsToContactController = new CreateTagsToContactController();
 const changeContactSubscriptionStatusController =
   new ChangeContactSubscriptionStatusController();
 const listContactsController = new ListContactsController();
 
-const contactsRoutes = Router();
+const contactRouter = Router();
 const uploadContacts = multer(upload.multer);
 
-contactsRoutes.get('/', listContactsController.handle);
-contactsRoutes.post(
+contactRouter.get('/', listContactsController.handle);
+contactRouter.post(
   '/import',
   uploadContacts.single('file'),
   importContactsController.handle
 );
-contactsRoutes.post(
-  '/tags/:id',
+contactRouter.post(
+  '/:contact_id/tags',
   celebrate({
     [Segments.PARAMS]: {
-      id: Joi.string().uuid().required(),
+      contact_id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
-      tags_ids: Joi.array().items(Joi.string()),
+      tag_ids: Joi.array().items(Joi.string()),
     },
   }),
-  createTagContactServiceController.handle
+  createTagsToContactController.handle
 );
-contactsRoutes.patch(
+contactRouter.patch(
   '/:contact_id/subscription',
   celebrate({
     [Segments.PARAMS]: {
@@ -49,4 +48,4 @@ contactsRoutes.patch(
   changeContactSubscriptionStatusController.handle
 );
 
-export default contactsRoutes;
+export default contactRouter;

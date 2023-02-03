@@ -14,10 +14,8 @@ describe('ChangeContactSubscriptionStatusService', () => {
   });
 
   it('should be able to change status of specific contact', async () => {
-    const email = 'ugivapzo@uvo.so';
-
     const { id } = await inMemoryContactsRepository.create({
-      email,
+      email: 'ugivapzo@uvo.so',
       subscribed: true,
     });
 
