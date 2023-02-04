@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { RoleEnum } from '@config/roles';
+import { RoleEnum } from '@modules/accessControlList/dtos/enuns/rolesEnum';
 
 import Permission from './Permission';
 

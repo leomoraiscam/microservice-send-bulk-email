@@ -1,8 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
-import { RoleEnum } from '@config/roles';
 import AppError from '@shared/errors/AppError';
 
+import { RoleEnum } from '../dtos/enuns/rolesEnum';
 import ICreateRolesDTO from '../dtos/ICreateRolesDTO';
 import Role from '../infra/typeorm/entities/Role';
 import IRoleRepository from '../repositories/IRolesRepository';

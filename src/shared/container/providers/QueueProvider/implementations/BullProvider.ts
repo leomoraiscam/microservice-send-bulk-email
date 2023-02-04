@@ -1,7 +1,7 @@
 import Bull, { Queue, ProcessPromiseFunction } from 'bull';
 import { injectable } from 'tsyringe';
 
-import redisConfig from '@config/redis';
+import redisConfig from '@config/database/redis';
 
 import IQueueProvider from '../models/IQueueProvider';
 
