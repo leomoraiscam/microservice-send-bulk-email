@@ -4,11 +4,7 @@ import jwt from 'jsonwebtoken';
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
-interface ITokenPayload {
-  iat: number;
-  exp: number;
-  sub: string;
-}
+import ITokenPayloadDTO from '../dtos/ITokenPayloadDTO';
 
 export default function ensureAuthenticated(
   req: Request,
@@ -26,7 +22,7 @@ export default function ensureAuthenticated(
   try {
     const decoded = jwt.verify(token, authConfig.jwt.secret);
 
-    const { sub } = decoded as ITokenPayload;
+    const { sub } = decoded as ITokenPayloadDTO;
 
     req.user = {
       id: sub,
