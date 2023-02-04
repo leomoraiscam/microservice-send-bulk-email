@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import User from '@modules/users/infra/typeorm/entities/User';
-import IUserRepository from '@modules/users/repositories/IUsersRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 
 import ICreateACLsToUserDTO from '../dtos/ICreateAccessControlListToUserDTO';
@@ -11,8 +11,8 @@ import IRoleRepository from '../repositories/IRolesRepository';
 @injectable()
 class CreateAccessControlListToUserService {
   constructor(
-    @inject('UserRepository')
-    private usersRepository: IUserRepository,
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
     @inject('PermissionsRepository')
     private permissionsRepository: IPermissionsRepository,
     @inject('RolesRepository')

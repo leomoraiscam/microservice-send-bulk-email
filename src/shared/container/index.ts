@@ -3,7 +3,7 @@ import './providers';
 
 import PermissionsRepository from '@modules/accessControlList/infra/typeorm/repositories/PermissionsRepository';
 import RolesRepository from '@modules/accessControlList/infra/typeorm/repositories/RolesRepository';
-import IPermissionRepository from '@modules/accessControlList/repositories/IPermissionRepository';
+import IPermissionsRepository from '@modules/accessControlList/repositories/IPermissionsRepository';
 import IRolesRepository from '@modules/accessControlList/repositories/IRolesRepository';
 import ContactsRepository from '@modules/contacts/infra/typeorm/repositories/ContactsRepository';
 import TagsRepository from '@modules/contacts/infra/typeorm/repositories/TagsRepository';
@@ -11,8 +11,8 @@ import IContactsRepository from '@modules/contacts/repositories/IContactsReposit
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 import MessagesRepository from '@modules/messages/infra/typeorm/repositories/MessagesRepository';
 import TemplatesRepository from '@modules/messages/infra/typeorm/repositories/TemplatesRepository';
-import IMessageRepository from '@modules/messages/repositories/IMessageRepository';
-import ITemplateRepository from '@modules/messages/repositories/ITemplateRepository';
+import IMessagesRepository from '@modules/messages/repositories/IMessagesRepository';
+import ITemplatesRepository from '@modules/messages/repositories/ITemplatesRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
@@ -23,13 +23,13 @@ container.registerSingleton<IContactsRepository>(
 
 container.registerSingleton<ITagsRepository>('TagsRepository', TagsRepository);
 
-container.registerSingleton<IMessageRepository>(
+container.registerSingleton<IMessagesRepository>(
   'MessagesRepository',
   MessagesRepository
 );
 
 container.registerSingleton<IUsersRepository>(
-  'UserRepository',
+  'UsersRepository',
   UsersRepository
 );
 
@@ -38,12 +38,12 @@ container.registerSingleton<IRolesRepository>(
   RolesRepository
 );
 
-container.registerSingleton<IPermissionRepository>(
+container.registerSingleton<IPermissionsRepository>(
   'PermissionsRepository',
   PermissionsRepository
 );
 
-container.registerSingleton<ITemplateRepository>(
+container.registerSingleton<ITemplatesRepository>(
   'TemplatesRepository',
   TemplatesRepository
 );

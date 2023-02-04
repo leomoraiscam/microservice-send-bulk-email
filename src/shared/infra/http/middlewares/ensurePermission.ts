@@ -7,9 +7,9 @@ export default function can(permissionsData: string[]) {
   return async (request: Request, response: Response, next: NextFunction) => {
     const { id } = request.user;
 
-    const userRepository = new UsersRepository();
+    const usersRepository = new UsersRepository();
 
-    const user = await userRepository.findById(id);
+    const user = await usersRepository.findById(id);
 
     if (!user) {
       throw new AppError('User does not exist');
@@ -31,9 +31,9 @@ export function is(rolesData: string[]) {
   return async (request: Request, response: Response, next: NextFunction) => {
     const { id } = request.user;
 
-    const userRepository = new UsersRepository();
+    const usersRepository = new UsersRepository();
 
-    const user = await userRepository.findById(id);
+    const user = await usersRepository.findById(id);
 
     if (!user) {
       throw new AppError('User does not exist');
