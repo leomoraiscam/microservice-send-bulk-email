@@ -1,4 +1,4 @@
-import FakeHashProvider from '@shared/container/providers/HashProvider/fakes/FakeHashProvider';
+import InMemoryHashProvider from '@shared/container/providers/HashProvider/in-memory/InMemoryHashProvider';
 import AppError from '@shared/errors/AppError';
 
 import UsersRepositoryInMemory from '../repositories/in-memory/UsersRepositoryInMemory';
@@ -7,14 +7,14 @@ import CreateUserService from './CreateUserService';
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
   let usersRepositoryInMemory: UsersRepositoryInMemory;
-  let fakeHashProvider: FakeHashProvider;
+  let inMemoryHashProvider: InMemoryHashProvider;
 
   beforeEach(() => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
-    fakeHashProvider = new FakeHashProvider();
+    inMemoryHashProvider = new InMemoryHashProvider();
     createUserService = new CreateUserService(
       usersRepositoryInMemory,
-      fakeHashProvider
+      inMemoryHashProvider
     );
   });
 
