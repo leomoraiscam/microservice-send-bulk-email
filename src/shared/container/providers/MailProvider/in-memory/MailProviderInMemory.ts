@@ -1,16 +1,10 @@
+import ISendMailDTO from '../dtos/ISendMailDTO';
 import IMailProvider from '../models/IMailProvider';
-
-interface ISendMail {
-  from: string;
-  to: string;
-  subject: string;
-  text: string;
-}
 
 class MailProviderInMemory implements IMailProvider {
   private message: any[] = [];
 
-  async sendMail({ from, to, subject, text }: ISendMail): Promise<void> {
+  async sendMail({ from, to, subject, text }: ISendMailDTO): Promise<void> {
     this.message.push({
       from,
       to,

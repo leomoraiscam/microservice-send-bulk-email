@@ -1,13 +1,8 @@
 import nodemailer, { Transporter } from 'nodemailer';
 
+import ISendMail from '../dtos/ISendMailDTO';
 import IMailProvider from '../models/IMailProvider';
 
-interface ISendMail {
-  from: string;
-  to: string;
-  subject: string;
-  text: string;
-}
 class MailTrapProvider implements IMailProvider {
   private transporter: Transporter;
 
