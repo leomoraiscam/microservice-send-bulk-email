@@ -8,7 +8,7 @@ import IPermissionsRepository from '../repositories/IPermissionsRepository';
 import IRoleRepository from '../repositories/IRolesRepository';
 
 @injectable()
-class CreateRolePermissionService {
+class CreatePermissionsRoleService {
   constructor(
     @inject('PermissionsRepository')
     private permissionsRepository: IPermissionsRepository,
@@ -38,4 +38,4 @@ class CreateRolePermissionService {
   }
 }
 
-export default CreateRolePermissionService;
+export default CreatePermissionsRoleService;

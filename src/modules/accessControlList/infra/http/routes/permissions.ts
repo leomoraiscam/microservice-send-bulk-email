@@ -6,9 +6,9 @@ import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthentica
 
 const createPermissionController = new CreatePermissionController();
 
-const permissionsRoutes = Router();
+const permissionRouter = Router();
 
-permissionsRoutes.post(
+permissionRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -20,4 +20,4 @@ permissionsRoutes.post(
   createPermissionController.handle
 );
 
-export default permissionsRoutes;
+export default permissionRouter;

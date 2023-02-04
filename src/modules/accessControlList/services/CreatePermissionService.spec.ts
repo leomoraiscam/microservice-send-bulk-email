@@ -3,7 +3,7 @@ import AppError from '@shared/errors/AppError';
 
 import CreatePermissionService from './CreatePermissionService';
 
-describe('CreatePermissionsService', () => {
+describe('CreatePermissionService', () => {
   let createPermissionService: CreatePermissionService;
   let permissionsRepositoryInMemory: PermissionsRepositoryInMemory;
 

@@ -9,9 +9,9 @@ const createUserAccessControlListController =
   new CreateUserAccessControlListController();
 const createPermissionsRoleController = new CreatePermissionsRoleController();
 
-const userAclRoutes = Router();
+const userAclRouteR = Router();
 
-userAclRoutes.post(
+userAclRouteR.post(
   '/users/:user_id/acl',
   celebrate({
     [Segments.BODY]: {
@@ -23,7 +23,7 @@ userAclRoutes.post(
   createUserAccessControlListController.handle
 );
 
-userAclRoutes.post(
+userAclRouteR.post(
   '/roles/:role_id/permissions',
   celebrate({
     [Segments.PARAMS]: {
@@ -35,4 +35,5 @@ userAclRoutes.post(
   }),
   createPermissionsRoleController.handle
 );
-export default userAclRoutes;
+
+export default userAclRouteR;

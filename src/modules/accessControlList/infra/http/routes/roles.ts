@@ -7,9 +7,9 @@ import { is } from '@shared/infra/http/middlewares/ensurePermission';
 
 const createRoleController = new CreateRoleController();
 
-const rolesRoutes = Router();
+const roleRouter = Router();
 
-rolesRoutes.post(
+roleRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -22,4 +22,4 @@ rolesRoutes.post(
   createRoleController.handle
 );
 
-export default rolesRoutes;
+export default roleRouter;
