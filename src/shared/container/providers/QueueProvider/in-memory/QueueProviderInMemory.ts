@@ -1,14 +1,7 @@
 import IJobData from '@modules/messages/dtos/IMessageJobDTO';
 
+import IJobProcessDTO from '../dtos/IJobProcessDTO';
 import IQueueProvider from '../models/IQueueProvider';
-
-export interface IJob {
-  data: IJobData;
-}
-
-interface IJobProcess {
-  data: object;
-}
 
 class QueueProviderInMemory implements IQueueProvider {
   public jobs: IJobData[] = [];
@@ -17,7 +10,7 @@ class QueueProviderInMemory implements IQueueProvider {
     this.jobs.push(job);
   }
 
-  process(processFunction: (job: IJobProcess) => Promise<void>): void {
+  process(processFunction: (job: IJobProcessDTO) => Promise<void>): void {
     this.jobs.forEach((job, index) => {
       processFunction({ data: job });
 
