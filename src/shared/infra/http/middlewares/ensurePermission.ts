@@ -4,7 +4,7 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 import AppError from '@shared/errors/AppError';
 
 export default function can(permissionsData: string[]) {
-  return async (request: Request, response: Response, next: NextFunction) => {
+  return async (request: Request, _: Response, next: NextFunction) => {
     const { id } = request.user;
 
     const usersRepository = new UsersRepository();
@@ -28,7 +28,7 @@ export default function can(permissionsData: string[]) {
 }
 
 export function is(rolesData: string[]) {
-  return async (request: Request, response: Response, next: NextFunction) => {
+  return async (request: Request, _: Response, next: NextFunction) => {
     const { id } = request.user;
 
     const usersRepository = new UsersRepository();
