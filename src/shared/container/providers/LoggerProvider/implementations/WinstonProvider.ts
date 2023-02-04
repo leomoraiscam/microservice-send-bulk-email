@@ -1,4 +1,4 @@
-import winston, { createLogger, Logger, LoggerOptions } from 'winston';
+import winston, { createLogger, Logger } from 'winston';
 
 import ILoggerProvider from '../models/ILoggerProvider';
 
