@@ -1,9 +1,9 @@
 import { getMongoRepository, MongoRepository } from 'typeorm';
 
+import ICreateTemplateDTO from '@modules/messages/dtos/ICreateTemplatesDTO';
 import ITemplatesRepository from '@modules/messages/repositories/ITemplatesRepository';
 import IOptions from '@shared/dtos/IOptionsDTO';
 
-import ICreateTemplateDTO from '../../../dtos/ICreateTemplatesDTO';
 import Template from '../schemas/Template';
 
 class TemplatesRepository implements ITemplatesRepository {

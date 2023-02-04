@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import ListTemplatesService from '../../../services/ListTemplatesService';
+import ListTemplatesService from '@modules/messages/services/ListTemplatesService';
 
 class ListTemplatesController {
   async handle(request: Request, response: Response): Promise<Response> {

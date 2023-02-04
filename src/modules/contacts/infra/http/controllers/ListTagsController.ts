@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import ListTagsService from '../../../services/ListTagsService';
+import ListTagsService from '@modules/contacts/services/ListTagsService';
 
 class ListTagsController {
   async handle(request: Request, response: Response): Promise<Response> {

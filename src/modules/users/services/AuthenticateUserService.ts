@@ -1,11 +1,11 @@
 import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
+import authConfig from '@config/auth';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
 import AppError from '@shared/errors/AppError';
 
-import authConfig from '../../../config/auth';
-import IHashProvider from '../../../shared/container/providers/HashProvider/models/IHashProvider';
 import ICreateSessionsDTO from '../dtos/ICreateSessionsDTO';
 import ICreateSessionsResponseDTO from '../dtos/ICreateSessionsResponseDTO';
 

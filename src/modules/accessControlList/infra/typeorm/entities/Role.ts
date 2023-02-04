@@ -9,7 +9,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { RoleEnum } from '../../../../../config/roles';
+import { RoleEnum } from '@config/roles';
+
 import Permission from './Permission';
 
 @Entity('roles')

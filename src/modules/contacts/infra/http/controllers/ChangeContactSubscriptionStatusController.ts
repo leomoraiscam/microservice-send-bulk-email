@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import ChangeContactSubscriptionStatusService from '../../../services/ChangeContactSubscriptionStatusService';
+import ChangeContactSubscriptionStatusService from '@modules/contacts/services/ChangeContactSubscriptionStatusService';
 
 class ChangeContactSubscriptionStatusController {
   async handle(request: Request, response: Response): Promise<Response> {

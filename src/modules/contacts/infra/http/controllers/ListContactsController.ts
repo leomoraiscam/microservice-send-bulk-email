@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import ListContactsService from '../../../services/ListContactsService';
+import ListContactsService from '@modules/contacts/services/ListContactsService';
 
 class ListContactsController {
   async handle(request: Request, response: Response): Promise<Response> {

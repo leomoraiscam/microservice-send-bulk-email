@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import CreateTagsToContactService from '../../../services/CreateTagsToContactService';
+import CreateTagsToContactService from '@modules/contacts/services/CreateTagsToContactService';
 
 class CreateTagsToContactController {
   async handle(request: Request, response: Response): Promise<Response> {
