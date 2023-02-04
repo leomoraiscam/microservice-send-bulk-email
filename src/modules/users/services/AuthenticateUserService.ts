@@ -1,25 +1,16 @@
 import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
-import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 
 import authConfig from '../../../config/auth';
 import IHashProvider from '../../../shared/container/providers/HashProvider/models/IHashProvider';
-
-interface IRequest {
-  email: string;
-  password: string;
-}
-
-interface IResponse {
-  user: User;
-  token: string;
-}
+import ICreateSessionsDTO from '../dtos/ICreateSessionsDTO';
+import ICreateSessionsResponseDTO from '../dtos/ICreateSessionsResponseDTO';
 
 @injectable()
-class AuthenticatedUserService {
+class AuthenticateUserService {
   constructor(
     @inject('UserRepository')
     private usersRepository: IUsersRepository,
@@ -27,7 +18,10 @@ class AuthenticatedUserService {
     private hashProvider: IHashProvider
   ) {}
 
-  async execute({ email, password }: IRequest): Promise<IResponse> {
+  async execute({
+    email,
+    password,
+  }: ICreateSessionsDTO): Promise<ICreateSessionsResponseDTO> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -54,4 +48,4 @@ class AuthenticatedUserService {
   }
 }
 
-export default AuthenticatedUserService;
+export default AuthenticateUserService;

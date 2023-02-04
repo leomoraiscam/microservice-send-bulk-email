@@ -1,9 +1,9 @@
 import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
-import AuthenticatedUserController from '@modules/users/infra/http/controllers/AuthenticatedUserController';
+import AuthenticateUserController from '@modules/users/infra/http/controllers/AuthenticateUserController';
 
-const authenticatedUserController = new AuthenticatedUserController();
+const authenticateUserController = new AuthenticateUserController();
 
 const sessionRouter = Router();
 
@@ -15,7 +15,7 @@ sessionRouter.post(
       password: Joi.string().required(),
     },
   }),
-  authenticatedUserController.handle
+  authenticateUserController.handle
 );
 
 export default sessionRouter;

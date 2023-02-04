@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
+import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
 import AppError from '@shared/errors/AppError';
 
 import ICreateUsersDTO from '../dtos/ICreateUsersDTO';
@@ -11,17 +12,19 @@ import IUserRepository from '../repositories/IUsersRepository';
 class CreateUserUseCase {
   constructor(
     @inject('UserRepository')
-    private usersRepository: IUserRepository
+    private usersRepository: IUserRepository,
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) {}
 
   async execute({ name, email, password }: ICreateUsersDTO): Promise<User> {
     const userExist = await this.usersRepository.findByEmail(email);
 
     if (userExist) {
-      throw new AppError('User already exist', 400);
+      throw new AppError('User already exist', 409);
     }
 
-    const passwordHash = await hash(password, 8);
+    const passwordHash = await this.hashProvider.generateHash(password);
 
     const user = await this.usersRepository.create({
       name,

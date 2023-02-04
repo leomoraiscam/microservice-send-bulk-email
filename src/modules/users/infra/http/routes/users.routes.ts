@@ -5,9 +5,9 @@ import CreateUserController from '@modules/users/infra/http/controllers/CreateUs
 
 const createUserController = new CreateUserController();
 
-const usersRouter = Router();
+const userRouter = Router();
 
-usersRouter.post(
+userRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -19,4 +19,4 @@ usersRouter.post(
   createUserController.handle
 );
 
-export default usersRouter;
+export default userRouter;

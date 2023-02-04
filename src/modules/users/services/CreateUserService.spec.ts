@@ -1,3 +1,4 @@
+import FakeHashProvider from '@shared/container/providers/HashProvider/fakes/FakeHashProvider';
 import AppError from '@shared/errors/AppError';
 
 import UsersRepositoryInMemory from '../repositories/in-memory/UsersRepositoryInMemory';
@@ -6,10 +7,15 @@ import CreateUserService from './CreateUserService';
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
   let usersRepositoryInMemory: UsersRepositoryInMemory;
+  let fakeHashProvider: FakeHashProvider;
 
   beforeEach(() => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
-    createUserService = new CreateUserService(usersRepositoryInMemory);
+    fakeHashProvider = new FakeHashProvider();
+    createUserService = new CreateUserService(
+      usersRepositoryInMemory,
+      fakeHashProvider
+    );
   });
 
   it('should be able create a user when receive correct data', async () => {
