@@ -2,6 +2,8 @@ import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
 import CreateUserController from '@modules/users/infra/http/controllers/CreateUserController';
+import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
+import { can, is } from '@shared/infra/http/middlewares/ensurePermission';
 
 const createUserController = new CreateUserController();
 
@@ -16,6 +18,9 @@ userRouter.post(
       password: Joi.string().required(),
     },
   }),
+  ensureAuthenticated,
+  is(['admin']),
+  can(['create-sender']),
   createUserController.handle
 );
 

@@ -3,7 +3,7 @@ import { Router } from 'express';
 
 import CreateRoleController from '@modules/accessControlList/infra/http/controller/CreateRoleController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
-import { is } from '@shared/infra/http/middlewares/ensurePermission';
+import { is, can } from '@shared/infra/http/middlewares/ensurePermission';
 
 const createRoleController = new CreateRoleController();
 
@@ -19,6 +19,7 @@ roleRouter.post(
   }),
   ensureAuthenticated,
   is(['admin']),
+  can(['create-role']),
   createRoleController.handle
 );
 

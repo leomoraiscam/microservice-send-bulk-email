@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import AppError from '@shared/errors/AppError';
 
-export default function can(permissionsData: string[]) {
+export function can(permissionsData: string[]) {
   return async (request: Request, _: Response, next: NextFunction) => {
     const { id } = request.user;
 

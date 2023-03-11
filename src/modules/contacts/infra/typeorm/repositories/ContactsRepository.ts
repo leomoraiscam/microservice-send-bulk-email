@@ -26,14 +26,16 @@ class ContactsRepository implements IContactsRepository {
   }
 
   async findByTags(tags: string[]): Promise<Contact[]> {
-    return this.repository
-      .createQueryBuilder('contact')
-      .innerJoin('contact.tags', 'contacts_tags')
-      .where('contacts_tags.id IN (:...tags)', {
-        tags,
-      })
-      .andWhere('contact.subscribed = :subscribed', { subscribed: true })
-      .getMany();
+    return (
+      this.repository
+        .createQueryBuilder('contact')
+        .innerJoin('contact.tags', 'contacts_tags')
+        .where('contacts_tags.id IN (:...tags)', {
+          tags,
+        })
+        // .andWhere('contact.subscribed = :subscribed', { subscribed: true })
+        .getMany()
+    );
   }
 
   async list({ page, perPage }: IOptionsDTO): Promise<Contact[]> {
@@ -46,7 +48,7 @@ class ContactsRepository implements IContactsRepository {
   async create({ subscribed, email }: ICreateContactsDTO): Promise<Contact> {
     const contact = this.repository.create({
       subscribed,
-      email,
+      email: 'lmorais.contato@email.com',
     });
 
     await this.repository.save(contact);

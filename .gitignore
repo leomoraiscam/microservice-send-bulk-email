@@ -6,3 +6,7 @@ coverage
 
 tmp/*
 !tmp/.gitkeep
+
+requirements/*
+
+ormconfig.json

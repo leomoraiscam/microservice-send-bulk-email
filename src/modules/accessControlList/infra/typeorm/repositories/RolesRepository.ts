@@ -13,7 +13,12 @@ class RolesRepository implements IRolesRepository {
   }
 
   findById(id: string): Promise<Role> {
-    const roles = this.repository.findOne(id);
+    const roles = this.repository.findOne({
+      where: {
+        id,
+      },
+      relations: ['permissions'],
+    });
 
     return roles;
   }
@@ -41,6 +46,19 @@ class RolesRepository implements IRolesRepository {
     await this.repository.save(role);
 
     return role;
+  }
+
+  async bulkCreate(data: ICreateRolesDTO[]): Promise<Role[]> {
+    const rolesToSave = data.map(({ name, description }) =>
+      this.repository.create({
+        name,
+        description,
+      })
+    );
+
+    await this.repository.save(rolesToSave);
+
+    return rolesToSave;
   }
 
   async save(role: Role): Promise<Role> {

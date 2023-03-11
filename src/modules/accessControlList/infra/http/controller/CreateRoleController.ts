@@ -1,4 +1,3 @@
-import { classToClass } from 'class-transformer';
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
 
@@ -15,7 +14,7 @@ class CreateRoleController {
       description,
     });
 
-    return response.status(201).json(classToClass(role));
+    return response.status(201).json(role);
   }
 }
 

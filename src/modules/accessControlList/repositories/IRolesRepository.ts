@@ -6,6 +6,7 @@ interface IRolesRepository {
   findByIds(ids: string[]): Promise<Role[]>;
   findByName(name: string): Promise<Role | undefined>;
   create(data: ICreateRolesDTO): Promise<Role>;
+  bulkCreate(data: ICreateRolesDTO[]): Promise<Role[]>;
   save(role: Role): Promise<Role>;
 }
 

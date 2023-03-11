@@ -18,14 +18,8 @@ class Role {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Exclude()
   @Column()
   name: string;
-
-  @Expose({ name: 'name' })
-  getAccessType() {
-    return RoleEnum[this.name];
-  }
 
   @Column()
   description: string;

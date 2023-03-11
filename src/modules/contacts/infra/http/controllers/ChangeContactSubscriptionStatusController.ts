@@ -12,12 +12,12 @@ class ChangeContactSubscriptionStatusController {
       ChangeContactSubscriptionStatusService
     );
 
-    const contact = await changeContactSubscriptionStatus.execute({
+    await changeContactSubscriptionStatus.execute({
       contact_id,
       subscribed,
     });
 
-    return response.status(201).json(contact);
+    return response.status(204).send();
   }
 }
 

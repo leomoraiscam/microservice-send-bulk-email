@@ -28,6 +28,10 @@ class CreateTagsToContactService {
 
     const tags = await this.tagsRepository.findByIds(tag_ids);
 
+    if (!tags.length) {
+      throw new AppError("Tags doesn't exist", 404);
+    }
+
     Object.assign(contact, {
       tags,
     });

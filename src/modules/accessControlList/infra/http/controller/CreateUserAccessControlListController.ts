@@ -6,12 +6,12 @@ import createUserAccessControlListService from '@modules/accessControlList/servi
 class CreateUserAccessControlListController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { permissions, roles } = request.body;
-    const { id } = request.user;
+    const { user_id } = request.params;
 
     const createUserACL = container.resolve(createUserAccessControlListService);
 
     const accessControlListToUser = await createUserACL.execute({
-      user_id: id,
+      user_id,
       permissions,
       roles,
     });

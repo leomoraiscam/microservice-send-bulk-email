@@ -4,6 +4,7 @@ import { Router } from 'express';
 import CreatePermissionsRoleController from '@modules/accessControlList/infra/http/controller/CreatePermissionsRoleController';
 import CreateUserAccessControlListController from '@modules/accessControlList/infra/http/controller/CreateUserAccessControlListController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
+import { can, is } from '@shared/infra/http/middlewares/ensurePermission';
 
 const createUserAccessControlListController =
   new CreateUserAccessControlListController();
@@ -20,6 +21,8 @@ userAclRouteR.post(
     },
   }),
   ensureAuthenticated,
+  is(['admin']),
+  can(['create-role', 'create-permission']),
   createUserAccessControlListController.handle
 );
 
@@ -33,6 +36,9 @@ userAclRouteR.post(
       permissions: Joi.array().items(Joi.string().uuid()),
     },
   }),
+  ensureAuthenticated,
+  is(['admin']),
+  can(['create-role', 'create-permission']),
   createPermissionsRoleController.handle
 );
 

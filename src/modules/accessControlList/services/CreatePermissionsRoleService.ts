@@ -23,12 +23,16 @@ class CreatePermissionsRoleService {
     const role = await this.rolesRepository.findById(role_id);
 
     if (!role) {
-      throw new AppError('Role does not exist');
+      throw new AppError('Role not found', 404);
     }
 
     const permissionsExists = await this.permissionsRepository.findByIds(
       permissions
     );
+
+    if (!permissionsExists.length) {
+      throw new AppError('Permissions not found', 404);
+    }
 
     role.permissions = permissionsExists;
 

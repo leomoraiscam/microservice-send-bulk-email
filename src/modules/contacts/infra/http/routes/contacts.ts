@@ -7,6 +7,8 @@ import ChangeContactSubscriptionStatusController from '@modules/contacts/infra/h
 import CreateTagsToContactController from '@modules/contacts/infra/http/controllers/CreateTagsToContactController';
 import ImportContactsController from '@modules/contacts/infra/http/controllers/ImportContactsController';
 import ListContactsController from '@modules/contacts/infra/http/controllers/ListContactsController';
+import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
+import { can, is } from '@shared/infra/http/middlewares/ensurePermission';
 
 const importContactsController = new ImportContactsController();
 const createTagsToContactController = new CreateTagsToContactController();
@@ -17,10 +19,19 @@ const listContactsController = new ListContactsController();
 const contactRouter = Router();
 const uploadContacts = multer(upload.multer);
 
-contactRouter.get('/', listContactsController.handle);
+contactRouter.get(
+  '/',
+  ensureAuthenticated,
+  is(['admin', 'viewer', 'sender']),
+  can(['list-data']),
+  listContactsController.handle
+);
 contactRouter.post(
   '/import',
   uploadContacts.single('file'),
+  ensureAuthenticated,
+  is(['admin']),
+  can(['create-subscription']),
   importContactsController.handle
 );
 contactRouter.post(
@@ -33,6 +44,9 @@ contactRouter.post(
       tag_ids: Joi.array().items(Joi.string()),
     },
   }),
+  ensureAuthenticated,
+  is(['admin']),
+  can(['create-subscription']),
   createTagsToContactController.handle
 );
 contactRouter.patch(
@@ -45,6 +59,8 @@ contactRouter.patch(
       subscribed: Joi.bool(),
     },
   }),
+  is(['admin']),
+  can(['create-subscription']),
   changeContactSubscriptionStatusController.handle
 );
 

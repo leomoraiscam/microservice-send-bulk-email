@@ -1,41 +1,90 @@
 {
   "openapi":"3.0.0",
   "info": {
-    "title": "Documentation bulk message microservice",
-    "description": "This is microservice",
-    "version": "1.0.0"
+    "title": "Bulk email sending microservice",
+    "description": "This is microservice built on top of expressJS to send email",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
   },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Development Environment"
+    }
+  ],
   "paths": {
-    "/contacts/import": {
+    "/users": {
       "post": {
-        "tags": ["Contacts"],
-        "summary": "Upload a new contacts from csv",
-        "description": "Upload a new contacts",
+        "tags":["Users"],
+        "summary": "Create users in database",
         "requestBody": {
+          "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
+                "$ref": "#/definitions/CreateUsers"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error",
+            "description": "This will be returned when the created a user",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Error"
+                  "$ref": "#/definitions/CreateUsersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "email"
+                      ],
+                      "message": "\"email\" must be a valid email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the user email already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "User already exist",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
                 },
                 "example": {
                   "message": "Internal Server Error",
@@ -47,73 +96,506 @@
         }
       }
     },
-    "/contacts/tags/:id": {
+    "/sessions": {
       "post": {
-        "tags": ["Contacts"],
-        "summary": "Create a tags to specific contact",
-        "description":"Create a tags to specific contact",
+        "tags":["Auth"],
+        "summary": "Create a new session to user access private routes",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "properties": {
-                    "tags_id": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "example": {
-                  "tags_ids":  [
-                    "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b",
-                    "36684f21-55f8-44d9-bbd1-2bab8bcc4dc1"
-                  ]
-                }
+                "$ref": "#/definitions/CreateSessions"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "This will be returned when the created a user",
+            "content": {
+              "application/json:": {
+                "schema": {
+                  "$ref": "#/definitions/CreateSessionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "email":  {
-                      "type": "string"
-                    },
-                    "created_at": {
-                      "type": "string"
-                    },
-                    "updated_at": {
-                      "type": "string"
-                    },
-                    "tags": {
-                      "type": "array",
-                      "items": {
-                        "properties": {
-                          "id" : {
-                            "type": "string"
-                          },
-                          "title": {
-                            "type": "string"
-                          },
-                          "created_at": {
-                            "type": "string"
-                          },
-                          "updated_at": {
-                            "type": "string"
-                          }
-                        }
-                      }
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "email"
+                      ],
+                      "message": "\"email\" must be a valid email"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Incorrect email/password combination",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "post": {
+        "tags":["Access Control list"],
+        "summary": "Create roles in database",
+        "security": [{ "BearerToken": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/CreateRoles"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a role",
+            "content": {
+              "application/json:": {
+                "schema": {
+                  "$ref": "#/definitions/CreateRolesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "name"
+                      ],
+                      "message": "\"name\" must be one of [ADMIN, USER]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the user role already exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Role already exist",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissions": {
+      "post": {
+        "tags":["Access Control list"],
+        "summary": "Create permissions in database",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/CreatePermissions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a permission",
+            "content": {
+              "application/json:": {
+                "schema": {
+                  "$ref": "#/definitions/CreatePermissionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "name"
+                      ],
+                      "message": "\"name\" must be a string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the permission name already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Permissions already exist",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/:id/permissions": {
+      "post": {
+        "tags":["Access Control list"],
+        "summary": "Add one or many permissions to specific role domain receive by parameter",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/CreatePermissionsRole"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a permissions role",
+            "content": {
+              "application/json:": {
+                "schema": {
+                  "$ref": "#/definitions/CreatePermissionsRoleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "permissions"
+                      ],
+                      "message": "\"permissions\" must be an array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be return whe the object entity does not exist or not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Permissions not found",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/:id/acl": {
+      "post": {
+        "tags":["Access Control list"],
+        "summary": "Add list of access to specific user domain receive by parameter",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/CreateAccessControlListToUsers"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a permissions role",
+            "content": {
+              "application/json:": {
+                "schema": {
+                  "$ref": "#/definitions/CreateAccessControlListToUsersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "permissions"
+                      ],
+                      "message": "\"permissions\" must be an array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be return whe the object entity does not exist or not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Permissions not found",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "list a list of contacts present in database",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The page to be returned"
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of documents to limit per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "This will be returned when the return list of data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Contacts"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "This will be returned when the empty data to this entity"
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
                 }
               }
             }
@@ -123,7 +605,220 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Error"
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/import": {
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Upload contacts from csv to database",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/definitions/UploadContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a entity resource"
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/:id/tags": {
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Create a tags to specific contact",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/CreateTagsContact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a entity resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/CreateTagsContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "permissions"
+                      ],
+                      "message": "\"tag_ids\" must be an array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be return whe the object entity does not exist or not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Tags not found",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/:id/subscription": {
+      "patch": {
+        "tags": ["Contacts"],
+        "summary": "Change status of specific contact",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/definitions/ChangeSubscriptionStatusContact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "This will be returned when the return success"
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "subscribed"
+                      ],
+                      "message": "\"subscribed\" must be a boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
                 },
                 "example": {
                   "message": "Internal Server Error",
@@ -136,10 +831,75 @@
       }
     },
     "/tags": {
+      "get": {
+        "tags": ["Tags"],
+        "summary": "list a list of tags",
+        "responses": {
+          "200": {
+            "description": "This will be returned when the return list of data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example":"2d124790-c2b0-43df-beea-6ab450d5a783"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Javascript"
+                      },
+                      "user_id": {
+                        "type": "string",
+                        "example": "313cf5a6-3ae4-4cba-bb2b-d32c4c01d0f5"
+                      },
+                      "created_at": {
+                        "type": "string"
+                      },
+                      "updated_at": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "This will be returned when the empty data to this entity"
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Internal Server Error",
+                  "status": "Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": ["Tags"],
         "summary": "Create a tags",
-        "description": "Create a new tags",
         "requestBody": {
           "content": {
             "application/json": {
@@ -161,28 +921,49 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "This will be returned when the created a entity resource",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "created_at": {
-                        "type": "string"
-                      },
-                      "updated_at": {
-                        "type": "string"
-                      }
+                  "$ref": "#/definitions/CreateTagsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "tags.0.title"
+                      ],
+                      "message": "\"tags[0].title\" must be a string"
                     }
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Invalid JWT token",
+                  "status": "Error"
                 }
               }
             }
@@ -192,7 +973,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Error"
+                  "$ref": "#/definitions/ExceptionError"
                 },
                 "example": {
                   "message": "tag already exist",
@@ -206,7 +987,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Error"
+                  "$ref": "#/definitions/ExceptionError"
                 },
                 "example": {
                   "message": "Internal Server Error",
@@ -222,45 +1003,70 @@
       "post": {
         "tags": ["Messages"],
         "summary": "Create a message",
-        "description":"Create a new message",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "subject": {
-                    "type": "string"
-                  },
-                  "body": {
-                    "type": "string"
-                  }
-                }
+                "$ref":"#/definitions/CreateMessages"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "This will be returned when the created a entity resource",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Messages"
+                  "$ref": "#/definitions/CreateMessagesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ValidationError"
                 },
                 "example": {
-                  "subject": "[Subject] - confirmation e-mail",
-                  "body": "welcome"
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "subject"
+                      ],
+                      "message": "\"subject\" must be a string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
                 }
               }
             }
           },
           "500": {
-            "description": "Internal Server Error",
+            "description": "This will be returned when an unexpected error occurs",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Error"
+                  "$ref": "#/definitions/ExceptionError"
                 },
                 "example": {
                   "message": "Internal Server Error",
@@ -281,39 +1087,63 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "tags": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
+                "$ref": "#/definitions/SendMessages"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
+          "204": {
+            "description": "This will be returned when the empty data but operation was successfully"
+          },
+          "400": {
+            "description": "This will be returned when has validation error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "subject": {
-                      "type": "string"
-                    },
-                    "body": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/definitions/ValidationError"
                 },
                 "example": {
-                  "tags": [
-                    "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b"
-                  ]
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Validation failed",
+                  "validation": {
+                    "body": {
+                      "source": "body",
+                      "keys": [
+                        "tags.0"
+                      ],
+                      "message": "\"tags[0]\" must be a string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be return when client doesnt provide Authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "JWT token is missing.",
+                  "status": "Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be return whe the object entity does not exist or not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ExceptionError"
+                },
+                "example": {
+                  "message": "Message not found",
+                  "status": "Error"
                 }
               }
             }
@@ -323,7 +1153,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/definitions/Error"
+                  "$ref": "#/definitions/ExceptionError"
                 },
                 "example": {
                   "message": "Internal Server Error",
@@ -337,6 +1167,450 @@
     }
   },
   "definitions": {
+    "CreateUsers": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example":"John Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jonhdoe@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Test@123"
+        }
+      }
+    },
+    "CreateUsersResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "04c10b89-121e-4ff5-a7a2-6b269ea63cb7"
+        },
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "email": {
+          "type": "string",
+          "email": "johndoe@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Test@123"
+        },
+        "created_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "updated_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        }
+      }
+    },
+    "CreateSessions": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example":"jonhdoe@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Test@123"
+        }
+      }
+    },
+    "CreateSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "04c10b89-121e-4ff5-a7a2-6b269ea63cb7"
+            },
+            "name": {
+              "type": "string",
+              "example": "John Doe"
+            },
+            "email": {
+              "type": "string",
+              "email": "johndoe@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "Test@123"
+            },
+            "created_at": {
+              "type": "Date",
+              "example": "2023-01-29T20:42:04.398Z"
+            },
+            "updated_at": {
+              "type": "Date",
+              "example": "2023-01-29T20:42:04.398Z"
+            }
+          }
+        },
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NzU0NTI2MzcsImV4cCI6MTY3NTUzOTAzNywic3ViIjoiMzEzY2Y1YTYtM2FlNC00Y2JhLWJiMmItZDMyYzRjMDFkMGY1In0.d7KuE-jVU4vlxOGbJvMYhwTeoW1atgd5eK_Kaq5euiY"
+        }
+      }
+    },
+    "CreateRoles": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example":"ADMIN",
+          "enum": ["ADMIN", "USER"]
+        },
+        "description": {
+          "type": "string",
+          "example": "this role is the user"
+        }
+      }
+    },
+    "CreateRolesResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "3ed99009-f7f6-4040-8849-caecc5ec6d30"
+        },
+        "name": {
+          "type": "string",
+          "email": "ADMIN"
+        },
+        "description": {
+          "type": "string",
+          "example": "this role is the admin"
+        },
+        "created_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "updated_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        }
+      }
+    },
+    "CreatePermissions": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example":"create"
+        },
+        "description": {
+          "type": "string",
+          "example": "this permission to create data"
+        }
+      }
+    },
+    "CreatePermissionsResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "70d934bb-5df9-4988-980a-3ecd1bca217f"
+        },
+        "name": {
+          "type": "string",
+          "email": "update"
+        },
+        "description": {
+          "type": "string",
+          "example": "this permission to update data"
+        },
+        "created_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "updated_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        }
+      }
+    },
+    "CreatePermissionsRole": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "permissions": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "permissions":  [
+          "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b",
+          "36684f21-55f8-44d9-bbd1-2bab8bcc4dc1"
+        ]
+      }
+    },
+    "CreatePermissionsRoleResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "3ed99009-f7f6-4040-8849-caecc5ec6d30"
+        },
+        "name": {
+          "type": "string",
+          "email": "ADMIN"
+        },
+        "description": {
+          "type": "string",
+          "example": "this role is the admin"
+        },
+        "created_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "updated_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "70d934bb-5df9-4988-980a-3ecd1bca217f"
+              },
+              "name": {
+                "type": "string",
+                "email": "update"
+              },
+              "description": {
+                "type": "string",
+                "example": "this permission to update data"
+              },
+              "created_at": {
+                "type": "Date",
+                "example": "2023-01-29T20:42:04.398Z"
+              },
+              "updated_at": {
+                "type": "Date",
+                "example": "2023-01-29T20:42:04.398Z"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CreateAccessControlListToUsers": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "roles": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "roles":  [
+          "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b",
+          "36684f21-55f8-44d9-bbd1-2bab8bcc4dc1"
+        ],
+        "permissions":  [
+          "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b",
+          "36684f21-55f8-44d9-bbd1-2bab8bcc4dc1"
+        ]
+      }
+    },
+    "CreateAccessControlListToUsersResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "04c10b89-121e-4ff5-a7a2-6b269ea63cb7"
+        },
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "email": {
+          "type": "string",
+          "email": "johndoe@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Test@123"
+        },
+        "created_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "updated_at": {
+          "type": "Date",
+          "example": "2023-01-29T20:42:04.398Z"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "3ed99009-f7f6-4040-8849-caecc5ec6d30"
+              },
+              "name": {
+                "type": "string",
+                "email": "ADMIN"
+              },
+              "description": {
+                "type": "string",
+                "example": "this role is the admin"
+              },
+              "created_at": {
+                "type": "Date",
+                "example": "2023-01-29T20:42:04.398Z"
+              },
+              "updated_at": {
+                "type": "Date",
+                "example": "2023-01-29T20:42:04.398Z"
+              }
+            }
+          }
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "70d934bb-5df9-4988-980a-3ecd1bca217f"
+              },
+              "name": {
+                "type": "string",
+                "email": "update"
+              },
+              "description": {
+                "type": "string",
+                "example": "this permission to update data"
+              },
+              "created_at": {
+                "type": "Date",
+                "example": "2023-01-29T20:42:04.398Z"
+              },
+              "updated_at": {
+                "type": "Date",
+                "example": "2023-01-29T20:42:04.398Z"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example":"2d124790-c2b0-43df-beea-6ab450d5a783"
+          },
+          "email": {
+            "type": "string",
+            "example": "halpeeti@pebeve.pg"
+          },
+          "subscribed": {
+            "type": "boolean",
+            "example": true
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UploadContacts": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "type": "string",
+          "format": "binary"
+        }
+      }
+    },
+    "CreateTagsContact": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        }
+      },
+      "example": {
+        "tag_ids":  [
+          "f7d11e39-dde5-4a43-a2f3-9cb91f707b6b",
+          "36684f21-55f8-44d9-bbd1-2bab8bcc4dc1"
+        ]
+      }
+    },
+    "CreateTagsContactResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email":  {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "id" : {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "updated_at": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ChangeSubscriptionStatusContact": {
+      "type": "object",
+      "properties": {
+        "subscribed": {
+          "type": "boolean",
+          "example": false
+        }
+      }
+    },
     "Tags": {
       "properties": {
         "tags": {
@@ -351,7 +1625,27 @@
         }
       }
     },
-    "Messages": {
+    "CreateTagsResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CreateMessages": {
       "type": "object",
       "properties": {
         "subject": {
@@ -362,7 +1656,29 @@
         }
       }
     },
-    "Error": {
+    "CreateMessagesResponse": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    },
+    "SendMessages": {
+      "type": "object",
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ExceptionError": {
       "type": "object",
       "properties": {
         "message": {
@@ -370,6 +1686,45 @@
         },
         "status": {
           "type": "string"
+        }
+      }
+    },
+    "ValidationError": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "keys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "properties": {
+                      "key": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         }
       }
     }

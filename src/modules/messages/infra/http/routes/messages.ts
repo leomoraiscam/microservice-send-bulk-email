@@ -4,7 +4,7 @@ import { Router } from 'express';
 import CreateMessageController from '@modules/messages/infra/http/controllers/CreateMessageController';
 import SendMessageController from '@modules/messages/infra/http/controllers/SendMessageController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
-import can from '@shared/infra/http/middlewares/ensurePermission';
+import { is, can } from '@shared/infra/http/middlewares/ensurePermission';
 
 const messageRouter = Router();
 
@@ -20,7 +20,8 @@ messageRouter.post(
     },
   }),
   ensureAuthenticated,
-  can(['send_mail']),
+  is(['admin']),
+  can(['create-broadcast']),
   createMessageController.handle
 );
 messageRouter.post(
@@ -30,6 +31,9 @@ messageRouter.post(
       tags: Joi.array().items(Joi.string().uuid().required()),
     },
   }),
+  ensureAuthenticated,
+  is(['admin', 'sender']),
+  can(['send-email']),
   sendMessageController.handle
 );
 

@@ -5,7 +5,7 @@ import CreateTagsToContactService from '@modules/contacts/services/CreateTagsToC
 
 class CreateTagsToContactController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { id: contact_id } = request.params;
+    const { contact_id } = request.params;
     const { tag_ids } = request.body;
 
     const createTagContact = container.resolve(CreateTagsToContactService);

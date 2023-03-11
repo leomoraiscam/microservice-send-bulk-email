@@ -27,14 +27,22 @@ class CreateAccessControlListToUserService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('Users does not exist');
+      throw new AppError('Users does not exist', 404);
     }
 
     const permissionsExists = await this.permissionsRepository.findByIds(
       permissions
     );
 
+    if (!permissionsExists.length) {
+      throw new AppError('Permissions not found', 404);
+    }
+
     const rolesExists = await this.rolesRepository.findByIds(roles);
+
+    if (!rolesExists.length) {
+      throw new AppError('Roles not found', 404);
+    }
 
     Object.assign(user, {
       roles: rolesExists,

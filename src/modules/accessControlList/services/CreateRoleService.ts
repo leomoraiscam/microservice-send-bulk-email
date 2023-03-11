@@ -15,13 +15,13 @@ class CreateRoleService {
   ) {}
 
   async execute({ name, description }: ICreateRolesDTO): Promise<Role> {
-    const roleExists = await this.rolesRepository.findByName(name);
+    const serializeRole = RoleEnum[name];
+
+    const roleExists = await this.rolesRepository.findByName(serializeRole);
 
     if (roleExists) {
       throw new AppError('Role already exist', 409);
     }
-
-    const serializeRole = RoleEnum[name];
 
     const role = await this.rolesRepository.create({
       name: serializeRole,
