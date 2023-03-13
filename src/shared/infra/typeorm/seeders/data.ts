@@ -44,8 +44,12 @@ export const permissionsData = [
       'The permission create crate subscription permission can allow new contacts and tags to be registered in the database.',
   },
   {
-    name: 'send.email',
+    name: 'send-email',
     description:
       'The send email permission can allow senders users to send transactional emails to multiple contacts according to their tags.',
+  },
+  {
+    name: 'list-sender',
+    description: 'The permission can list all senders users',
   },
 ];
