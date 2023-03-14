@@ -2,16 +2,16 @@ import { RoleEnum } from '@modules/accessControlList/dtos/enuns/rolesEnum';
 
 export const rolesData = [
   {
-    name: RoleEnum.ADMIN,
+    name: 'admin',
     description:
       'The administrator account, as you might guess, can make changes that affect other users.',
   },
   {
-    name: RoleEnum.SENDER,
+    name: 'sender',
     description: 'The sender account, can send emails to other contacts.',
   },
   {
-    name: RoleEnum.VIEW,
+    name: 'viewer',
     description:
       'The viewers account can view the data without modification privileges or send data to contacts.',
   },
@@ -44,8 +44,12 @@ export const permissionsData = [
       'The permission create crate subscription permission can allow new contacts and tags to be registered in the database.',
   },
   {
-    name: 'send.email',
+    name: 'send-email',
     description:
       'The send email permission can allow senders users to send transactional emails to multiple contacts according to their tags.',
+  },
+  {
+    name: 'list-data',
+    description: 'The create permission you can see all datas.',
   },
 ];
