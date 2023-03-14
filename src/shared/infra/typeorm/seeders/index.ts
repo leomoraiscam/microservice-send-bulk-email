@@ -1,28 +1,81 @@
-import { makeRegisterPermissions } from './factory/populatePermissions';
-import '@shared/infra/typeorm';
+import { hash } from 'bcryptjs';
+import { Client } from 'pg';
+import { Connection, createConnection, getConnectionOptions } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
-const seed = async () => {
-  try {
-    await makeRegisterPermissions();
+import { rolesData } from './data';
 
-    console.log('Successfully completed seeding to common permissions');
-  } catch (error) {
-    console.log('ERROR', error);
+const connect = async (): Promise<Connection> => {
+  const defaultOptions = await getConnectionOptions();
 
-    console.log('Failed seeding common access permissions');
-  }
+  return createConnection(
+    Object.assign(defaultOptions, {
+      host: 'localhost',
+      username: 'docker',
+      password: 'docker',
+      database: 'bulk_message',
+      port: 5454,
+    })
+  );
 };
 
-async function executeSeeders() {
-  try {
-    await seed();
+async function create() {
+  const pgclient = await connect();
 
-    console.log('Seeding Completed');
-  } catch (error) {
-    console.log('Seeding failed');
+  const id = uuidv4();
+  const password = await hash('admin', 8);
 
-    throw error;
-  }
+  // await pgclient.query(
+  //   `INSERT INTO
+  //     users
+  //     (
+  //       id,
+  //       email,
+  //       password,
+  //       name,
+  //       created_at,
+  //       updated_at
+  //     )
+  //     VALUES (
+  //       '${id}',
+  //       'email2@admin.com',
+  //       '${password}',
+
+  //       'Leonardo',
+  //       'now()',
+  //       'now()'
+  //     )
+  //   `
+  // );
+
+  const user = await pgclient.query('select * from users');
+
+  const userId = user[0].id;
+
+  const rolesCreated = rolesData.map(async (data) => {
+    await pgclient.query(
+      `INSERT INTO
+        roles
+        (
+          id,
+          name,
+          description,
+          created_at,
+          updated_at
+        )
+        VALUES (
+          '${id}',
+          '${data.name}',
+          '${data.description}',
+          'now()',
+          'now()'
+        )
+      `
+    );
+  });
+
+  await pgclient.close();
 }
 
-executeSeeders();
+// eslint-disable-next-line
+create().then(() => console.log('✔️ User admin created'));
