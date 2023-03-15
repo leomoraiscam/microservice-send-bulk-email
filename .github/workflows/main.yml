@@ -48,7 +48,7 @@ jobs:
           script: |
             cd ~/app/microservice-send-bulk-email
             yarn
-##
+###
 #       - name: Run migrations on AWS and production script
 #         uses: appleboy/ssh-action@master
 #         with:
