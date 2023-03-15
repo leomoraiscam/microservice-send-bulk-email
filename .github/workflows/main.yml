@@ -1,0 +1,62 @@
+name: CI
+ 
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ckeckout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+    
+      - name: Install Depedencies 
+        run: yarn
+
+      - name: Check commit message
+        uses: wagoid/commitlint-github-action@v3
+        
+      - name: Run Build
+        run: yarn build
+
+      - name: Copy dist to AWS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{secrets.SSH_KEY}}
+          source: ".,!node_modules, !ormconfig.js"
+          target: "~/app/microservice-send-bulk-email"
+
+#       - name: Install dependences on AWS 
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.SSH_HOST }}
+#           username: ${{ secrets.SSH_USER }}
+#           port: ${{ secrets.SSH_PORT }}
+#           key: ${{secrets.SSH_KEY}}
+#           script: |
+#             cd ~/app/microservice-send-bulk-email
+#             yarn 
+      
+#       - name: Run migrations on AWS and production script
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.SSH_HOST }}
+#           username: ${{ secrets.SSH_USER }}
+#           port: ${{ secrets.SSH_PORT }}
+#           key: ${{secrets.SSH_KEY}}
+#           script: |
+#             cd ~/app/microservice-send-bulk-email
+#             yarn
+#             yarn typeorm migration:run
