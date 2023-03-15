@@ -13,8 +13,8 @@ const listTemplatesController = new ListTemplatesController();
 
 templateRouter.get(
   '/',
-  is(['admin', 'sender', 'viewer']),
-  can(['list-data']),
+  // is(['admin', 'sender', 'viewer']),
+  // can(['list-data']),
   listTemplatesController.handle
 );
 templateRouter.post(
@@ -26,8 +26,8 @@ templateRouter.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-broadcast']),
+  // is(['admin']),
+  // can(['create-broadcast']),
   createTemplateController.handle
 );
 

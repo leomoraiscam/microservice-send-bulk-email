@@ -19,8 +19,8 @@ userRouter.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-sender']),
+  // is(['admin']),
+  // can(['create-sender']),
   createUserController.handle
 );
 

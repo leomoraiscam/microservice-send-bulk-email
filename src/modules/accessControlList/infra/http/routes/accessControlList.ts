@@ -21,8 +21,8 @@ userAclRouteR.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-role', 'create-permission']),
+  // is(['admin']),
+  // can(['create-role', 'create-permission']),
   createUserAccessControlListController.handle
 );
 
@@ -37,8 +37,8 @@ userAclRouteR.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-role', 'create-permission']),
+  // is(['admin']),
+  // can(['create-role', 'create-permission']),
   createPermissionsRoleController.handle
 );
 

@@ -14,8 +14,8 @@ const tagRouter = Router();
 tagRouter.get(
   '/',
   ensureAuthenticated,
-  is(['admin', 'viewer', 'sender']),
-  can(['list-data']),
+  // is(['admin', 'viewer', 'sender']),
+  // can(['list-data']),
   listTagsController.handle
 );
 tagRouter.post(
@@ -28,8 +28,8 @@ tagRouter.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-subscription']),
+  // is(['admin']),
+  // can(['create-subscription']),
   createTagController.handle
 );
 

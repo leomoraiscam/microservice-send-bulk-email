@@ -18,8 +18,8 @@ roleRouter.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-role']),
+  // is(['admin']),
+  // can(['create-role']),
   createRoleController.handle
 );
 

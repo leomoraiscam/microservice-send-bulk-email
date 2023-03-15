@@ -22,16 +22,16 @@ const uploadContacts = multer(upload.multer);
 contactRouter.get(
   '/',
   ensureAuthenticated,
-  is(['admin', 'viewer', 'sender']),
-  can(['list-data']),
+  // is(['admin', 'viewer', 'sender']),
+  // can(['list-data']),
   listContactsController.handle
 );
 contactRouter.post(
   '/import',
   uploadContacts.single('file'),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-subscription']),
+  // is(['admin']),
+  // can(['create-subscription']),
   importContactsController.handle
 );
 contactRouter.post(
@@ -45,8 +45,8 @@ contactRouter.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-subscription']),
+  // is(['admin']),
+  // can(['create-subscription']),
   createTagsToContactController.handle
 );
 contactRouter.patch(
@@ -59,8 +59,8 @@ contactRouter.patch(
       subscribed: Joi.bool(),
     },
   }),
-  is(['admin']),
-  can(['create-subscription']),
+  // is(['admin']),
+  // can(['create-subscription']),
   changeContactSubscriptionStatusController.handle
 );
 

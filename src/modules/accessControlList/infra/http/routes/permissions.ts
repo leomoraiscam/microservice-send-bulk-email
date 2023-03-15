@@ -18,8 +18,8 @@ permissionRouter.post(
     },
   }),
   ensureAuthenticated,
-  is(['admin']),
-  can(['create-permission']),
+  // is(['admin']),
+  // can(['create-permission']),
   createPermissionController.handle
 );
 
