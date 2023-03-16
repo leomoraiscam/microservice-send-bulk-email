@@ -60,5 +60,5 @@ jobs:
             cd ~/app/microservice-send-bulk-email
             yarn
             yarn typeorm migration:run
-            yarn typeorm seed:production
+            yarn seed:production
             pm2 restart bulk-message-api
