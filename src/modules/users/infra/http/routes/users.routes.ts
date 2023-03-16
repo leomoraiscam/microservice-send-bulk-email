@@ -18,9 +18,9 @@ userRouter.post(
       password: Joi.string().required(),
     },
   }),
-  // ensureAuthenticated,
-  // is(['admin']),
-  // can(['create-sender']),
+  ensureAuthenticated,
+  is(['admin']),
+  can(['create-sender']),
   createUserController.handle
 );
 

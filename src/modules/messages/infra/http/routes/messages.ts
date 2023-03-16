@@ -20,8 +20,8 @@ messageRouter.post(
     },
   }),
   ensureAuthenticated,
-  // is(['admin']),
-  // can(['create-broadcast']),
+  is(['admin']),
+  can(['create-broadcast']),
   createMessageController.handle
 );
 messageRouter.post(
@@ -32,8 +32,8 @@ messageRouter.post(
     },
   }),
   ensureAuthenticated,
-  // is(['admin', 'sender']),
-  // can(['send-email']),
+  is(['admin', 'sender']),
+  can(['send-email']),
   sendMessageController.handle
 );
 
