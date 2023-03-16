@@ -12,6 +12,9 @@ import userRoutes from '@modules/users/infra/http/routes/users.routes';
 
 const routes = Router();
 
+routes.get('/', (req, res) => {
+  res.status(204).send();
+});
 routes.use('/sessions', sessionRoutes);
 routes.use('/users', userRoutes);
 routes.use('/contacts', contactRoutes);
