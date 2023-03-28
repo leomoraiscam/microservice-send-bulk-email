@@ -6,10 +6,10 @@
     "username": "docker",
     "password": "docker",
     "database": "bulk_message",
-    "migrations": ["./dist/shared/infra/typeorm/migrations/*.js"],
-    "entities": ["./dist/modules/**/infra/typeorm/entities/*.js"],
+    "migrations": ["./src/shared/infra/typeorm/migrations/*.ts"],
+    "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
     "cli": {
-      "migrationsDir": "./dist/shared/infra/typeorm/migrations"
+      "migrationsDir": "./src/shared/infra/typeorm/migrations"
     }
   },
   {
@@ -20,7 +20,7 @@
     "database": "umbriel",
     "useUnifiedTopology": true,
     "entities": [
-      "./dist/modules/**/infra/typeorm/schemas/*.js"
+      "./src/modules/**/infra/typeorm/schemas/*.ts"
     ]
   }
 ]
