@@ -12,10 +12,16 @@ class MailTrapProvider implements IMailProvider {
     this.transporter = nodemailer.createTransport(mailConfig.config.mailtrap);
   }
 
-  async sendMail({ to, subject, text }: ISendMail): Promise<void> {
+  async sendMail({ from, to, subject, text }: ISendMail): Promise<void> {
     const message = await this.transporter.sendMail({
-      from: 'sender@example.com',
-      to,
+      from: {
+        name: from?.name || 'Equipe Bulk-message',
+        address: from?.email || 'sender@example.com',
+      },
+      to: {
+        name: to.name || '',
+        address: to.email,
+      },
       subject,
       text,
     });

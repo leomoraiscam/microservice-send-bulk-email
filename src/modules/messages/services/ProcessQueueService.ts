@@ -21,8 +21,9 @@ class ProcessQueueService {
       const { contact, message } = job.data as IMessageJob;
 
       await this.mailProvider.sendMail({
-        from: 'sender@example.com',
-        to: contact.email,
+        to: {
+          email: contact.email,
+        },
         subject: message.subject,
         text: message.body,
       });

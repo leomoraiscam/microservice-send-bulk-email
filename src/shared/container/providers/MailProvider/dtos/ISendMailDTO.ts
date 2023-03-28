@@ -1,6 +1,11 @@
+interface IMailContact {
+  name: string;
+  email: string;
+}
+
 interface ISendMailDTO {
-  from: string;
-  to: string;
+  from?: IMailContact;
+  to: Partial<IMailContact>;
   subject: string;
   text: string;
 }
