@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreateTagsDTO from '../dtos/ICreateTagsDTO';
 import Tag from '../infra/typeorm/entities/Tag';
@@ -20,14 +21,14 @@ class CreateTagService {
     });
 
     if (hasTagsWithSameTitle) {
-      throw new AppError('Tag already exist', 409);
+      throw new AppError('Tag already exist', HttpStatusCode.CONFLICT);
     }
 
     const hasTagsWithSameTitleRequest = tags.map(async ({ title }) => {
       const foundTag = await this.tagsRepository.findByTitle(title);
 
       if (foundTag) {
-        throw new AppError('Tag already exist', 409);
+        throw new AppError('Tag already exist', HttpStatusCode.CONFLICT);
       }
     });
 

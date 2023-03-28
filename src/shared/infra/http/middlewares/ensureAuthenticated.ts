@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ITokenPayloadDTO from '../dtos/ITokenPayloadDTO';
 
@@ -14,7 +15,7 @@ export default function ensureAuthenticated(
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    throw new AppError('JWT token is missing.');
+    throw new AppError('JWT token is missing.', HttpStatusCode.UNAUTHORIZED);
   }
 
   const [, token] = authHeader.split(' ');
@@ -30,6 +31,6 @@ export default function ensureAuthenticated(
 
     return next();
   } catch {
-    throw new AppError('Invalid JWT token', 401);
+    throw new AppError('Invalid JWT token', HttpStatusCode.UNAUTHORIZED);
   }
 }

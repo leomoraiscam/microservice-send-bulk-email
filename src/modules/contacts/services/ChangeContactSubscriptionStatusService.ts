@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import IChangeStatusDTO from '../dtos/IChangeContactStatusDTO';
 import Contact from '../infra/typeorm/entities/Contact';
@@ -20,7 +21,7 @@ class ChangeContactSubscriptionStatusService {
     const contact = await this.contactsRepository.findById(contact_id);
 
     if (!contact) {
-      throw new AppError("Contact doesn't exist", 404);
+      throw new AppError("Contact doesn't exist", HttpStatusCode.NOT_FOUND);
     }
 
     Object.assign(contact, {

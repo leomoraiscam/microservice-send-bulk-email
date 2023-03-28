@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreateUsersDTO from '../dtos/ICreateUsersDTO';
 import User from '../infra/typeorm/entities/User';
@@ -20,7 +21,7 @@ class CreateUserUseCase {
     const userExist = await this.usersRepository.findByEmail(email);
 
     if (userExist) {
-      throw new AppError('User already exist', 409);
+      throw new AppError('User already exist', HttpStatusCode.CONFLICT);
     }
 
     const passwordHash = await this.hashProvider.generateHash(password);

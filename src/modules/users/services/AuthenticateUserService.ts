@@ -5,6 +5,7 @@ import authConfig from '@config/auth';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IHashProvider from '@shared/container/providers/HashProvider/models/IHashProvider';
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreateSessionsDTO from '../dtos/ICreateSessionsDTO';
 import ICreateSessionsResponseDTO from '../dtos/ICreateSessionsResponseDTO';
@@ -25,7 +26,10 @@ class AuthenticateUserService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('Incorrect email/password combination', 401);
+      throw new AppError(
+        'Incorrect email/password combination',
+        HttpStatusCode.UNAUTHORIZED
+      );
     }
 
     const passwordMatched = await this.hashProvider.compareHash(
@@ -34,7 +38,10 @@ class AuthenticateUserService {
     );
 
     if (!passwordMatched) {
-      throw new AppError('Incorrect email/password combination', 401);
+      throw new AppError(
+        'Incorrect email/password combination',
+        HttpStatusCode.UNAUTHORIZED
+      );
     }
 
     const { secret, expiresIn } = authConfig.jwt;

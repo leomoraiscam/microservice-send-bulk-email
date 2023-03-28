@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreatePermissionsRoleDTO from '../dtos/ICreatePermissionsRoleDTO';
 import Role from '../infra/typeorm/entities/Role';
@@ -23,7 +24,7 @@ class CreatePermissionsRoleService {
     const role = await this.rolesRepository.findById(role_id);
 
     if (!role) {
-      throw new AppError('Role not found', 404);
+      throw new AppError('Role not found', HttpStatusCode.NOT_FOUND);
     }
 
     const permissionsExists = await this.permissionsRepository.findByIds(
@@ -31,7 +32,7 @@ class CreatePermissionsRoleService {
     );
 
     if (!permissionsExists.length) {
-      throw new AppError('Permissions not found', 404);
+      throw new AppError('Permissions not found', HttpStatusCode.NOT_FOUND);
     }
 
     role.permissions = permissionsExists;

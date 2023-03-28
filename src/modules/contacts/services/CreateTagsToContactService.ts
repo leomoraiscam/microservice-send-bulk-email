@@ -4,6 +4,7 @@ import Contact from '@modules/contacts/infra/typeorm/entities/Contact';
 import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
 import ITagsRepository from '@modules/contacts/repositories/ITagsRepository';
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreateTagsToContactDTO from '../dtos/ICreateTagsToContactDTO';
 
@@ -23,13 +24,13 @@ class CreateTagsToContactService {
     const contact = await this.contactsRepository.findById(contact_id);
 
     if (!contact) {
-      throw new AppError("Contact doesn't exist", 404);
+      throw new AppError("Contact doesn't exist", HttpStatusCode.NOT_FOUND);
     }
 
     const tags = await this.tagsRepository.findByIds(tag_ids);
 
     if (!tags.length) {
-      throw new AppError("Tags doesn't exist", 404);
+      throw new AppError("Tags doesn't exist", HttpStatusCode.NOT_FOUND);
     }
 
     Object.assign(contact, {

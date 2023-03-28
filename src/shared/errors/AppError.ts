@@ -1,8 +1,10 @@
+import HttpStatusCode from './StatusCodes';
+
 class AppError {
   public readonly message: string;
-  public readonly statusCode: number;
+  public readonly statusCode: HttpStatusCode;
 
-  constructor(message, statusCode = 400) {
+  constructor(message, statusCode = HttpStatusCode.BAD_GATEWAY) {
     this.message = message;
     this.statusCode = statusCode;
   }

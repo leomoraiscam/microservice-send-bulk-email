@@ -4,6 +4,7 @@ import IContactsRepository from '@modules/contacts/repositories/IContactsReposit
 import ILoggerProvider from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import IQueueProvider from '@shared/container/providers/QueueProvider/models/IQueueProvider';
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import IMessagesRepository from '../repositories/IMessagesRepository';
 
@@ -29,13 +30,13 @@ class SendMessageService {
     const message = await this.messageRepository.findById(id);
 
     if (!message) {
-      throw new AppError('Message not found', 404);
+      throw new AppError('Message not found', HttpStatusCode.NOT_FOUND);
     }
 
     const contacts = await this.contactsRepository.findByTags(tags);
 
     if (!contacts.length) {
-      throw new AppError('recipients does not exist');
+      throw new AppError('recipients does not exist', HttpStatusCode.NOT_FOUND);
     }
 
     const queueJobs = contacts.map((contact) => ({

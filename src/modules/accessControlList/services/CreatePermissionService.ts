@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreatePermissionsDTO from '../dtos/ICreatePermissionsDTO';
 import Permission from '../infra/typeorm/entities/Permission';
@@ -20,7 +21,7 @@ class CreatePermissionService {
     const permissionExists = await this.permissionsRepository.findByName(name);
 
     if (permissionExists) {
-      throw new AppError('Permissions already exist', 409);
+      throw new AppError('Permissions already exist', HttpStatusCode.CONFLICT);
     }
 
     const permission = await this.permissionsRepository.create({

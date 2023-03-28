@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import User from '@modules/users/infra/typeorm/entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import HttpStatusCode from '@shared/errors/StatusCodes';
 
 import ICreateACLsToUserDTO from '../dtos/ICreateAccessControlListToUserDTO';
 import IPermissionsRepository from '../repositories/IPermissionsRepository';
@@ -27,7 +28,7 @@ class CreateAccessControlListToUserService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('Users does not exist', 404);
+      throw new AppError('Users does not exist', HttpStatusCode.NOT_FOUND);
     }
 
     const permissionsExists = await this.permissionsRepository.findByIds(
@@ -35,13 +36,13 @@ class CreateAccessControlListToUserService {
     );
 
     if (!permissionsExists.length) {
-      throw new AppError('Permissions not found', 404);
+      throw new AppError('Permissions not found', HttpStatusCode.NOT_FOUND);
     }
 
     const rolesExists = await this.rolesRepository.findByIds(roles);
 
     if (!rolesExists.length) {
-      throw new AppError('Roles not found', 404);
+      throw new AppError('Roles not found', HttpStatusCode.NOT_FOUND);
     }
 
     Object.assign(user, {
