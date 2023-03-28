@@ -1,5 +1,7 @@
 import { container } from 'tsyringe';
 
+import mailConfig from '@config/mail/index';
+
 import BCryptHashProvider from './HashProvider/implementations/BCrtyptHashProvider';
 import IHashProvider from './HashProvider/models/IHashProvider';
 import WinstonProvider from './LoggerProvider/implementations/WinstonProvider';
@@ -10,6 +12,10 @@ import BullProvider from './QueueProvider/implementations/BullProvider';
 import IQueueProvider from './QueueProvider/models/IQueueProvider';
 import DiskStorageProvider from './StorageProvider/implementations/DiskStorageProvider';
 import IStorageProvider from './StorageProvider/models/IStorageProvider';
+
+const providers = {
+  mailtrap: MailTrapProvider,
+};
 
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 
@@ -22,4 +28,7 @@ container.registerSingleton<IStorageProvider>(
 
 container.registerSingleton<ILoggerProvider>('LoggerProvider', WinstonProvider);
 
-container.registerSingleton<IMailProvider>('MailProvider', MailTrapProvider);
+container.registerSingleton<IMailProvider>(
+  'MailProvider',
+  providers[mailConfig.driver]
+);
