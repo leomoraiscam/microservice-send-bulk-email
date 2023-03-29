@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import Queue from 'bull';
 import { errors } from 'celebrate';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
 import { createBullBoard } from '@bull-board/api';
@@ -17,42 +17,66 @@ import routes from './routes';
 
 import '@shared/container';
 
-const someQueue = new Queue('mail');
+class App {
+  public server: Application;
 
-const serverAdapter = new ExpressAdapter();
-
-createBullBoard({
-  queues: [new BullAdapter(someQueue)],
-  serverAdapter,
-});
-
-const app = express();
-
-serverAdapter.setBasePath('/admin/queues');
-app.use('/admin/queues', serverAdapter.getRouter());
-
-app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
-
-app.use(routes);
-app.use(errors());
-
-app.use(
-  (error: Error, request: Request, response: Response, next: NextFunction) => {
-    if (error instanceof AppError) {
-      return response.status(error.statusCode).json({
-        message: error.message,
-        status: 'Error',
-      });
-    }
-
-    console.log('Error', error.message);
-
-    return response.status(500).json({
-      message: 'Internal Server Error',
-      status: 'Error',
-    });
+  constructor() {
+    this.server = express();
+    this.middleware();
+    this.routes();
+    this.exceptionHandler();
+    this.bullDashboardQueue();
   }
-);
 
-export default app;
+  private middleware() {
+    this.server.use(express.json());
+  }
+
+  private routes() {
+    this.server.use(routes);
+    this.server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+  }
+
+  private exceptionHandler() {
+    this.server.use(errors());
+    this.server.use(
+      (
+        error: Error,
+        request: Request,
+        response: Response,
+        next: NextFunction
+      ) => {
+        if (error instanceof AppError) {
+          return response.status(error.statusCode).json({
+            message: error.message,
+            status: 'Error',
+          });
+        }
+
+        console.log('Error', error.message);
+
+        return response.status(500).json({
+          message: 'Internal Server Error',
+          status: 'Error',
+        });
+      }
+    );
+  }
+
+  private bullDashboardQueue() {
+    const someQueue = new Queue('mail');
+
+    const serverAdapter = new ExpressAdapter();
+
+    createBullBoard({
+      queues: [new BullAdapter(someQueue)],
+      serverAdapter,
+    });
+
+    serverAdapter.setBasePath('/admin/queues');
+
+    this.server.use('/admin/queues', serverAdapter.getRouter());
+  }
+}
+
+export default new App().server;
