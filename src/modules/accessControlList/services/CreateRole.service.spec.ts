@@ -30,7 +30,7 @@ describe('CreateRoleService', () => {
 
     await expect(
       createRoleService.execute({
-        name: 'admin',
+        name: 'ADMIN',
         description: 'administration role',
       })
     ).rejects.toBeInstanceOf(AppError);

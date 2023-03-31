@@ -65,8 +65,9 @@ describe('ProcessQueueService', () => {
     await processQueueService.execute();
 
     expect(sendMail).toHaveBeenCalledWith({
-      from: 'sender@example.com',
-      to: contact.email,
+      to: {
+        email: contact.email,
+      },
       subject: message.subject,
       text: message.body,
     });

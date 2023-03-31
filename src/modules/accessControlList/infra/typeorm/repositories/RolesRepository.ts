@@ -48,19 +48,6 @@ class RolesRepository implements IRolesRepository {
     return role;
   }
 
-  async bulkCreate(data: ICreateRolesDTO[]): Promise<Role[]> {
-    const rolesToSave = data.map(({ name, description }) =>
-      this.repository.create({
-        name,
-        description,
-      })
-    );
-
-    await this.repository.save(rolesToSave);
-
-    return rolesToSave;
-  }
-
   async save(role: Role): Promise<Role> {
     return this.repository.save(role);
   }
