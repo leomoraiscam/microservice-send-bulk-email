@@ -1,13 +1,19 @@
 import { createConnection } from 'typeorm';
 
-import { CreatePermissionSeeder } from './populate';
+import PermissionsSeed from './permissions';
+import PermissionsRole from './permissions-roles';
+import RolesSeed from './roles';
+import UsersSeed from './user';
 
 (async () => {
   console.log('Starting Seed');
   try {
     const connection = await createConnection();
 
-    await CreatePermissionSeeder.run(connection);
+    await RolesSeed(connection);
+    await PermissionsSeed(connection);
+    await PermissionsRole(connection);
+    await UsersSeed(connection);
 
     await connection.close();
 
