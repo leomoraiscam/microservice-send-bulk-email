@@ -8,19 +8,21 @@ const permissions_roles = [
     name: 'admin',
     permissions: [
       'create-sender',
-      'create-subscription',
-      'create-broadcast',
       'create-role',
       'create-permission',
+      'create-broadcast',
+      'create-subscription',
+      'send-email',
+      'list-data',
     ],
+  },
+  {
+    name: 'sender',
+    permissions: ['send-email', 'list-data'],
   },
   {
     name: 'viewer',
     permissions: ['list-data'],
-  },
-  {
-    name: 'sender',
-    permissions: ['send-email'],
   },
 ];
 
@@ -29,7 +31,7 @@ const PermissionsRolesSeed = async (connection: Connection) => {
   const permissionsRepository = connection.getRepository(Permission);
 
   const mapper = permissions_roles.map(
-    async ({ name, permissions: permissionsRoles }, index) => {
+    async ({ name, permissions: permissionsRoles }) => {
       const role = await rolesRepository.findOne({
         where: {
           name,

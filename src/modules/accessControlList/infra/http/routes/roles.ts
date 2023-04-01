@@ -13,7 +13,7 @@ roleRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().valid('ADMIN', 'USER').required(),
+      name: Joi.string().valid('ADMIN', 'SENDER', 'VIEW').required(),
       description: Joi.string().required(),
     },
   }),

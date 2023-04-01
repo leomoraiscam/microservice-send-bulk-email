@@ -20,7 +20,23 @@ const users = [
       'create-broadcast',
       'create-role',
       'create-permission',
+      'send-email',
+      'list-data',
     ],
+  },
+  {
+    name: 'sender mailers',
+    email: 'sender_user_default@email.com',
+    password: 'default_password',
+    roles: ['sender'],
+    permissions: ['send-email', 'list-data'],
+  },
+  {
+    name: 'user viewer',
+    email: 'viewer_user_default@email.com',
+    password: 'default_password',
+    roles: ['viewer'],
+    permissions: ['list-data'],
   },
 ];
 
